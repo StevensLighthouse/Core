@@ -1,7 +1,7 @@
-#Lighthouse (Guided Tour App)
+###Lighthouse (Guided Tour App)
 
-## Core (API Backend)
+#### Core (API Backend)
 
-### Fall 2013, CS423/CS424, Senior Design
-### Stevens Institute of Technology
+##### Fall 2013, CS423/CS424, Senior Design
+##### Stevens Institute of Technology
 
