@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131030000835) do
+ActiveRecord::Schema.define(version: 20131030011151) do
 
   create_table "tours", force: true do |t|
     t.string   "name"
@@ -20,6 +20,17 @@ ActiveRecord::Schema.define(version: 20131030000835) do
     t.boolean  "visibility"
     t.decimal  "lat",         precision: 9, scale: 6
     t.decimal  "lon",         precision: 9, scale: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", force: true do |t|
+    t.string   "email"
+    t.string   "hashed_password"
+    t.string   "password_salt"
+    t.datetime "last_login"
+    t.integer  "creator_id"
+    t.integer  "editor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
