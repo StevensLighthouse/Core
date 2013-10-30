@@ -1,5 +1,8 @@
-post '/create_tour' do 	
-  p params
-  Tour.create(params[:name],params[:description], params[:creator], params[:editor], params[:visibility], params[:lat], params[:lon])
+post '/create_tour' do
+  t = Tour.create(listing_params)
+end
 
+private
+def listing_params
+  params.allow(:name, :description, :visibility, :lat, :lon)
 end
