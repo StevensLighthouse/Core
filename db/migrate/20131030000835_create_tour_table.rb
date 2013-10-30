@@ -2,6 +2,7 @@ class CreateTourTable < ActiveRecord::Migration
   def up
     create_table :tours do |t|
       t.string :name
+      t.text :description
       t.references :editor
       t.references :creator
       t.boolean :visibility
