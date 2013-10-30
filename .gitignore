@@ -1,4 +1,5 @@
 *.swp
 *.swo
 *~
-db/database.yml
+config/database.yml
+db/lighthouse_development.sqlite
