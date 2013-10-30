@@ -3,6 +3,9 @@ source 'http://rubygems.org'
 
 group :default do
   gem 'sinatra', '1.4.4'
+  gem 'rspec'
+  gem 'rack-test'
+  gem 'factory_girl'
 end
 
 group :development do
