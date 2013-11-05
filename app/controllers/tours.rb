@@ -1,8 +1,8 @@
 # GET /tours
 # Index of all tours
-# Soon to be deprecated - body will require a location
+# Params: [lat, lon]
 get '/tours' do
-  @tours = Tour.all
+  @tours = Tour.where(:visibility => true, :lat => (params[:lat].to_f - 0.005)..(params[:lat].to_f + 0.005), :lon => (params[:lon].to_f - 0.005)..(params[:lon].to_f + 0.005))
 
   { :tours => @tours }.to_json
 end
