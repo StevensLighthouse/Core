@@ -3,3 +3,4 @@
 *~
 config/database.yml
 db/lighthouse_development.sqlite
+.bundle/
