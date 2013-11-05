@@ -6,3 +6,5 @@ require 'rspec/core/rake_task'
 
 desc "Perform rspec tests ('spec' directory"
 RSpec::Core::RakeTask.new(:spec)
+
+task :default => :spec
