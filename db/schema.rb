@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131030011151) do
+ActiveRecord::Schema.define(version: 20131105202558) do
+
+  create_table "stops", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "category_id"
+    t.integer  "editor_id"
+    t.integer  "creator_id"
+    t.boolean  "visibility"
+    t.decimal  "lat",         precision: 9, scale: 6
+    t.decimal  "lon",         precision: 9, scale: 6
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tours", force: true do |t|
     t.string   "name"
