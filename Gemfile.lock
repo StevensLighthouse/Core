@@ -64,7 +64,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
   factory_girl
   mysql2
   rack-test
