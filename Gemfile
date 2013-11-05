@@ -3,6 +3,7 @@ source 'http://rubygems.org'
 
 group :default do
   gem 'sinatra', '1.4.4'
+  gem 'sinatra-activerecord'
   gem 'rspec'
   gem 'rack-test'
   gem 'factory_girl'
@@ -17,7 +18,3 @@ group :production do
 	gem 'unicorn'
   gem 'mysql2'
 end
-
-# these gems won't be autoloaded
-gem 'activerecord', :require => false 
-gem 'sinatra-activerecord', :require => false
