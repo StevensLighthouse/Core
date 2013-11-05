@@ -4,7 +4,10 @@
 get '/tours' do
   @tours = Tour.all
 
-  { :tours => @tours }.to_json
+  respond_to do |format|
+    format.html { erb :'tours/index' }
+    format.json { { :tours => @tours }.to_json }
+  end
 end
 
 # POST /tours
