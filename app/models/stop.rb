@@ -1,8 +1,8 @@
 class Stop < ActiveRecord::Base
 
   # associations
-  belongs_to :creator, :classname => 'User'
-  has_one :editor, :classname => 'User'
+  belongs_to :creator, :class_name => 'User'
+  has_one :editor, :class_name => 'User'
 
   # validators
   validates :name, :presence => true
