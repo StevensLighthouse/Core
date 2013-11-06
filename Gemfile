@@ -4,6 +4,7 @@ source 'http://rubygems.org'
 group :default do
   gem 'sinatra', '1.4.4'
   gem 'sinatra-activerecord'
+  gem 'sinatra-respond_to'
   gem 'rspec'
   gem 'rack-test'
   gem 'factory_girl'
@@ -18,3 +19,5 @@ group :production do
 	gem 'unicorn'
   gem 'mysql2'
 end
+
+gem 'rake'
