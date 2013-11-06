@@ -3,6 +3,7 @@ class Stop < ActiveRecord::Base
   # associations
   belongs_to :creator, :class_name => 'User'
   has_one :editor, :class_name => 'User'
+  has_many :categories
 
   # validators
   validates :name, :presence => true
