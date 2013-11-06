@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131105202558) do
+ActiveRecord::Schema.define(version: 20131106020013) do
 
   create_table "stops", force: true do |t|
     t.string   "name"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(version: 20131105202558) do
     t.decimal  "lat",         precision: 9, scale: 6
     t.decimal  "lon",         precision: 9, scale: 6
     t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "stops_tours", force: true do |t|
+    t.integer  "tour_id"
+    t.integer  "stop_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
