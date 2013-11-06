@@ -2,6 +2,7 @@ require 'erb'
 require 'sinatra'
 require 'sinatra/activerecord'
 require 'sinatra/respond_to'
+require 'sinatra/content_for'
 require 'yaml'
 
 require './config/environments'
@@ -14,6 +15,7 @@ class LighthouseCore < Sinatra::Application
     set :app_file, __FILE__
     set :root, File.dirname(__FILE__)
     set :views, File.join(settings.root, "app/views")
+    set :public_folder, 'public'
   end
 
 end

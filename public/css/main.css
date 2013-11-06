@@ -1,0 +1,274 @@
+/* ==========================================================================
+   HTML5 Boilerplate styles - h5bp.com (generated via initializr.com)
+   ========================================================================== */
+ html, button, input, select, textarea {
+    color: #222;
+}
+body {
+    font-size: 1em;
+    line-height: 1.4;
+}
+::-moz-selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+::selection {
+    background: #b3d4fc;
+    text-shadow: none;
+}
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+img {
+    vertical-align: middle;
+}
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+textarea {
+    resize: vertical;
+}
+.chromeframe {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+/* ==========================================================================
+   General
+   ========================================================================== */
+ .top-nav {
+    width: 90%;
+    margin: 0px auto;
+}
+.top-nav ul {
+    text-align: right;
+}
+.top-nav li, .top-nav a {
+    list-style: none;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+    ff border: 1px solid #000;
+    background: #FEFEFE;
+}
+/* ==========================================================================
+   Public Landing Page
+   ========================================================================== */
+ .landing {
+    width: 80%;
+    text-align: center;
+    margin: 0px auto;
+}
+.quotes {
+    width: 90%;
+    margin: 0px auto;
+}
+/* ==========================================================================
+   Admin Home Page
+   ========================================================================== */
+ .side-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    min-height: 100%;
+    width: 350px;
+    overflow: auto;
+}
+h1 {
+    margin: 0;
+    padding: 15px;
+}
+.sidebar-content {
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    border-right: 2px solid #000;
+}
+.one-tour {
+    display: none;
+}
+.tour-entry {
+    height: 50px;
+    box-sizing: border-box;
+    padding: 15px;
+    border-bottom: 1px solid #000;
+}
+.tour-entry i {
+    float: right;
+}
+.tour-entry:first-of-type {
+    border-top: 1px solid #000;
+}
+/* ==========================================================================
+   Login Page
+   ========================================================================== */
+ .login {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 30px;
+    height: 300px;
+    width: 300px;
+    margin: auto;
+    border: 1px solid #000;
+    border-radius: 15px;
+    font-size: 20px;
+}
+.login input[type='text'], .login input[type='password'] {
+    display: block;
+    width: 100%;
+    margin: 5px 0 20px 0;
+}
+.login label {
+    font-size: 22px;
+}
+/* ==========================================================================
+   Signup Page
+   ========================================================================== */
+ .signup {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 30px;
+    height: 500px;
+    width: 300px;
+    margin: auto;
+    border: 1px solid #000;
+    border-radius: 15px;
+    font-size: 20px;
+}
+.signup input[type='text'], .signup input[type='email'], .signup input[type='password'] {
+    display: block;
+    width: 100%;
+    margin: 5px 0 20px 0;
+}
+.signup label {
+    font-size: 22px;
+}
+/* ==========================================================================
+   Media Queries
+   ========================================================================== */
+ @media only screen and (min-width: 35em) {
+}
+@media print, (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+}
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+ .ir {
+    background-color: transparent;
+    border: 0;
+    overflow: hidden;
+    *text-indent: -9999px;
+}
+.ir:before {
+    content:"";
+    display: block;
+    width: 0;
+    height: 150%;
+}
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+.invisible {
+    visibility: hidden;
+}
+.clearfix:before, .clearfix:after {
+    content:" ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+/* ==========================================================================
+   Print styles
+   ========================================================================== */
+ @media print {
+    * {
+        background: transparent !important;
+        color: #000 !important;
+        /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    a, a:visited {
+        text-decoration: underline;
+    }
+    a[href]:after {
+        content:" (" attr(href)")";
+    }
+    abbr[title]:after {
+        content:" (" attr(title)")";
+    }
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+    .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+        content:"";
+    }
+    pre, blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+    thead {
+        display: table-header-group;
+        /* h5bp.com/t */
+    }
+    tr, img {
+        page-break-inside: avoid;
+    }
+    img {
+        max-width: 100% !important;
+    }
+    @page {
+        margin: 0.5cm;
+    }
+    p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+    }
+    h2, h3 {
+        page-break-after: avoid;
+    }
+}

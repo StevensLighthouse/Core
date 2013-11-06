@@ -1,5 +1,72 @@
-<ul>
-  <% @tours.each do |tour| %>
-    <li><%= tour.name %></li>
-  <% end %>
-</ul>
+<div class="side-bar">
+    <section class="sidebar-content" data-bind="visible: showLoadingPage">Loading...</section>
+    <section class="sidebar-content" data-bind="with: tourContainer">
+        <div data-bind="visible: $root.showTourList">
+            <h1>My Tours</h1>
+            <div data-bind="foreach: tours">
+                <div class="tour-entry">
+                    <span data-bind="text: name, click: load"></span><br />
+                    <a href="#" data-bind="click: edit">edit</a> - <a href="#" data-bind="click: deleteTour">delete</a>
+                </div>
+            </div>
+            <div class="tour-entry" data-bind="click: createNewTour">
+                Create a new Tour
+            </div>
+        </div>
+        <div data-bind="with: focusedTour">
+            <div data-bind="visible: $root.showViewTourPage">
+                <h1 data-bind="text: name"></h1>
+                <a href="#" data-bind="click: cancelFocus">go back</a> - <a href="#" data-bind="click: edit">edit</a>
+                <p class="tour-entry" data-bind="text: description"></p>
+                <p class="tour-entry">This tour is <span data-bind="text: visibilityText"></span>.</p>
+            </div>
+            <div data-bind="visible: $root.showEditTourPage">
+                <h1 data-bind="text: newName"></h1>
+                <a href="#" data-bind="click: cancelFocus">go back</a>
+                <p class="tour-entry">
+                    <label>Tour Name: <input type="text" data-bind="value: newName, valueUpdate: 'afterkeydown'" /></label>
+                </p>
+                <p class="tour-entry">
+                    Description: <br />
+                    <textarea data-bind="value: newDescription">
+
+                    </textarea>
+                </p>
+                <p class="tour-entry">
+                    <label> <input type="checkbox" data-bind="checked: newVisibilty">Visible</label>
+                </p>
+                <p class="tour-entry">
+                    <a href="#" data-bind="disable: disableSave, text: tourUpdateText, click: saveTour"></a>
+                <p>
+            </div>
+         </div>
+    </section>
+</div>
+
+<div style="position: absolute; left: 350px; top: 0; right: 0; bottom: 0; background: pink; overflow: hidden;">
+    <div id="map-canvas" style="width: 100%; padding: 50px; height: 110%; box-sizing: border-box;"></div>
+</div>
+
+<% content_for :scripts do %>
+    <script type="text/javascript">
+        var map,
+            raw = <%= @tours.to_json %>,
+            model;
+
+        function initialize() {
+            var mapOptions = {
+                zoom: 17,
+                center: new google.maps.LatLng(40.7435753309731, -74.02875912059483),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            model = new AppContainer(raw, map);
+
+            ko.applyBindings(model);
+            model.init();
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+<% end %>

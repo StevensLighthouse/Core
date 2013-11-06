@@ -5,6 +5,7 @@ group :default do
   gem 'sinatra', '1.4.4'
   gem 'sinatra-activerecord'
   gem 'sinatra-respond_to'
+  gem 'sinatra-contrib'
   gem 'rspec'
   gem 'rack-test'
   gem 'factory_girl'
