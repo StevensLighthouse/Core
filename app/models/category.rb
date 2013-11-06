@@ -1,5 +1,5 @@
 class Category < ActiveRecord::Base
 
-  has_many :tours
+  has_and_belongs_to_many :tours
 
 end
