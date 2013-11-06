@@ -10,12 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131106020013) do
+ActiveRecord::Schema.define(version: 20131106023258) do
+
+  create_table "categories", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.text     "icon_base64"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "categories_stops", force: true do |t|
+    t.integer  "category_id"
+    t.integer  "stop_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "stops", force: true do |t|
     t.string   "name"
     t.text     "description"
-    t.integer  "category_id"
     t.integer  "editor_id"
     t.integer  "creator_id"
     t.boolean  "visibility"
