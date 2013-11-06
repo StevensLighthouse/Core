@@ -4,7 +4,10 @@
 get '/tours' do
   @tours = Tour.where(:visibility => true, :lat => (params[:lat].to_f - 0.005)..(params[:lat].to_f + 0.005), :lon => (params[:lon].to_f - 0.005)..(params[:lon].to_f + 0.005))
 
-  { :tours => @tours }.to_json
+  respond_to do |format|
+    format.html { erb :'tours/index' }
+    format.json { { :tours => @tours }.to_json }
+  end
 end
 
 # POST /tours
