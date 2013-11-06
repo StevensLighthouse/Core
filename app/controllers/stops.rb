@@ -1,7 +1,7 @@
 # GET /stops
 # Index of all global stops
 get '/stops' do
-#how to get only public ones?
+
 end
 
 # POST /stops
