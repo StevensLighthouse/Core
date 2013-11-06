@@ -14,6 +14,7 @@ class Stop < ActiveRecord::Base
 
 
   scope :public_within, -> (lat, lon, boundary) do
+    boundary ||= 0.005
     where(:visibility => true,
           :lat => (lat.to_f - boundary.to_f)..(lat.to_f + boundary.to_f),
           :lon => (lon.to_f - boundary.to_f)..(lon.to_f + boundary.to_f))
