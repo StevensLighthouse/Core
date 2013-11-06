@@ -2,6 +2,10 @@ language: ruby
 rvm:
   - 2.0.0
   - 1.9.3
+notifications:
+  email:
+    on_success: never
+    on_failure: always
 before_script:
   - cp config/database.yml.example config/database.yml
   - bundle exec rake db:migrate
