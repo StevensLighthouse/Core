@@ -10,6 +10,7 @@ class CreateStopTable < ActiveRecord::Migration
       t.decimal :lat, :scale => 6, :precision => 9
       t.decimal :lon, :scale => 6, :precision =>9
       t.integer :parent_id
+      t.boolean :deleted
 
       t.timestamps
     end
