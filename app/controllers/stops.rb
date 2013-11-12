@@ -19,25 +19,34 @@ end
 # Get /stop/:id
 # Show a stop
 get '/stops/:id' do |id|
-	@stop = Stop.find(id)
+  @stop = Stop.find(id)
 
-	{ :stop => @stop }.to_json
+  { :stop => @stop }.to_json
 end
 
 # PUT /stops/:id
 # Update a stop
 # Should we include patch?
 put '/stops/:id' do |id|
-	@stop = Stop.find(id)
+  @stop = Stop.find(id)
 
-	if @stop.update(stop_params)
-		{ :stop => @stop }.to_json
-	else
-		{ :errors => @stop.errors, :status => :unprocessable_entity }.to_json
-	end
+  if @stop.update(stop_params)
+    { :stop => @stop }.to_json
+  else
+    { :errors => @stop.errors, :status => :unprocessable_entity }.to_json
+  end
 end
 
-#Later on add delete
+# DELETE /stops/:id
+delete '/stops/:id' do |id|
+  @stop = Stop.find(id)
+
+  if @stop.update_column(:deleted, true)
+    { :stop => @stop }.to_json
+  else
+    { :errors => @stop.errors, :status => :unprocessable_entity }.to_json
+  end
+end
 
 private
 def listing_params

@@ -45,8 +45,16 @@ put '/tours/:id' do |id|
   end
 end
 
-# DELETE /tours/:id
-# How do we handle deletions?
+# DELETE  /tours/:id
+delete '/tours/:id' do |id|
+  @tour = Tour.find(id)
+
+  if @tour.update_column(:deleted, true)
+    { :tour => @tour }.to_json
+  else
+    { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
+  end
+end
 
 private
 def tour_params
