@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131106023258) do
+ActiveRecord::Schema.define(version: 20131112224853) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20131106023258) do
     t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "deleted",                             default: true
   end
 
   create_table "stops_tours", force: true do |t|
@@ -57,6 +58,7 @@ ActiveRecord::Schema.define(version: 20131106023258) do
     t.decimal  "lon",         precision: 9, scale: 6
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "deleted",                             default: true
   end
 
   create_table "users", force: true do |t|
