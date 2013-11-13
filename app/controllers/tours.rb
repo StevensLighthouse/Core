@@ -56,6 +56,35 @@ delete '/tours/:id' do |id|
   end
 end
 
+# Add a stop to a tour
+# Params := [position]
+post '/tour/:tour_id/stop/:stop_id' do 
+  tour = Tour.find(params[:tour_id]) 
+  stop = Stop.find(params[:stop_id])
+
+  tour.stops << stop unless tour.stops.include? stop
+
+  if tour.save 
+    { :tour => tour }.to_json
+  else
+    { :errors => tour.errors, :status => :unprocessable_entity }.to_json
+  end
+    
+end
+
+# Disassociate a stop from a tour
+delete '/tour/:tour_id/stop/:stop_id' do
+  tour = Tour.find(params[:tour_id])
+  stop = Stop.find(params[:stop_id])
+
+  if tour.stops.delete(stop)
+    { :tour => tour }.to_json
+  else
+    { :error => tour.errors, :status => :unprocessable_entity }.to_json
+  end
+
+end
+
 private
 def tour_params
   params.allow(:name, :description, :visibility, :lat, :lon)

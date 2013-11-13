@@ -3,7 +3,7 @@ class Stop < ActiveRecord::Base
   # associations
   belongs_to :creator, :class_name => 'User'
   has_one :editor, :class_name => 'User'
-  has_and_belongs_to_many :tours
+  has_and_belongs_to_many :tours, :uniq => true
   has_and_belongs_to_many :categories
 
   # validators
@@ -20,5 +20,7 @@ class Stop < ActiveRecord::Base
           :lat => (lat.to_f - boundary.to_f)..(lat.to_f + boundary.to_f),
           :lon => (lon.to_f - boundary.to_f)..(lon.to_f + boundary.to_f))
   end
+
+  default_scope { where :deleted => false }
 
 end
