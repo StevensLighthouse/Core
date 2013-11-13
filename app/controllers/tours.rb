@@ -39,7 +39,7 @@ end
 put '/tours/:id' do |id|
   @tour = Tour.find(id)
 
-  if @tour.update(listing_params)
+  if @tour.update(tour_params)
     { :tour => @tour }.to_json
   else
     { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
