@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20131112224853) do
     t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "deleted",                             default: true
+    t.boolean  "deleted",                             default: false
   end
 
   create_table "stops_tours", force: true do |t|
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 20131112224853) do
     t.decimal  "lon",         precision: 9, scale: 6
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "deleted",                             default: true
+    t.boolean  "deleted",                             default: false
   end
 
   create_table "users", force: true do |t|
