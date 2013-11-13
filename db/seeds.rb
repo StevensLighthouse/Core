@@ -13,3 +13,9 @@ t.stops << s2
 t.stops << s3
 
 t.save
+
+p1 = Permission.find_or_create_by(:name => 'Admin', :description => 'Grants the highest level of permissions to the user', :level => 1)
+p2 = Permission.find_or_create_by(:name => 'Team Leader', :description => 'Grants the user the ability to add/remove users from the group', :level => 2)
+p3 = Permission.find_or_create_by(:name => 'Builder', :description => 'Grants the user the power to creat/edit/delete stops and tours', :level => 3)
+p4 = Permission.find_or_create_by(:name => 'Editor', :description => 'Grants the user the power to edit stops and tours', :level => 4)
+

@@ -8,7 +8,7 @@ class Stop < ActiveRecord::Base
 
   # validators
   validates :name, :presence => true
-  validates :description, :presence =>true
+  validates :description, :presence => true
   validates :lat, :numericality => { :greater_than => -90.0, :less_than => 90.0 }
   validates :lon, :numericality => { :greater_than => -180.0, :less_than => 180.0 }
 
