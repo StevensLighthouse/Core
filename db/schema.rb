@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131112224853) do
+ActiveRecord::Schema.define(version: 20131113021620) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -41,12 +41,15 @@ ActiveRecord::Schema.define(version: 20131112224853) do
     t.boolean  "deleted",                             default: false
   end
 
-  create_table "stops_tours", force: true do |t|
+  create_table "stops_tours", id: false, force: true do |t|
     t.integer  "tour_id"
     t.integer  "stop_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "position"
   end
+
+  add_index "stops_tours", ["stop_id", "tour_id", "position"], name: "index_stops_tours_on_stop_id_and_tour_id_and_position", unique: true
 
   create_table "tours", force: true do |t|
     t.string   "name"

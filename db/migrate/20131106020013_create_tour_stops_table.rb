@@ -1,6 +1,6 @@
 class CreateTourStopsTable < ActiveRecord::Migration
   def up
-    create_table :stops_tours do |t|
+    create_table :stops_tours, :id => false do |t|
       t.references :tour
       t.references :stop
 
