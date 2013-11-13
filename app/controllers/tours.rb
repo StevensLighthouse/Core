@@ -3,7 +3,8 @@
 # Params: [lat, lon, distance]
 get '/tours' do
   @tours = Tour.public_within(params[:lat], params[:lon], params[:distance])
-
+  @stops = Stop.all
+        
   respond_to do |format|
     format.html { erb :'tours/index' }
     format.json { { :tours => @tours }.to_json }
@@ -38,7 +39,7 @@ end
 put '/tours/:id' do |id|
   @tour = Tour.find(id)
 
-  if @tour.update(tour_params)
+  if @tour.update(listing_params)
     { :tour => @tour }.to_json
   else
     { :errors => @tour.errors, :status => :unprocessable_entity }.to_json

@@ -78,6 +78,34 @@ textarea {
 /* ==========================================================================
    Admin Home Page
    ========================================================================== */
+#map-canvas {
+    width: 100%; 
+    padding: 50px; 
+    height: 100%; 
+    -moz-box-sizing: border-box;    
+    box-sizing: border-box;
+}
+
+#mini-map {
+    float: right;
+    width: 400px;
+    height: 200px;
+}
+
+.full-pane {
+    position: absolute; 
+    background-color: #FFF;
+    left: 350px; 
+    top: 0; 
+    right: 0; 
+    bottom: 0; 
+    overflow: hidden;
+}
+
+.full-editor {
+    padding: 10px;
+}
+
  .side-bar {
     position: absolute;
     top: 0;
@@ -86,8 +114,10 @@ textarea {
     min-height: 100%;
     width: 350px;
     overflow: auto;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
-h1 {
+h1, h2, h3, h4, h5, h6 {
     margin: 0;
     padding: 15px;
 }
@@ -95,23 +125,35 @@ h1 {
     width: 100%;
     min-height: 100%;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     border-right: 2px solid #000;
 }
 .one-tour {
     display: none;
 }
-.tour-entry {
-    height: 50px;
+.entry {
+    margin: 0;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     padding: 15px;
     border-bottom: 1px solid #000;
 }
-.tour-entry i {
-    float: right;
-}
-.tour-entry:first-of-type {
+.entry:first-of-type {
     border-top: 1px solid #000;
 }
+
+.full-editor h1, .full-editor h2, .full-editor h3, .full-editor h4, .full-editor h5 {
+    padding: 0;
+    margin: 10px 0;
+}
+
+.stop-container .entry {
+    width: 50%;
+    float: left;
+    border: none;
+    padding: 0;
+}
+
 /* ==========================================================================
    Login Page
    ========================================================================== */
