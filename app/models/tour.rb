@@ -19,4 +19,11 @@ class Tour < ActiveRecord::Base
           :lon => (lon.to_f - boundary.to_f)..(lon.to_f + boundary.to_f))
   end
 
+  # override default to_json to include stops association with tour
+  def as_json(options = {})
+    options[:include] ||= []
+    options[:include] << :stops
+    super(options)
+  end
+
 end
