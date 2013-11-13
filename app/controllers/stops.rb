@@ -30,7 +30,7 @@ end
 put '/stops/:id' do |id|
   @stop = Stop.find(id)
 
-  if @stop.update(stop_params)
+  if @stop.update(listing_params)
     { :stop => @stop }.to_json
   else
     { :errors => @stop.errors, :status => :unprocessable_entity }.to_json
