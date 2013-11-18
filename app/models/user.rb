@@ -5,5 +5,9 @@ class User < ActiveRecord::Base
   belongs_to :permissions
 
   # validators
+  validates :email, :presence => true
+  # make sure email address is valid
+  validates :hashed_password, :presence => true
+  validates :password_salt, :presence => true
 
 end
