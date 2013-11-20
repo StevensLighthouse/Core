@@ -38,8 +38,8 @@
                 </p>
                 <p class="entry">
                     Stops: 
-                    <ul data-bind="sortable: newStops">
-                        <li data-bind="text: name, click: $parent.centerOnStop"></li>
+                    <ul class="stop-sort-list" data-bind="sortable: newStops">
+                        <li> <a href="#" class="delete-link" data-bind="click: $parent.detachStop">remove</a> <span data-bind="text: name, click: $parent.centerOnStop"></span></li>
                     </ul>
                 </p>
                 <p class="entry">

@@ -62,15 +62,17 @@ var TourViewModel = function (raw, parent) {
 
     self.addNewStop = function () {
         var newStop = self.newStop();
-        if (self.stops.indexOf(newStop) < 0) {
-            self.stops.push(newStop);
+        if (self.newStops.indexOf(newStop) < 0) {
+            self.newStops.push(newStop);
             parent.parent.addMarker(newStop, self);
             parent.parent.setCenter(newStop.lat(), newStop.lon());
+            self.newStop(null);
         }
     };
 
     self.detachStop = function (stop) {
         self.newStops.remove(stop);
+        parent.parent.removeMarker(stop, self);
     };
     
     self.tourUpdateText = ko.computed(function () {
@@ -713,15 +715,18 @@ var AppContainer = function (raw, map) {
             lon = stop.lon(),
             title = stop.name(),
             description = stop.description(),            
-        marker = new google.maps.Marker({
-            position: new google.maps.LatLng(lat, lon),
-            map: map,
-            title: title
-        }),
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(lat, lon),
+                map: map,
+                title: title
+            }),
             infowindow = new google.maps.InfoWindow({
                 content: ""
             });
-
+        
+        // Little hacky, but what can you do? :|
+        marker.stopId = stop.id();
+        
         window.google.maps.event.addListener(marker, "click", function () {
             // this is actually, legitly voodoo. I am not very pleased with this
             self.closeInfoWindows();
@@ -738,6 +743,16 @@ var AppContainer = function (raw, map) {
         self.infoWindows.push(infowindow);
         
         return marker;
+    };
+    
+    self.removeMarker = function (stop) {
+        for(var i = 0, desiredId = stop.id(), found = false, curr = null; !found && i < self.markers.length; i++) {
+            curr = self.markers[i];
+            if(curr.stopId === desiredId){
+                found = true;
+                curr.setMap(null);
+            }
+        }
     };
 
     /**
