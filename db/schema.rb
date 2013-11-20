@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131113030423) do
+ActiveRecord::Schema.define(version: 20131119225453) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20131113030423) do
     t.integer  "editor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "permission"
   end
 
 end
