@@ -62,10 +62,11 @@ var TourViewModel = function (raw, parent) {
 
     self.addNewStop = function () {
         var newStop = self.newStop();
-        if (self.stops.indexOf(newStop) < 0) {
-            self.stops.push(newStop);
+        if (self.newStops.indexOf(newStop) < 0) {
+            self.newStops.push(newStop);
             parent.parent.addMarker(newStop, self);
             parent.parent.setCenter(newStop.lat(), newStop.lon());
+            self.newStop(null);
         }
     };
 
