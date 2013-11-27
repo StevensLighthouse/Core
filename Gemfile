@@ -9,11 +9,15 @@ group :default do
   gem 'rspec'
   gem 'rack-test'
   gem 'factory_girl'
+  gem 'protected_attributes'
+  gem 'bcrypt-ruby'
 end
 
 group :development do
 	gem 'shotgun'
   gem 'sqlite3'
+  gem 'guard'
+  gem 'guard-rspec'
 end
 
 group :production do

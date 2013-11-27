@@ -4,6 +4,8 @@ require 'sinatra/activerecord'
 require 'sinatra/respond_to'
 require 'sinatra/content_for'
 require 'yaml'
+require 'bcrypt'
+require 'protected_attributes' # needed for attr_accessible
 
 require './config/environments'
 
@@ -25,4 +27,5 @@ end
     require f
   end
 end
+
 
