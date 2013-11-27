@@ -14,4 +14,9 @@ FactoryGirl.define do
     lon -74.030085     
   end
 
+  factory :user do
+    email "user@example.com"
+    password "testpassword"
+    password_confirmation "testpassword"
+  end
 end
