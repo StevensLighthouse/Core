@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   validates_presence_of :email
   validates_uniqueness_of :email
 
+  validates_length_of :password, :minimum => 6
+
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create }
 
   before_save :encrypt
