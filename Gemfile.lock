@@ -24,6 +24,7 @@ GEM
     celluloid (0.15.2)
       timers (~> 1.1.0)
     coderay (1.1.0)
+    database_cleaner (1.2.0)
     diff-lcs (1.2.4)
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
@@ -111,6 +112,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt-ruby
+  database_cleaner
   factory_girl
   guard
   guard-rspec
