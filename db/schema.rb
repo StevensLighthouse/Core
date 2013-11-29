@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131119225453) do
+ActiveRecord::Schema.define(version: 20131129171902) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -25,12 +25,6 @@ ActiveRecord::Schema.define(version: 20131119225453) do
     t.integer  "stop_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "permissions", force: true do |t|
-    t.string  "name"
-    t.text    "description"
-    t.integer "level"
   end
 
   create_table "stops", force: true do |t|
