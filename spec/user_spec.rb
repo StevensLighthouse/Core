@@ -30,4 +30,14 @@ describe 'Users' do
     user.should_not be_valid
   end
 
+  it 'rejects user with password less than 6 characters' do
+    user = FactoryGirl.build(:user, :password => 'a', :password_confirmation => 'a')
+    user.should_not be_valid
+  end
+
+  it 'accepts user with password longer than 6 characters' do
+    user = FactoryGirl.build(:user, :password => 'longpassword', :password_confirmation => 'longpassword')
+    user.should be_valid
+  end
+
 end

@@ -18,12 +18,17 @@ group :development do
   gem 'sqlite3'
   gem 'guard'
   gem 'guard-rspec'
+  gem 'terminal-notifier-guard'  
 end
 
 group :production do
 	gem 'unicorn'
   gem 'mysql2'
   gem 'pg'
+end
+
+group :test do
+  gem 'database_cleaner'
 end
 
 gem 'rake'
