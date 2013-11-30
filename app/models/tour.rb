@@ -3,7 +3,7 @@ class Tour < ActiveRecord::Base
   # associations
   belongs_to :creator, :class_name => 'User' 
   has_one :editor, :class_name => 'User'
-  has_and_belongs_to_many :stops, :uniq => true
+  has_and_belongs_to_many :stops, -> { uniq } 
 
   # validators
   validates :name, :presence => true
