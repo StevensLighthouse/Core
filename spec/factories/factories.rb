@@ -18,5 +18,6 @@ FactoryGirl.define do
     email "user@example.com"
     password "testpassword"
     password_confirmation "testpassword"
+    permission 3
   end
 end

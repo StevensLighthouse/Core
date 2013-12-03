@@ -38,6 +38,29 @@ class User < ActiveRecord::Base
     end
   end
 
+  def is_site_admin?
+    return true if self.permission == 4
+    false
+  end
 
+  def is_group_admin?
+    return true if self.permission >= 3
+    false
+  end
+
+  def is_builder?
+    return true if self.permission >= 2
+    false
+  end
+
+  def is_editor?
+    return true if self.permission >= 1
+    false
+  end
+
+  def is_deactivated_account?
+    return true if self.permission == 0
+    false
+  end
 
 end
