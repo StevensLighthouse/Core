@@ -44,17 +44,17 @@ class User < ActiveRecord::Base
   end
 
   def is_group_admin?
-    return true if self.permission == 3
+    return true if self.permission >= 3
     false
   end
 
   def is_builder?
-    return true if self.permission == 2
+    return true if self.permission >= 2
     false
   end
 
   def is_editor?
-    return true if self.permission == 1
+    return true if self.permission >= 1
     false
   end
 
