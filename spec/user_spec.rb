@@ -39,5 +39,17 @@ describe 'Users' do
     user = FactoryGirl.build(:user, :password => 'longpassword', :password_confirmation => 'longpassword')
     user.should be_valid
   end
+  
+  it 'is an admin account' do
+    user = FactoryGirl.build(:user, :permission => 4)
+    user.is_site_admin?.should be(true)
+  end
+
+  it 'is should not be an admin account' do
+    user = FactoryGirl.build(:user, :permission => 2)
+    user.is_site_admin?.should be(false)
+  end
+
+
 
 end
