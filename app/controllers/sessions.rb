@@ -1,3 +1,11 @@
+# GET /login
+# Provides a login page
+get '/login' do 
+  respond_to do |format|
+    format.html { erb :'sessions/login' }
+  end
+end
+
 post '/login' do
   username = params[:username]
   password = params[:password]
