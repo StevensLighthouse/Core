@@ -48,3 +48,13 @@ post '/login' do
   end
 
 end
+
+get '/logout' do
+  # log the current_user() out
+  user = current_user()
+
+  # delete all sessions associated with this user
+  Session.where(:user_id => user.id).destroy_all
+
+  redirect to('/login')
+end
