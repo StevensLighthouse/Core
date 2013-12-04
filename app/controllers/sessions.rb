@@ -17,7 +17,7 @@ post '/login' do
 
   if user
     # create a new session instance
-    @session = Session.new(:ip_address => request.ip, :user_agent => request.user_agent, :expiry_time => 24.hours.from_now) 
+    @session = Session.new(:user => user, :ip_address => request.ip, :user_agent => request.user_agent, :expiry_time => 24.hours.from_now) 
     if @session.save
       # user is logged in
       session[:user_id] = user.id
