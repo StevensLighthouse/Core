@@ -8,7 +8,16 @@ get '/login' do
   end
 end
 
+get '/logged_in' do
+  user = current_user()
+
+  respond_to do |wants|
+    wants.html { user.to_json } 
+  end
+end
+
 post '/login' do
+  p params
   username = params[:username]
   password = params[:password]
 
