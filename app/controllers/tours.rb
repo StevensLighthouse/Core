@@ -14,12 +14,14 @@ end
 # POST /tours
 # Create a new tour
 post '/tours' do
-  @tour = Tour.create(tour_params)
-
-  if @tour.save
-    { :status => :created, :tour => @tour }.to_json
-  else
-    { :status => :unprocessable_entity, :errors => @tour.errors }.to_json
+  @current_user = current(user)
+  if @current_user.is_builder?
+    @tour = Tour.create(tour_params)
+    if @tour.save
+      { :status => :created, :tour => @tour }.to_json
+    else
+      { :status => :unprocessable_entity, :errors => @tour.errors }.to_json
+    end
   end
 end
 
@@ -37,23 +39,29 @@ end
 # Update a tour
 # Should probably accept PATCH too
 put '/tours/:id' do |id|
-  @tour = Tour.find(id)
+  @current_user = current_user()
+  if @current_user.is_editor?
+    @tour = Tour.find(id)
 
-  if @tour.update(tour_params)
-    { :tour => @tour }.to_json
-  else
-    { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
+    if @tour.update(tour_params)
+      { :tour => @tour }.to_json
+    else
+      { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
+    end
   end
 end
 
 # DELETE  /tours/:id
 delete '/tours/:id' do |id|
-  @tour = Tour.find(id)
+  @current_user = current_user()
+  if @current_user.is_builder?
+    @tour = Tour.find(id)
 
-  if @tour.update_column(:deleted, true)
-    { :tour => @tour }.to_json
-  else
-    { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
+    if @tour.update_column(:deleted, true)
+      { :tour => @tour }.to_json
+    else
+      { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
+    end
   end
 end
 
