@@ -18,6 +18,10 @@ describe "User API" do
     post "/login", :username => u.email, :password => u.password
 
     last_response.body.should =~ /Log out/
+
+    session = Session.where(:user_id => u.id).last
+    session.should_not be(nil)
+
   end
 end
 
