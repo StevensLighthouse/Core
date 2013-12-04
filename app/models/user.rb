@@ -1,10 +1,9 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :password, :password_confirmation
+  attr_accessible :email, :password, :password_confirmation, :permission
 
   # associations
   has_one :creator, :class_name => 'User'
   has_one :editor, :class_name => 'User'
-  belongs_to :permissions
 
   # validators
 
@@ -18,7 +17,7 @@ class User < ActiveRecord::Base
   validates_presence_of :email
   validates_uniqueness_of :email
 
-  validates_length_of :password, :minimum => 6
+  validates_length_of :password, :minimum => 6, :on => :create
 
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create }
 
