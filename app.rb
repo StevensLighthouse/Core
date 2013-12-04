@@ -18,6 +18,7 @@ class LighthouseCore < Sinatra::Application
     set :root, File.dirname(__FILE__)
     set :views, File.join(settings.root, "app/views")
     set :public_folder, 'public'
+    set :sessions, true
   end
 
 end
