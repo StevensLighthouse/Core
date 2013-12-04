@@ -21,6 +21,7 @@ describe "User API" do
 
     session = Session.where(:user_id => u.id).last
     session.should_not be(nil)
+    session.is_expired?.should be(false)
 
   end
 end
