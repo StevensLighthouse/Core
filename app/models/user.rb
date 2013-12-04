@@ -1,10 +1,9 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :password, :password_confirmation
+  attr_accessible :email, :password, :password_confirmation, :permission
 
   # associations
   has_one :creator, :class_name => 'User'
   has_one :editor, :class_name => 'User'
-  belongs_to :permissions
 
   # validators
 

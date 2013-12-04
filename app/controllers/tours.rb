@@ -2,7 +2,7 @@
 # Index of all tours
 # Params: [lat, lon, distance]
 get '/tours' do
-  redirect_to '/login' unless current_user()
+  redirect to('/login') unless current_user()
   @tours = Tour.public_within(params[:lat], params[:lon], params[:distance])
   @stops = Stop.all
         
@@ -15,8 +15,9 @@ end
 # POST /tours
 # Create a new tour
 post '/tours' do
-  redirect_to '/login' unless current_user()
-  @current_user = current(user)
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  p @current_user
   if @current_user.is_builder?
     @tour = Tour.create(tour_params)
     if @tour.save
@@ -41,7 +42,7 @@ end
 # Update a tour
 # Should probably accept PATCH too
 put '/tours/:id' do |id|
-  redirect_to '/login' unless current_user()
+  redirect to('/login') unless current_user()
   @current_user = current_user()
   if @current_user.is_editor?
     @tour = Tour.find(id)
@@ -56,7 +57,7 @@ end
 
 # DELETE  /tours/:id
 delete '/tours/:id' do |id|
-  redirect_to '/login' unless current_user()
+  redirect to('/login') unless current_user()
   @current_user = current_user()
   if @current_user.is_builder?
     @tour = Tour.find(id)
@@ -72,7 +73,7 @@ end
 # Add a stop to a tour
 # Params := [position]
 post '/tour/:tour_id/stop/:stop_id' do 
-  redirect_to '/login' unless current_user()
+  redirect to('/login') unless current_user()
   tour = Tour.find(params[:tour_id]) 
   stop = Stop.find(params[:stop_id])
 
@@ -88,7 +89,7 @@ end
 
 # Disassociate a stop from a tour
 delete '/tour/:tour_id/stop/:stop_id' do
-  redirect_to '/login' unless current_user()
+  redirect to('/login') unless current_user()
   tour = Tour.find(params[:tour_id])
   stop = Stop.find(params[:stop_id])
 
