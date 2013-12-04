@@ -12,5 +12,17 @@ describe "User API" do
     expect(json).to_not be_nil
   end
 
+  it 'logs a user in' do
+    u = FactoryGirl.create(:user)
+
+    post "/login", :username => u.email, :password => u.password
+
+    last_response.body.should =~ /Log out/
+
+    session = Session.where(:user_id => u.id).last
+    session.should_not be(nil)
+    session.is_expired?.should be(false)
+
+  end
 end
 
