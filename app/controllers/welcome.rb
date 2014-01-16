@@ -1,6 +1,6 @@
 get '/' do
 
-  'hello'
+  'hello new'
 end
 
 get '/create_tour' do
