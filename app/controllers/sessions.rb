@@ -3,9 +3,7 @@ enable :sessions
 # GET /login
 # Provides a login page
 get '/login' do 
-  respond_to do |format|
-    format.html { erb :'sessions/login' }
-  end
+   erb :'sessions/login', :layout => :login
 end
 
 get '/logged_in' do

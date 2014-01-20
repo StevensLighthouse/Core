@@ -1,6 +1,15 @@
 get '/' do
-
-  'hello'
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  if @current_user.is_editor?
+    @tours = Tour.public_within(params[:lat], params[:lon], params[:distance])
+    @stops = Stop.all
+        
+    respond_to do |format|
+      format.html { erb :'home/index', :layout => :layout_new }
+      format.json { { :tours => @tours }.to_json }
+    end
+  end
 end
 
 get '/create_tour' do
