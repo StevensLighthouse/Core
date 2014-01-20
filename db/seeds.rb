@@ -1,3 +1,15 @@
+require 'factory_girl'
+require_relative '../spec/factories/factories'
+
+# create a user account, override the email address if you like
+#   default password: testpassword
+#   ---
+#   you can override the password as well using password
+#   and password_confirmation
+#   ---
+FactoryGirl.create(:user, :email => 'ehayon@gmail.com')
+
+# Create some tours and stops
 t= Tour.find_or_create_by(:name => 'Pizza Tour',
                :description => 'A Tour that incorporates all of the best pizza stops in Hoboken, New Jersey.',
                :visibility => true, 
