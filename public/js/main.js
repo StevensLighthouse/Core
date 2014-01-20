@@ -772,14 +772,24 @@ var AppContainer = function (raw, map) {
     self.clearMap = function () {
         self.removeMarkers();
     };
+    
+    self.syncState = function () {
+        var hash = window.location.hash,
+            components;
+        if (!hash) {
+            self.state(SiteState.TourList);
+            return;
+        }
+        components = hash.substr(2).split("/");
+        console.log(components);
+    };
 
     /**
      * Initializes the application
      * @function
      */
     self.init = function () {
-        self.state(SiteState.TourList);
-
+        self.syncState();
         self.stopContainer(new StopContainerViewModel(raw.stops, self));
         self.tourContainer(new TourContainerViewModel(raw.tours, self));
     };

@@ -2,7 +2,7 @@ get '/' do
   redirect to('/login') unless current_user()
   @current_user = current_user()
   if @current_user.is_editor?
-    @tours = Tour.public_within(params[:lat], params[:lon], params[:distance])
+    @tours = Tour.all
     @stops = Stop.all
         
     respond_to do |format|
