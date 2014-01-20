@@ -29,7 +29,7 @@ post '/login' do
       # user is logged in
       session[:user_id] = user.id
       respond_to do |wants|
-        wants.html { "Log out" }
+          redirect to('/')
       end
     else
       # unexpected error occured
