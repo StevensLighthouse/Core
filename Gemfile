@@ -21,6 +21,7 @@ group :development do
   gem 'guard'
   gem 'guard-rspec'
   gem 'terminal-notifier-guard'  
+  gem 'capistrano-bundler'
 end
 
 group :production do
