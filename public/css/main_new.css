@@ -1,0 +1,21 @@
+/* ==========================================================================
+   Admin Home Page
+   ========================================================================== */
+#map-canvas {
+    width: 100%; 
+    padding: 50px; 
+    height: 100%; 
+    min-height: 500px;
+    -moz-box-sizing: border-box;    
+    box-sizing: border-box;
+}
+
+#mini-map {
+    float: right;
+    width: 400px;
+    height: 200px;
+}
+
+.full-editor {
+    padding: 10px;
+}
