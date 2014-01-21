@@ -414,7 +414,7 @@
                 </div>
                 <div class="row" data-bind="page: 'create-group', onVisible: userContainer.createGroup">
                     <div class="col-xs-12">
-                        <form role="form" class="form-horizontal" action="#grops" method="get">
+                        <form role="form" class="form-horizontal" action="#groups" method="get">
                             <div class="form-group">
                                 <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Group Name</label>
                                 <div class="col-sm-9">
@@ -425,7 +425,7 @@
                             <div class="form-group">
                                 <label for="form-field-select-3" class="col-sm-3 control-label no-padding-right">About the group</label>
                                 <div class="col-sm-5">
-                                    <textarea class="form-control" id="" placeholder="About your group"></textarea>
+                                    <textarea class="form-control" id="" placeholder="About your group" data-bind="value: userContainer.newGroupDescription"></textarea>
                                 </div>
                             </div>
                             <div class="clearfix form-actions">

@@ -693,9 +693,9 @@ var UserContainer = function () {
             curr,
             i;
 
-        for(i = 0; i < groups.length; i++){
+        for (i = 0; i < groups.length; i++) {
             curr = groups[i];
-            if(curr.id() === id) return curr;
+            if (curr.id() === id) return curr;
         }
 
         return null;
@@ -708,7 +708,7 @@ var UserContainer = function () {
         self.newPasswordConfirm("");
         self.newGroup(null);
     };
-    
+
     this.createGroup = function () {
         self.newGroupName("");
         self.newGroupDescription("");
@@ -744,9 +744,27 @@ var UserContainer = function () {
     };
 
     this.saveGroup = function () {
-        
+        if (!self.newGroupName()) return false;
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: "/groups",
+            data: {
+                name: self.newGroupName(),
+                description: self.newGroupDescription()
+            }
+        }).done(function (response) {
+            self.groups.push(new GroupViewModel(response.group));
+            self.polling(false);
+        }).fail(function (r) {
+            console.log(r);
+            self.polling(false);
+        });
+
+        return true;
     };
-    
+
     this.init = function () {
         $.ajax({
             url: "/users",
@@ -757,7 +775,7 @@ var UserContainer = function () {
             },
             dataType: "json"
         });
-        
+
         $.ajax({
             url: "/groups.json",
             success: function (data) {
