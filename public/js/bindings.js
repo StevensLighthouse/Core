@@ -28,13 +28,14 @@ ko.bindingHandlers.page = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         var ele = $(element),
             val = valueAccessor(),
+            type = val.constructor,
             allBindings = allBindingsAccessor(),
             curr = "";
 
         function change() {
             curr = window.location.hash;
             if (curr) curr = curr.substr(1);
-            if (curr === val) {
+            if ((type === String && val === curr) || (type === Array && val.indexOf(curr) >= 0)) {
                 ele.show();
                 if(allBindings.onVisible && typeof allBindings.onVisible === "function"){
                     allBindings.onVisible();
