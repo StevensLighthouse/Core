@@ -385,7 +385,8 @@
             model.init();
         }
         
-        function refresh() {
+        function refresh(foo) {
+            console.log(foo);
             google.maps.event.trigger(map, 'resize');            
         }
 
