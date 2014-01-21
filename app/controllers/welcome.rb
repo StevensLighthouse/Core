@@ -2,7 +2,6 @@ get '/' do
   redirect to('/login') unless current_user()
   @current_user = current_user()
   if @current_user.is_editor?
-    @tours = Tour.all
     @stops = Stop.all
         
     respond_to do |format|

@@ -368,10 +368,6 @@
 <% content_for :scripts do %>
     <script type="text/javascript">
         var map,
-            raw = {
-                tours: <%= @tours.to_json %>,
-                stops: <%= @stops.to_json %>
-            },
             model;
 
         function initialize() {
@@ -382,7 +378,7 @@
             };
 
             map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-            model = new AppContainer(raw, map);
+            model = new AppContainer(map);
 
             ko.applyBindings(model);            
             model.init();

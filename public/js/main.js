@@ -248,7 +248,7 @@ var TourViewModel = function (raw, parent) {
  * @param {object} [raw] The raw data to create tours.
  * @param {objet} [parent] A reference to the app container.
  */
-var TourContainerViewModel = function (raw, parent) {
+var TourContainerViewModel = function (parent) {
     var self = this;
 
     // Allows us climb up the chain fo rwhen we want to import stops
@@ -258,7 +258,7 @@ var TourContainerViewModel = function (raw, parent) {
 
     // When we want to focus on one tour to view / edit it
     self.focusedTour = ko.observable();
-    
+
     // Sets us up to create a new tour
     self.createNewTour = function () {
         self.focusedTour(new TourViewModel(null, self));
@@ -273,32 +273,32 @@ var TourContainerViewModel = function (raw, parent) {
     self.focusOn = function (id) {
         // panic
         var asNum = parseInt(id);
-        if(Number.isNaN(asNum)) return;
+        if (Number.isNaN(asNum)) return;
 
-        for(var i = 0; i < self.tours().length; i++){
-            if (self.tours()[i].id() === asNum){
+        for (var i = 0; i < self.tours().length; i++) {
+            if (self.tours()[i].id() === asNum) {
                 self.focusedTour(self.tours()[i]);
                 self.focusedTour().load();
                 return;
             }
         }
     };
-    
+
     self.preview = function (id) {
         self.focusOn(id);
-        
+
         if (!self.focusedTour()) return false;
-        
+
         return true;
     };
-    
+
     self.edit = function (id) {
         self.focusOn(id);
         if (!self.focusedTour()) return false;
         self.focusedTour().edit();
         return true;
     };
-    
+
     /**
      * Loads a tour to be visible on the map, as well as come into some sort of focus
      * @function
@@ -337,12 +337,18 @@ var TourContainerViewModel = function (raw, parent) {
      * @function
      */
     self.init = function () {
-        // We do a .push.apply to only 
-        var tours = ko.utils.arrayMap(raw, function (tour) {
-            return new TourViewModel(tour, self);
-        });
+        $.ajax({
+            dataType: "json",
+            url: "/tours.json",
+            success: function (data) {
+                var tours = ko.utils.arrayMap(data.tours, function (tour) {
+                    return new TourViewModel(tour, self);
+                });
 
-        self.tours.push.apply(self.tours, tours);
+                // We do a .push.apply to only update once
+                self.tours(tours);
+            }
+        });
     };
 
     (function () {
@@ -517,7 +523,7 @@ var StopViewModel = function (raw, parent) {
 
 };
 
-var StopContainerViewModel = function (raw, parent) {
+var StopContainerViewModel = function (parent) {
     var self = this,
         miniMap,
         miniMapOptions = {
@@ -617,15 +623,20 @@ var StopContainerViewModel = function (raw, parent) {
     };
 
     /**
-     * Initializes the tour list container; safe to self-invoke
+     * Initializes the stop list container; safe to self-invoke
      * @function
      */
     self.init = function () {
-        var stops = ko.utils.arrayMap(raw, function (stop) {
-            return new StopViewModel(stop, self);
+        $.ajax({
+            dataType: "json",
+            url: "/stops.json",
+            success: function (data) {
+                var stops = ko.utils.arrayMap(data.stops, function (stop) {
+                    return new StopViewModel(stop, self);
+                });
+                self.stops(stops);
+            }
         });
-
-        self.stops.push.apply(self.stops, stops);
     };
 
     (function () {
@@ -633,42 +644,44 @@ var StopContainerViewModel = function (raw, parent) {
     }());
 };
 
-var UserViewModel = function(raw){
+var UserViewModel = function (raw) {
     this.id = ko.observable(raw.id);
     this.email = ko.observable(raw.email);
     this.permission = ko.observable(raw.permission);
-    this.role = ko.computed(function() {
+    this.role = ko.computed(function () {
         return UserRoles[this.permission()];
     }, this);
 };
 
-var UserContainer = function () { 
+var UserContainer = function () {
     var self = this;
-    
+
     this.polling = ko.observable(false);
     this.users = ko.observableArray();
     this.newEmail = ko.observable("");
     this.newPermission = ko.observable(0);
     this.newPassword = ko.observable("");
     this.newPasswordConfirm = ko.observable("");
-    
+
     this.populateUsers = function () {
         $.ajax({
             url: "/users",
             success: function (data) {
-                self.users(ko.utils.arrayMap(data.users, function(x){return new UserViewModel(x);}));
+                self.users(ko.utils.arrayMap(data.users, function (x) {
+                    return new UserViewModel(x);
+                }));
             },
             dataType: "json"
         });
     };
-    
+
     this.createUser = function () {
         self.newEmail("");
         self.newPermission(1);
         self.newPassword("");
         self.newPasswordConfirm("");
     };
-    
+
     this.saveUser = function () {
         self.polling(true);
 
@@ -693,7 +706,7 @@ var UserContainer = function () {
             console.log(r);
             self.polling(false);
         });
-        
+
         return true;
     };
 };
@@ -701,16 +714,16 @@ var UserContainer = function () {
 /**
  * A container around our application.
  * @constructor
- * @param {object} [raw] The raw data that will
+ * @param {google_map} [map] The google map object
  */
-var AppContainer = function (raw, map) {
+var AppContainer = function (map) {
     var self = this;
 
     self.map = map;
 
     self.userContainer = new UserContainer();
-    self.stopContainer = new StopContainerViewModel(raw.stops, self);
-    self.tourContainer = new TourContainerViewModel(raw.tours, self);
+    self.stopContainer = new StopContainerViewModel(self);
+    self.tourContainer = new TourContainerViewModel(self);
 
     // Map operations
 
@@ -819,6 +832,5 @@ var AppContainer = function (raw, map) {
      * Initializes the application
      * @function
      */
-    self.init = function () {
-    };
+    self.init = function () {};
 };

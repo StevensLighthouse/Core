@@ -1,7 +1,15 @@
 # GET /stops
 # Index of all global stops
 get '/stops' do
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  if @current_user.is_editor?
+    @stops = Stop.all
 
+    respond_to do |format|
+      format.json { { :stops => @stops }.to_json }
+    end
+  end
 end
 
 # POST /stops
