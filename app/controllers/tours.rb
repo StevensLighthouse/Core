@@ -7,7 +7,7 @@ get '/tours' do
   if @current_user.is_editor?
     @tours = Tour.public_within(params[:lat], params[:lon], params[:distance])
     @stops = Stop.all
-        
+
     respond_to do |format|
       format.html { erb :'tours/index' }
       format.json { { :tours => @tours }.to_json }
@@ -63,12 +63,13 @@ delete '/tours/:id' do |id|
   if @current_user.is_builder?
     @tour = Tour.find(id)
 
-  # Update the deleted column of the tour so it is "deleted" to the user
-  if @tour.update_column(:deleted, true)
-    { :tour => @tour }.to_json
-  #  Tour was not sucessfully "deleted", show errors
-  else
-    { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
+    # Update the deleted column of the tour so it is "deleted" to the user
+    if @tour.update_column(:deleted, true)
+      { :tour => @tour }.to_json
+      #  Tour was not sucessfully "deleted", show errors
+    else
+      { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
+    end
   end
 end
 
@@ -85,11 +86,11 @@ post '/tour/:tour_id/stop/:stop_id' do
   # Save the updated tour
   if tour.save 
     { :tour => tour }.to_json
-  # Tour was not sucessfully saved, show errors
+    # Tour was not sucessfully saved, show errors
   else
     { :errors => tour.errors, :status => :unprocessable_entity }.to_json
   end
-    
+
 end
 
 # Disassociate a stop from a tour
@@ -100,9 +101,9 @@ delete '/tour/:tour_id/stop/:stop_id' do
   # Delete the stop from the tour
   if tour.stops.delete(stop)
     { :tour => tour }.to_json
-  # Stop was not successfully deleted from the tour, show errors
+    # Stop was not successfully deleted from the tour, show errors
   else
-  # stop was not successfully deleted, show errors
+    # stop was not successfully deleted, show errors
     { :error => tour.errors, :status => :unprocessable_entity }.to_json
   end
 
