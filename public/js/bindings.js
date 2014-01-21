@@ -25,9 +25,10 @@ ko.bindingHandlers.debug = {
 };
 
 ko.bindingHandlers.page = {
-    init: function (element, valueAccessor) {
+    init: function (element, valueAccessor, allBindingsAccessor) {
         var ele = $(element),
             val = valueAccessor(),
+            allBindings = allBindingsAccessor(),
             curr = "";
 
         function change() {
@@ -35,6 +36,9 @@ ko.bindingHandlers.page = {
             if (curr) curr = curr.substr(1);
             if (curr === val) {
                 ele.show();
+                if(allBindings.onVisible && typeof allBindings.onVisible === "function"){
+                    allBindings.onVisible();
+                }
             } else {
                 ele.hide();
             }

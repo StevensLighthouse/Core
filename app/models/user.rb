@@ -61,5 +61,9 @@ class User < ActiveRecord::Base
     return true if self.permission == 0
     false
   end
+    
+  def as_json(options={})
+      super(options.merge(:except=>[:hashed_password, :password_salt, :last_login, :creator_id, :editor_id, :updated_at, :created_at]))
+  end;
 
 end

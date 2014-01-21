@@ -29,6 +29,14 @@ var SiteState = {
     FindStop: "Find Stop"
 };
 
+var UserRoles = {
+    0: "Deactivated",
+    1: "Editor",
+    2: "Builder",
+    3: "Group Admin",
+    4: "Site Admin"
+};
+
 /**
  * Represents a single tour.
  * @constructor
@@ -74,7 +82,7 @@ var TourViewModel = function (raw, parent) {
         self.newStops.remove(stop);
         parent.parent.removeMarker(stop, self);
     };
-    
+
     self.tourUpdateText = ko.computed(function () {
         return self.id() ? "Update Tour" : "Create Tour";
     });
@@ -611,6 +619,16 @@ var StopContainerViewModel = function (raw, parent) {
     }());
 };
 
+var UserViewModel = function(raw){
+    this.id = ko.observable(raw.id);
+    this.email = ko.observable(raw.email);
+    this.checked = ko.observable(false);
+    this.permission = ko.observable(raw.permission);
+    this.role = ko.computed(function() {
+        return UserRoles[this.permission()];
+    }, this);
+};
+
 /**
  * A container around our application.
  * @constructor
@@ -623,6 +641,18 @@ var AppContainer = function (raw, map) {
 
     // Determines what's actually visible on the page.
     self.state = ko.observable(SiteState.Loading);
+
+    self.users = ko.observableArray();
+
+    self.populateUsers = function () {
+        $.ajax({
+            url: "/users",
+            success: function (data) {
+                self.users(ko.utils.arrayMap(data.users, function(x){return new UserViewModel(x);}));
+            },
+            dataType: "json"
+        });
+    };
 
     self.stopContainer = new StopContainerViewModel(raw.stops, self);
     self.tourContainer = new TourContainerViewModel(raw.tours, self);
@@ -696,12 +726,12 @@ var AppContainer = function (raw, map) {
         map.setCenter(new google.maps.LatLng(lat, lon));
     };
 
-    self.closeInfoWindows = function() {
-        for(var i = 0; i < self.infoWindows.length; i++) {
+    self.closeInfoWindows = function () {
+        for (var i = 0; i < self.infoWindows.length; i++) {
             self.infoWindows[i].close();
         }
     };
-    
+
     self.infoWindowStop = ko.observable();
     self.infoWindowTrip = ko.observable();
     self.infoWindowMarker = ko.observable();
@@ -715,7 +745,7 @@ var AppContainer = function (raw, map) {
         var lat = stop.lat(),
             lon = stop.lon(),
             title = stop.name(),
-            description = stop.description(),            
+            description = stop.description(),
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, lon),
                 map: map,
@@ -724,17 +754,17 @@ var AppContainer = function (raw, map) {
             infowindow = new google.maps.InfoWindow({
                 content: ""
             });
-        
+
         // Little hacky, but what can you do? :|
         marker.stopId = stop.id();
-        
+
         window.google.maps.event.addListener(marker, "click", function () {
             // this is actually, legitly voodoo. I am not very pleased with this
             self.closeInfoWindows();
             self.infoWindowStop(stop);
             self.infoWindowTrip(trip);
             self.infoWindowMarker(marker);
-            
+
             infowindow.setContent($('#hidden-info-window-helper').clone(true)[0]);
 
             infowindow.open(map, marker);
@@ -742,14 +772,14 @@ var AppContainer = function (raw, map) {
 
         self.markers.push(marker);
         self.infoWindows.push(infowindow);
-        
+
         return marker;
     };
-    
+
     self.removeMarker = function (stop) {
-        for(var i = 0, desiredId = stop.id(), found = false, curr = null; !found && i < self.markers.length; i++) {
+        for (var i = 0, desiredId = stop.id(), found = false, curr = null; !found && i < self.markers.length; i++) {
             curr = self.markers[i];
-            if(curr.stopId === desiredId){
+            if (curr.stopId === desiredId) {
                 found = true;
                 curr.setMap(null);
             }
@@ -773,7 +803,7 @@ var AppContainer = function (raw, map) {
     self.clearMap = function () {
         self.removeMarkers();
     };
-    
+
     /**
      * Initializes the application
      * @function
