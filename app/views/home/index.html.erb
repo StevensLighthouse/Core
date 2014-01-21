@@ -47,9 +47,9 @@
                                 </a>
                                 <ul class="submenu" data-bind="foreach: tourContainer.tours">
                                     <li>
-                                        <a href="#">
+                                        <a href="#preview-tour" data-bind="click: load">
                                             <i class="icon-leaf"></i>
-                                            <span data-bind="text: name, click: load"></span>
+                                            <span data-bind="text: name"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -64,9 +64,9 @@
 
                                 <ul class="submenu" data-bind="foreach: tourContainer.tours">
                                     <li>
-                                        <a href="#">
+                                        <a href="#edit-tour" data-bind="click: edit">
                                             <i class="icon-leaf"></i>
-                                            <span data-bind="text: name, click: edit"></span>
+                                            <span data-bind="text: name"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -217,10 +217,11 @@
                             </div>
                         </div>
                     </div>
-                    <div data-bind="page: ['create-tour', 'edit-tour'], onVisible: refresh">
+                    <div data-bind="page: ['create-tour', 'edit-tour', 'preview-tour'], onVisible: refresh">
 						<div class="page-header">
                             <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
                             <h1 data-bind="page: 'edit-tour'">Manage a Tour</h1>
+                            <h1 data-bind="page: 'preview-tour'">My Tour</h1>
                         </div>
 						<div class="row">
 							<div class="col-xs-12">

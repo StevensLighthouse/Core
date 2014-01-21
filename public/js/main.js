@@ -177,6 +177,7 @@ var TourViewModel = function (raw, parent) {
      */
     self.load = function () {
         parent.loadTour(self, SiteState.ViewTour);
+        return true;
     };
 
     /**
@@ -189,6 +190,7 @@ var TourViewModel = function (raw, parent) {
         self.newVisibilty(self.visibility());
         self.newStops(self.stops().slice(0));
         parent.loadTour(self, SiteState.EditTour);
+        return true;
     };
 
     /**
