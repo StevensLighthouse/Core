@@ -1,11 +1,5 @@
 enable :sessions
 
-# GET /login
-# Provides a login page
-get '/login' do 
-   erb :'sessions/login', :layout => :login
-end
-
 get '/logged_in' do
   user = current_user()
 
