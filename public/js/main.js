@@ -685,7 +685,9 @@ var UserContainer = function () {
     this.newGroup = ko.observable(null);
     this.newPassword = ko.observable("");
     this.newPasswordConfirm = ko.observable("");
-    
+    this.newGroupName = ko.observable("");
+    this.newGroupDescription = ko.observable("");
+
     this.getGroup = function (id) {
         var groups = this.groups(),
             curr,
@@ -705,6 +707,11 @@ var UserContainer = function () {
         self.newPassword("");
         self.newPasswordConfirm("");
         self.newGroup(null);
+    };
+    
+    this.createGroup = function () {
+        self.newGroupName("");
+        self.newGroupDescription("");
     };
 
     this.saveUser = function () {
@@ -736,6 +743,10 @@ var UserContainer = function () {
         return true;
     };
 
+    this.saveGroup = function () {
+        
+    };
+    
     this.init = function () {
         $.ajax({
             url: "/users",

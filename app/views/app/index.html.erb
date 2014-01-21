@@ -412,6 +412,33 @@
                         </table>
                     </div>
                 </div>
+                <div class="row" data-bind="page: 'create-group', onVisible: userContainer.createGroup">
+                    <div class="col-xs-12">
+                        <form role="form" class="form-horizontal" action="#grops" method="get">
+                            <div class="form-group">
+                                <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Group Name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="col-xs-10 col-sm-5" placeholder="Group Name" data-bind="value: userContainer.newGroupName">
+                                </div>
+                            </div>
+                            <div class="space-4"></div>
+                            <div class="form-group">
+                                <label for="form-field-select-3" class="col-sm-3 control-label no-padding-right">About the group</label>
+                                <div class="col-sm-5">
+                                    <textarea class="form-control" id="" placeholder="About your group"></textarea>
+                                </div>
+                            </div>
+                            <div class="clearfix form-actions">
+                                <div class="col-md-9">
+                                    <button class="btn btn-info" type="submit" data-bind="click: userContainer.saveGroup">
+                                        <i class="icon-ok bigger-110"></i>
+                                        Create Group
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- /.main-content -->
