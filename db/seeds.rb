@@ -25,3 +25,6 @@ t.stops << s2
 t.stops << s3
 
 t.save
+
+# Create a group
+g1 = Group.find_or_create_by(:name => 'Steven\'s', :description => 'School in Hoboken NJ')

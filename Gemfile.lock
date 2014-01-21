@@ -25,6 +25,9 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (>= 0.0.23)
+    capistrano-bundler (1.1.1)
+      capistrano (~> 3.0)
+      sshkit (>= 1.2.0)
     capistrano-rvm (0.1.1)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
@@ -130,6 +133,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt-ruby
   capistrano
+  capistrano-bundler
   capistrano-rvm
   database_cleaner
   factory_girl
