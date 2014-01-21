@@ -37,5 +37,5 @@ end
 
 private
 def user_params
-  params.allow(:email, :permission, :password, :group)
+  params.allow(:email, :permission, :password, :group_id)
 end
