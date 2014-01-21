@@ -666,18 +666,6 @@ var UserContainer = function () {
     this.newPassword = ko.observable("");
     this.newPasswordConfirm = ko.observable("");
 
-    this.populateUsers = function () {
-        $.ajax({
-            url: "/users",
-            success: function (data) {
-                self.users(ko.utils.arrayMap(data.users, function (x) {
-                    return new UserViewModel(x);
-                }));
-            },
-            dataType: "json"
-        });
-    };
-
     this.createUser = function () {
         self.newEmail("");
         self.newPermission(1);
@@ -712,6 +700,21 @@ var UserContainer = function () {
 
         return true;
     };
+    
+    
+    this.init = function () {
+        $.ajax({
+            url: "/users",
+            success: function (data) {
+                self.users(ko.utils.arrayMap(data.users, function (x) {
+                    return new UserViewModel(x);
+                }));
+            },
+            dataType: "json"
+        });
+    };
+    
+    this.init();
 };
 
 /**
