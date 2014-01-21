@@ -669,7 +669,7 @@ var GroupViewModel = function (raw) {
     var self = this;
 
     this.id = ko.observable(raw.id);
-    this.name = ko.obserable(raw.name);
+    this.name = ko.observable(raw.name);
     this.description = ko.observable(raw.description);
 };
 
@@ -723,10 +723,10 @@ var UserContainer = function () {
                 email: self.newEmail(),
                 permission: self.newPermission(),
                 password: self.newPassword(),
-                group_id: self.newGroup()
+                group: self.newGroup()
             }
         }).done(function (response) {
-            self.users.push(new UserViewModel(response.user));
+            self.users.push(new UserViewModel(response.user, self));
             self.polling(false);
         }).fail(function (r) {
             console.log(r);
@@ -741,7 +741,17 @@ var UserContainer = function () {
             url: "/users",
             success: function (data) {
                 self.users(ko.utils.arrayMap(data.users, function (x) {
-                    return new UserViewModel(x);
+                    return new UserViewModel(x, self);
+                }));
+            },
+            dataType: "json"
+        });
+        
+        $.ajax({
+            url: "/groups.json",
+            success: function (data) {
+                self.groups(ko.utils.arrayMap(data.groups, function (x) {
+                    return new GroupViewModel(x);
                 }));
             },
             dataType: "json"
