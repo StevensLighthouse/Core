@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :password, :password_confirmation, :permission
+  attr_accessible :email, :password, :password_confirmation, :permission, :group_id, :group
 
   # associations
   has_one :creator, :class_name => 'User'
