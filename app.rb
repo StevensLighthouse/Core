@@ -2,6 +2,7 @@ require 'erb'
 require 'sinatra'
 require 'sinatra/activerecord'
 require 'sinatra/respond_to'
+require 'sinatra/namespace'
 require 'sinatra/content_for'
 require 'yaml'
 require 'bcrypt'
@@ -19,6 +20,7 @@ class LighthouseCore < Sinatra::Application
     set :views, File.join(settings.root, "app/views")
     set :public_folder, 'public'
     set :sessions, true
+    set :session_secret, 'secret'
   end
 
 end
