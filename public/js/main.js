@@ -622,7 +622,6 @@ var StopContainerViewModel = function (raw, parent) {
 var UserViewModel = function(raw){
     this.id = ko.observable(raw.id);
     this.email = ko.observable(raw.email);
-    this.checked = ko.observable(false);
     this.permission = ko.observable(raw.permission);
     this.role = ko.computed(function() {
         return UserRoles[this.permission()];

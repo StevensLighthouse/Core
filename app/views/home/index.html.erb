@@ -194,26 +194,19 @@
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th class="center">
-                                        <label>
-                                            <input type="checkbox" class="ace">
-                                            <span class="lbl"></span>
-                                        </label>
-                                    </th>
                                     <th>Email</th>
                                     <th>Account Type</th>
+                                    <th>Manage</th>
                                 </tr>
                             </thead>
                             <tbody data-bind="foreach: userContainer.users">
                                 <tr>
-                                    <td class="center">
-                                        <label>
-                                            <input type="checkbox" class="ace" data-bind="checked: checked">
-                                            <span class="lbl"></span>
-                                        </label>
-                                    </td>
                                     <td data-bind="text: email"></td>
                                     <td data-bind="text: role"></td>
+                                    <td>
+                                        <button class="btn btn-xs btn-info"><i class="icon-edit bigger-120"></i></button>
+                                        <button class="btn btn-xs btn-danger"><i class="icon-trash bigger-120"></i></button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
