@@ -629,6 +629,62 @@ var UserViewModel = function(raw){
     }, this);
 };
 
+var UserContainer = function () { 
+    var self = this;
+    
+    this.polling = ko.observable(false);
+    this.users = ko.observableArray();
+    this.newEmail = ko.observable("");
+    this.newPermission = ko.observable(0);
+    this.newPassword = ko.observable("");
+    this.newPasswordConfirm = ko.observable("");
+    
+    this.populateUsers = function () {
+        $.ajax({
+            url: "/users",
+            success: function (data) {
+                self.users(ko.utils.arrayMap(data.users, function(x){return new UserViewModel(x);}));
+            },
+            dataType: "json"
+        });
+    };
+    
+    this.createUser = function () {
+        self.newEmail("");
+        self.newPermission(1);
+        self.newPassword("");
+        self.newPasswordConfirm("");
+    };
+    
+    this.saveUser = function () {
+        self.polling(true);
+
+        if (!self.newEmail()) return false;
+        if (!self.newPassword()) return false;
+        if (!self.newPermission()) return false;
+        if (self.newPassword() != self.newPasswordConfirm()) return false;
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: "/users",
+            data: {
+                email: self.newEmail(),
+                permission: self.newPermission(),
+                password: self.newPassword()
+            }
+        }).done(function (response) {
+            self.users.push(new UserViewModel(response.user));
+            self.polling(false);
+        }).fail(function (r) {
+            console.log(r);
+            self.polling(false);
+        });
+        
+        return true;
+    };
+};
+
 /**
  * A container around our application.
  * @constructor
@@ -642,18 +698,7 @@ var AppContainer = function (raw, map) {
     // Determines what's actually visible on the page.
     self.state = ko.observable(SiteState.Loading);
 
-    self.users = ko.observableArray();
-
-    self.populateUsers = function () {
-        $.ajax({
-            url: "/users",
-            success: function (data) {
-                self.users(ko.utils.arrayMap(data.users, function(x){return new UserViewModel(x);}));
-            },
-            dataType: "json"
-        });
-    };
-
+    self.userContainer = new UserContainer();
     self.stopContainer = new StopContainerViewModel(raw.stops, self);
     self.tourContainer = new TourContainerViewModel(raw.tours, self);
 

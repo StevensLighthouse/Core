@@ -7,7 +7,7 @@ require_relative '../spec/factories/factories'
 #   you can override the password as well using password
 #   and password_confirmation
 #   ---
-FactoryGirl.create(:user, :email => 'ehayon@gmail.com')
+FactoryGirl.create(:user, :email => 'ehayon@gmail.com', :permission => 4)
 
 # Create some tours and stops
 t= Tour.find_or_create_by(:name => 'Pizza Tour',
