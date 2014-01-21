@@ -295,6 +295,21 @@ var TourContainerViewModel = function (raw, parent) {
         }
     };
     
+    self.preview = function (id) {
+        self.focusOn(id);
+        
+        if (!self.focusedTour()) return false;
+        
+        return true;
+    };
+    
+    self.edit = function (id) {
+        self.focusOn(id);
+        if (!self.focusedTour()) return false;
+        self.focusedTour().edit();
+        return true;
+    };
+    
     /**
      * Loads a tour to be visible on the map, as well as come into some sort of focus
      * @function

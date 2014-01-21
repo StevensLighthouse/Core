@@ -47,7 +47,7 @@
                                 </a>
                                 <ul class="submenu" data-bind="foreach: tourContainer.tours">
                                     <li>
-                                        <a href="#" data-bind="attr: {href: '#preview-tour/' + id()}, click: load">
+                                        <a href="#" data-bind="attr: {href: '#preview-tour/' + id() }, click: load">
                                             <i class="icon-leaf"></i>
                                             <span data-bind="text: name"></span>
                                         </a>
@@ -64,7 +64,7 @@
 
                                 <ul class="submenu" data-bind="foreach: tourContainer.tours">
                                     <li>
-                                        <a href="#edit-tour" data-bind="click: edit">
+                                        <a href="#" data-bind="attr: {href: '#edit-tour/' + id() }">
                                             <i class="icon-leaf"></i>
                                             <span data-bind="text: name"></span>
                                         </a>
@@ -221,7 +221,7 @@
 						<div class="page-header">
                             <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
                             <h1 data-bind="page: 'edit-tour'">Manage a Tour</h1>
-                            <h1 data-bind="page: 'preview-tour', onVisible: tourContainer.focusOn">Preview Tour</h1>
+                            <h1 data-bind="page: 'preview-tour'">Preview Tour</h1>
                         </div>
 						<div class="row">
 							<div class="col-xs-12">
@@ -232,13 +232,6 @@
                                                 <label for="form-field-1" class="col-sm-3 control-label no-padding-right"> Name </label>
                                                 <div class="col-sm-9">
                                                     <input type="text" class="col-xs-12 col-sm-12" placeholder="My New Tour" data-bind="">
-                                                </div>
-                                            </div>
-                                            <div class="space-4"></div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label no-padding-right"> Description </label>
-                                                <div class="col-sm-9">
-                                                    <textarea class="form-control" id="" placeholder="Tell us about your tour"></textarea>
                                                 </div>
                                             </div>
                                             <div class="space-4"></div>
@@ -267,10 +260,9 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="col-sm-6" data-bind="page: 'edit-tour'">
-                                        editing a tour
+                                    <div class="col-sm-6" data-bind="page: 'edit-tour', onVisible: tourContainer.edit, with: tourContainer.focusedTour">
                                     </div>
-                                    <div class="col-sm-6" data-bind="page: 'preview-tour', with: tourContainer.focusedTour">
+                                    <div class="col-sm-6" data-bind="page: 'preview-tour', onVisible: tourContainer.preview, with: tourContainer.focusedTour">
                                         <h3 data-bind="text: name"></h3>
                                         <p data-bind="text: description"></p>
                                         <ul data-bind="foreach: stops">
