@@ -95,14 +95,17 @@ delete '/tour/:tour_id/stop/:stop_id' do
   tour = Tour.find(params[:tour_id])
   stop = Stop.find(params[:stop_id])
 
+  # Check to see if the stop was successfully deleted
   if tour.stops.delete(stop)
     { :tour => tour }.to_json
   else
+  # stop was not successfully deleted, show errors
     { :error => tour.errors, :status => :unprocessable_entity }.to_json
   end
 
 end
 
+# Set the allowed parameters, for security
 private
 def tour_params
   params.allow(:name, :description, :visibility, :lat, :lon)
