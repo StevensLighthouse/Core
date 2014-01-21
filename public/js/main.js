@@ -269,7 +269,10 @@ var TourContainerViewModel = function (raw, parent) {
 
     // When we want to focus on one tour to view / edit it
     self.focusedTour = ko.observable();
-
+    self.focusedTourName = ko.computed(function(){
+        return !self.focusedTour() ? "" : self.focusedTour().name();
+    });
+    
     // Sets us up to create a new tour
     self.createNewTour = function () {
         self.focusedTour(new TourViewModel(null, self));
@@ -281,6 +284,19 @@ var TourContainerViewModel = function (raw, parent) {
         return parent.stopContainer.stops();
     });
 
+    self.focusOn = function (id) {
+        // panic
+        var asNum = parseInt(id);
+        if(Number.isNaN(asNum)) return;
+
+        for(var i = 0; i < self.tours().length; i++){
+            if (self.tours()[i].id() === asNum){
+                self.focusedTour(self.tours()[i]);
+                return;
+            }
+        }
+    };
+    
     /**
      * Loads a tour to be visible on the map, as well as come into some sort of focus
      * @function

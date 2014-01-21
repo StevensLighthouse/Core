@@ -47,7 +47,7 @@
                                 </a>
                                 <ul class="submenu" data-bind="foreach: tourContainer.tours">
                                     <li>
-                                        <a href="#preview-tour" data-bind="click: load">
+                                        <a href="#" data-bind="attr: {href: '#preview-tour/' + id()}, click: load">
                                             <i class="icon-leaf"></i>
                                             <span data-bind="text: name"></span>
                                         </a>
@@ -221,7 +221,7 @@
 						<div class="page-header">
                             <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
                             <h1 data-bind="page: 'edit-tour'">Manage a Tour</h1>
-                            <h1 data-bind="page: 'preview-tour'">My Tour</h1>
+                            <h1 data-bind="page: 'preview-tour', onVisible: tourContainer.focusOn, text: tourContainer.focusedTourName">My Tour</h1>
                         </div>
 						<div class="row">
 							<div class="col-xs-12">
@@ -385,8 +385,7 @@
             model.init();
         }
         
-        function refresh(foo) {
-            console.log(foo);
+        function refresh() {
             google.maps.event.trigger(map, 'resize');            
         }
 
