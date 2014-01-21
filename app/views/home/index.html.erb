@@ -221,7 +221,7 @@
 						<div class="page-header">
                             <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
                             <h1 data-bind="page: 'edit-tour'">Manage a Tour</h1>
-                            <h1 data-bind="page: 'preview-tour', onVisible: tourContainer.focusOn, text: tourContainer.focusedTourName">My Tour</h1>
+                            <h1 data-bind="page: 'preview-tour', onVisible: tourContainer.focusOn">Preview Tour</h1>
                         </div>
 						<div class="row">
 							<div class="col-xs-12">
@@ -269,6 +269,13 @@
                                     </div>
                                     <div class="col-sm-6" data-bind="page: 'edit-tour'">
                                         editing a tour
+                                    </div>
+                                    <div class="col-sm-6" data-bind="page: 'preview-tour', with: tourContainer.focusedTour">
+                                        <h3 data-bind="text: name"></h3>
+                                        <p data-bind="text: description"></p>
+                                        <ul data-bind="foreach: stops">
+                                            <li data-bind="text: name"></li>
+                                        </ul>
                                     </div>
                                     <div class="col-sm-6">
                                         <div id="map-canvas"></div>

@@ -269,9 +269,6 @@ var TourContainerViewModel = function (raw, parent) {
 
     // When we want to focus on one tour to view / edit it
     self.focusedTour = ko.observable();
-    self.focusedTourName = ko.computed(function(){
-        return !self.focusedTour() ? "" : self.focusedTour().name();
-    });
     
     // Sets us up to create a new tour
     self.createNewTour = function () {
@@ -292,6 +289,7 @@ var TourContainerViewModel = function (raw, parent) {
         for(var i = 0; i < self.tours().length; i++){
             if (self.tours()[i].id() === asNum){
                 self.focusedTour(self.tours()[i]);
+                self.focusedTour().load();
                 return;
             }
         }
