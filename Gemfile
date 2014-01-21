@@ -9,7 +9,7 @@ group :default do
   gem 'rspec'
   gem 'rack-test'
   gem 'factory_girl'
-  gem 'protected_attributes'
+  gem 'protected_attributes', '1.0.3'
   gem 'bcrypt-ruby'
 end
 
