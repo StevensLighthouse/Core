@@ -1,180 +1,180 @@
-    <div class="main-container" id="main-container">
-        <script type="text/javascript">
-            try {
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
                 ace.settings.check('main-container', 'fixed')
             } catch (e) {}
-        </script>
+    </script>
 
-        <div class="main-container-inner">
-            <a class="menu-toggler" id="menu-toggler" href="#">
-                <span class="menu-text"></span>
-            </a>
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
 
-            <div class="sidebar" id="sidebar">
-                <script type="text/javascript">
-                    try {
+        <div class="sidebar" id="sidebar">
+            <script type="text/javascript">
+                try {
                         ace.settings.check('sidebar', 'fixed')
                     } catch (e) {}
-                </script>
+            </script>
 
-                <ul class="nav nav-list">
-                    <li class="active">
-                        <a href="#">
-                            <i class="icon-dashboard"></i>
-                            <span class="menu-text"> Home </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown-toggle">
-                            <i class="icon-desktop"></i>
-                            <span class="menu-text">My Tours</span>
-                            <b class="arrow icon-angle-down"></b>
-                        </a>
+            <ul class="nav nav-list">
+                <li class="active">
+                    <a href="#">
+                        <i class="icon-dashboard"></i>
+                        <span class="menu-text">Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-desktop"></i>
+                        <span class="menu-text">My Tours</span>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
 
-                        <ul class="submenu" data-bind="">
-                            <li>
-                                <a href="#create-tour" data-bind="click: tourContainer.createNewTour">
-                                    <i class="icon-double-angle-right"></i>
-                                    Create Tour
-                                </a>
-                            </li>
+                    <ul class="submenu" data-bind="">
+                        <li>
+                            <a href="#create-tour" data-bind="click: tourContainer.createNewTour">
+                                <i class="icon-double-angle-right"></i>
+                                Create Tour
+                            </a>
+                        </li>
 
-                            <li>
-                                <a href="#" class="dropdown-toggle">
-                                    <i class="icon-double-angle-right"></i>
-                                    Preview Tour
-                                    <b class="arrow icon-angle-down"></b>
-                                </a>
-                                <ul class="submenu" data-bind="foreach: tourContainer.tours">
-                                    <li>
-                                        <a href="#" data-bind="attr: {href: '#preview-tour/' + id() }">
-                                            <i class="icon-leaf"></i>
-                                            <span data-bind="text: name"></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle">
+                                <i class="icon-double-angle-right"></i>
+                                Preview Tour
+                                <b class="arrow icon-angle-down"></b>
+                            </a>
+                            <ul class="submenu" data-bind="foreach: tourContainer.tours">
+                                <li>
+                                    <a href="#" data-bind="attr: {href: '#preview-tour/' + id() }">
+                                        <i class="icon-leaf"></i>
+                                        <span data-bind="text: name"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
-                            <li>
-                                <a href="#" class="dropdown-toggle">
-                                    <i class="icon-double-angle-right"></i>
-                                    Edit Tour
-                                    <b class="arrow icon-angle-down"></b>
-                                </a>
+                        <li>
+                            <a href="#" class="dropdown-toggle">
+                                <i class="icon-double-angle-right"></i>
+                                Edit Tour
+                                <b class="arrow icon-angle-down"></b>
+                            </a>
 
-                                <ul class="submenu" data-bind="foreach: tourContainer.tours">
-                                    <li>
-                                        <a href="#" data-bind="attr: {href: '#edit-tour/' + id() }">
-                                            <i class="icon-leaf"></i>
-                                            <span data-bind="text: name"></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown-toggle">
-                            <i class="icon-list"></i>
-                            <span class="menu-text">My Stops</span>
+                            <ul class="submenu" data-bind="foreach: tourContainer.tours">
+                                <li>
+                                    <a href="#" data-bind="attr: {href: '#edit-tour/' + id() }">
+                                        <i class="icon-leaf"></i>
+                                        <span data-bind="text: name"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-list"></i>
+                        <span class="menu-text">My Stops</span>
 
-                            <b class="arrow icon-angle-down"></b>
-                        </a>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
 
-                        <ul class="submenu">
-                            <li>
-                                <a href="elements.html">
-                                    <i class="icon-double-angle-right"></i>
-                                    Create Stop
-                                </a>
-                            </li>
-                            <li>
-                                <a href="elements.html">
-                                    <i class="icon-double-angle-right"></i>
-                                    Find More Stops
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="dropdown-toggle">
-                                    <i class="icon-double-angle-right"></i>
-                                    Preview Stop
-                                    <b class="arrow icon-angle-down"></b>
-                                </a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="elements.html">
+                                <i class="icon-double-angle-right"></i>
+                                Create Stop
+                            </a>
+                        </li>
+                        <li>
+                            <a href="elements.html">
+                                <i class="icon-double-angle-right"></i>
+                                Find More Stops
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle">
+                                <i class="icon-double-angle-right"></i>
+                                Preview Stop
+                                <b class="arrow icon-angle-down"></b>
+                            </a>
 
-                                <ul class="submenu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="icon-leaf"></i>
-                                            Stop 1
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#">
+                                        <i class="icon-leaf"></i>
+                                        Stop 1
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
-                            <li>
-                                <a href="#" class="dropdown-toggle">
-                                    <i class="icon-double-angle-right"></i>
-                                    Edit Stop
-                                    <b class="arrow icon-angle-down"></b>
-                                </a>
+                        <li>
+                            <a href="#" class="dropdown-toggle">
+                                <i class="icon-double-angle-right"></i>
+                                Edit Stop
+                                <b class="arrow icon-angle-down"></b>
+                            </a>
 
-                                <ul class="submenu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="icon-leaf"></i>
-                                            Stop 1
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown-toggle">
-                            <i class="icon-edit"></i>
-                            <span class="menu-text">My Users</span>
+                            <ul class="submenu">
+                                <li>
+                                    <a href="#">
+                                        <i class="icon-leaf"></i>
+                                        Stop 1
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-edit"></i>
+                        <span class="menu-text">My Users</span>
 
-                            <b class="arrow icon-angle-down"></b>
-                        </a>
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
 
-                        <ul class="submenu">
-                            <li>
-                                <a href="#users">
-                                    <i class="icon-double-angle-right"></i>
-                                    Manage Users
-                                </a>
-                            </li>
+                    <ul class="submenu">
+                        <li>
+                            <a href="#users">
+                                <i class="icon-double-angle-right"></i>
+                                Manage Users
+                            </a>
+                        </li>
 
-                            <li>
-                                <a href="#users/create">
-                                    <i class="icon-double-angle-right"></i>
-                                    Add a user
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- /.nav-list -->
+                        <li>
+                            <a href="#users/create">
+                                <i class="icon-double-angle-right"></i>
+                                Add a user
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- /.nav-list -->
 
-                <div class="sidebar-collapse" id="sidebar-collapse">
-                    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
-                </div>
-
-                <script type="text/javascript">
-                    try {
-                        ace.settings.check('sidebar', 'collapsed')
-                    } catch (e) {}
-                </script>
+            <div class="sidebar-collapse" id="sidebar-collapse">
+                <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
             </div>
 
-            <div class="main-content">
-                <div class="breadcrumbs" id="breadcrumbs">
-                    <script type="text/javascript">
-                        try {
+            <script type="text/javascript">
+                try {
+                        ace.settings.check('sidebar', 'collapsed')
+                    } catch (e) {}
+            </script>
+        </div>
+
+        <div class="main-content">
+            <div class="breadcrumbs" id="breadcrumbs">
+                <script type="text/javascript">
+                    try {
                             ace.settings.check('breadcrumbs', 'fixed')
                         } catch (e) {}
-                    </script>
-<!--
+                </script>
+                <!--
                     <ul class="breadcrumb">
                         <li>
                             <i class="icon-home home-icon"></i>
@@ -186,180 +186,184 @@
                         </li>
                         <li class="active">Blank Page</li>
                     </ul> -->
-                    <!-- .breadcrumb -->
-                </div>
+                <!-- .breadcrumb -->
+            </div>
 
-                <div class="page-content">
-                    <div data-bind="page: ''">
-						<div class="page-header">
-                            <h1>Welcome home!</h1>
-                        </div>
-						<div class="row">
-							<div class="col-xs-12">
-								<div class="row">
-									<div class="col-sm-6">
-										<h2>How to add a trip</h2>
-										<p>We'll think of some text here explaining how to user Core.</p>
-                                    </div>
+            <div class="page-content">
+                <div data-bind="page: ''">
+                    <div class="page-header">
+                        <h1>Welcome home!</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2>How to add a trip</h2>
+                                    <p>We'll think of some text here explaining how to user Core.</p>
                                 </div>
-								<div class="row">
-                                    <div class="col-sm-6">
-										<h2>How to add a stop</h2>
-										<p>We'll think of some text here explaining how to user Core.</p>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2>How to add a stop</h2>
+                                    <p>We'll think of some text here explaining how to user Core.</p>
                                 </div>
-								<div class="row">
-                                    <div class="col-sm-6">
-										<h2>Managing Users</h2>
-										<p>We'll think of some text here explaining how to user Core.</p>
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h2>Managing Users</h2>
+                                    <p>We'll think of some text here explaining how to user Core.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div data-bind="page: ['create-tour', 'edit-tour', 'preview-tour'], onVisible: refresh">
-						<div class="page-header">
-                            <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
-                            <h1 data-bind="page: 'edit-tour'">Manage a Tour</h1>
-                            <h1 data-bind="page: 'preview-tour'">Preview Tour</h1>
-                        </div>
-						<div class="row">
-							<div class="col-xs-12">
-								<div class="row">
-									<div class="col-sm-6" data-bind="page: 'create-tour'">
-                                        <form role="form" class="form-horizontal" action="#users" method="get">
-                                            <div class="form-group">
-                                                <label for="form-field-1" class="col-sm-3 control-label no-padding-right"> Name </label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="col-xs-12 col-sm-12" placeholder="My New Tour" data-bind="">
-                                                </div>
+                </div>
+                <div data-bind="page: ['create-tour', 'edit-tour', 'preview-tour'], onVisible: refresh">
+                    <div class="page-header">
+                        <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
+                        <h1 data-bind="page: 'edit-tour'">Manage a Tour</h1>
+                        <h1 data-bind="page: 'preview-tour'">Preview Tour</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-sm-6" data-bind="page: 'create-tour'">
+                                    <form role="form" class="form-horizontal" action="#users" method="get">
+                                        <div class="form-group">
+                                            <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Name</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="col-xs-12 col-sm-12" placeholder="My New Tour" data-bind="">
                                             </div>
-                                            <div class="space-4"></div>
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label no-padding-right"> Description </label>
-                                                <div class="col-sm-9">
-                                                    <textarea class="form-control" id="" placeholder="Tell us about your tour"></textarea>
-                                                </div>
+                                        </div>
+                                        <div class="space-4"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label no-padding-right">Description</label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" id="" placeholder="Tell us about your tour"></textarea>
                                             </div>
-                                            <div class="space-4"></div>
-                                            <div class="form-group">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input name="form-field-checkbox" type="checkbox" class="ace" />
-                                                        <span class="lbl"> This tour is visible to the public. </span>
-                                                    </label>
-                                                </div>
+                                        </div>
+                                        <div class="space-4"></div>
+                                        <div class="form-group">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input name="form-field-checkbox" type="checkbox" class="ace" />
+                                                    <span class="lbl">This tour is visible to the public.</span>
+                                                </label>
                                             </div>
-                                            <div class="clearfix form-actions">
-                                                <div class="col-md-9">
-                                                    <button class="btn btn-info" type="submit" data-bind="click: userContainer.saveUser">
-                                                        <i class="icon-ok bigger-110"></i>
-                                                        Create Tour
-                                                    </button>
-                                                </div>
+                                        </div>
+                                        <div class="clearfix form-actions">
+                                            <div class="col-md-9">
+                                                <button class="btn btn-info" type="submit" data-bind="click: userContainer.saveUser">
+                                                    <i class="icon-ok bigger-110"></i>
+                                                    Create Tour
+                                                </button>
                                             </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-sm-6" data-bind="page: 'edit-tour', onVisible: tourContainer.edit, with: tourContainer.focusedTour">
-                                    </div>
-                                    <div class="col-sm-6" data-bind="page: 'preview-tour', onVisible: tourContainer.preview, with: tourContainer.focusedTour">
-                                        <h3 data-bind="text: name"></h3>
-                                        <p data-bind="text: description"></p>
-                                        <ol data-bind="foreach: stops">
-                                            <li data-bind="text: name"></li>
-                                        </ol>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div id="map-canvas"></div>
-                                    </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-sm-6" data-bind="page: 'edit-tour', onVisible: tourContainer.edit, with: tourContainer.focusedTour">
+                                </div>
+                                <div class="col-sm-6" data-bind="page: 'preview-tour', onVisible: tourContainer.preview, with: tourContainer.focusedTour">
+                                    <h3 data-bind="text: name"></h3>
+                                    <p data-bind="text: description"></p>
+                                    <ol data-bind="foreach: stops">
+                                        <li data-bind="text: name"></li>
+                                    </ol>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div id="map-canvas"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div data-bind="page: 'users', onVisible: userContainer.populateUsers">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Email</th>
-                                    <th>Account Type</th>
-                                    <th>Manage</th>
-                                </tr>
-                            </thead>
-                            <tbody data-bind="foreach: userContainer.users">
-                                <tr>
-                                    <td data-bind="text: email"></td>
-                                    <td data-bind="text: role"></td>
-                                    <td>
-                                        <button class="btn btn-xs btn-info"><i class="icon-edit bigger-120"></i></button>
-                                        <button class="btn btn-xs btn-danger"><i class="icon-trash bigger-120"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                </div>
+                <div data-bind="page: 'users', onVisible: userContainer.populateUsers">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Account Type</th>
+                                <th>Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: userContainer.users">
+                            <tr>
+                                <td data-bind="text: email"></td>
+                                <td data-bind="text: role"></td>
+                                <td>
+                                    <button class="btn btn-xs btn-info">
+                                        <i class="icon-edit bigger-120"></i>
+                                    </button>
+                                    <button class="btn btn-xs btn-danger">
+                                        <i class="icon-trash bigger-120"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div data-bind="page: 'users/create', onVisible: userContainer.createUser">
+                    <div class="page-header">
+                        <h1>Create a User</h1>
                     </div>
-                    <div data-bind="page: 'users/create', onVisible: userContainer.createUser">
-						<div class="page-header">
-                            <h1>Create a User</h1>
-                        </div>
-						<div class="row">
-							<div class="col-xs-12">
-                                <form role="form" class="form-horizontal" action="#users" method="get">
-                                    <div class="form-group">
-                                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right"> Email </label>
-                                        <div class="col-sm-9">
-                                            <input type="email" class="col-xs-10 col-sm-5" placeholder="email@domain.com" data-bind="value: userContainer.newEmail">
-                                        </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <form role="form" class="form-horizontal" action="#users" method="get">
+                                <div class="form-group">
+                                    <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Email</label>
+                                    <div class="col-sm-9">
+                                        <input type="email" class="col-xs-10 col-sm-5" placeholder="email@domain.com" data-bind="value: userContainer.newEmail">
                                     </div>
-                                    <div class="space-4"></div>
-                                    <div class="form-group">
-                                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right"> Password </label>
-                                        <div class="col-sm-9">
-                                            <input type="password" class="col-xs-10 col-sm-5" data-bind="value: userContainer.newPassword">
-                                        </div>
+                                </div>
+                                <div class="space-4"></div>
+                                <div class="form-group">
+                                    <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Password</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="col-xs-10 col-sm-5" data-bind="value: userContainer.newPassword">
                                     </div>
-                                    <div class="space-4"></div>
-                                    <div class="form-group">
-                                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right"> Password (Confirm) </label>
-                                        <div class="col-sm-9">
-                                            <input type="password" class="col-xs-10 col-sm-5" placeholder="" data-bind="value: userContainer.newPasswordConfirm">
-                                        </div>
+                                </div>
+                                <div class="space-4"></div>
+                                <div class="form-group">
+                                    <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Password (Confirm)</label>
+                                    <div class="col-sm-9">
+                                        <input type="password" class="col-xs-10 col-sm-5" placeholder="" data-bind="value: userContainer.newPasswordConfirm">
                                     </div>
-                                    <div class="space-4"></div>
-                                    <div class="form-group">
-                                        <label for="form-field-select-3" class="col-sm-3 control-label no-padding-right">Permission</label>
-                                        <div class="col-sm-5">
-                                            <select class="form-control col-xs-10 col-sm-5 width-80" id="form-field-select-1" data-bind="value: userContainer.newPermission">
-                                                <option value="0">Deactivated</option>
-                                                <option value="1">Editor</option>
-                                                <option value="2">Builder</option>
-                                                <option value="3">Group Admin</option>
-                                                <option value="4">Site Admin</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="space-4"></div>
+                                <div class="form-group">
+                                    <label for="form-field-select-3" class="col-sm-3 control-label no-padding-right">Permission</label>
+                                    <div class="col-sm-5">
+                                        <select class="form-control col-xs-10 col-sm-5 width-80" id="form-field-select-1" data-bind="value: userContainer.newPermission">
+                                            <option value="0">Deactivated</option>
+                                            <option value="1">Editor</option>
+                                            <option value="2">Builder</option>
+                                            <option value="3">Group Admin</option>
+                                            <option value="4">Site Admin</option>
+                                        </select>
                                     </div>
-									<div class="clearfix form-actions">
-										<div class="col-md-9">
-											<button class="btn btn-info" type="submit" data-bind="click: userContainer.saveUser">
-												<i class="icon-ok bigger-110"></i>
-												Create User
-											</button>
-										</div>
-									</div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="clearfix form-actions">
+                                    <div class="col-md-9">
+                                        <button class="btn btn-info" type="submit" data-bind="click: userContainer.saveUser">
+                                            <i class="icon-ok bigger-110"></i>
+                                            Create User
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- /.main-content -->
         </div>
-        <!-- /.main-container-inner -->
-
-        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-            <i class="icon-double-angle-up icon-only bigger-110"></i>
-        </a>
+        <!-- /.main-content -->
     </div>
-    <!-- /.main-container -->
+    <!-- /.main-container-inner -->
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+</div>
+<!-- /.main-container -->
 
 <% content_for :scripts do %>
     <script type="text/javascript">
@@ -390,4 +394,4 @@
 
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
-<% end %>
+    <% end %>
