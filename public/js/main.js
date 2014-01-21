@@ -197,7 +197,7 @@ var TourViewModel = function (raw, parent) {
     };
 
     self.importStops = function (rawStops) {
-        var stopList = parent.parent.stopContainer().stops(),
+        var stopList = parent.parent.stopContainer.stops(),
             i,
             stopHashTable,
             currStop;
@@ -267,7 +267,7 @@ var TourContainerViewModel = function (raw, parent) {
     };
 
     self.availableStops = ko.computed(function () {
-        return parent.stopContainer().stops();
+        return parent.stopContainer.stops();
     });
 
     /**
@@ -623,8 +623,8 @@ var AppContainer = function (raw, map) {
     // Determines what's actually visible on the page.
     self.state = ko.observable(SiteState.Loading);
 
-    self.tourContainer = ko.observable();
-    self.stopContainer = ko.observable();
+    self.stopContainer = new StopContainerViewModel(raw.stops, self);
+    self.tourContainer = new TourContainerViewModel(raw.tours, self);
 
     self.showTourList = ko.computed(function () {
         return self.state() === SiteState.TourList;
@@ -773,24 +773,11 @@ var AppContainer = function (raw, map) {
         self.removeMarkers();
     };
     
-    self.syncState = function () {
-        var hash = window.location.hash,
-            components;
-        if (!hash) {
-            self.state(SiteState.TourList);
-            return;
-        }
-        components = hash.substr(2).split("/");
-        console.log(components);
-    };
-
     /**
      * Initializes the application
      * @function
      */
     self.init = function () {
-        self.syncState();
-        self.stopContainer(new StopContainerViewModel(raw.stops, self));
-        self.tourContainer(new TourContainerViewModel(raw.tours, self));
+        self.state(SiteState.TourList);
     };
 };

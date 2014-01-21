@@ -25,9 +25,9 @@
                             <b class="arrow icon-angle-down"></b>
                         </a>
 
-                        <ul class="submenu" data-bind="with: tourContainer">
+                        <ul class="submenu" data-bind="">
                             <li>
-                                <a href="#/tours/create" data-bind="click: createNewTour">
+                                <a href="#/tours/create" data-bind="click: tourContainer.createNewTour">
                                     <i class="icon-double-angle-right"></i>
                                     Create Tour
                                 </a>
@@ -39,7 +39,7 @@
                                     Preview Tour
                                     <b class="arrow icon-angle-down"></b>
                                 </a>
-                                <ul class="submenu" data-bind="foreach: tours">
+                                <ul class="submenu" data-bind="foreach: tourContainer.tours">
                                     <li>
                                         <a href="#">
                                             <i class="icon-leaf"></i>
@@ -56,11 +56,11 @@
                                     <b class="arrow icon-angle-down"></b>
                                 </a>
 
-                                <ul class="submenu">
+                                <ul class="submenu" data-bind="foreach: tourContainer.tours">
                                     <li>
                                         <a href="#">
                                             <i class="icon-leaf"></i>
-                                            Tour 1
+                                            <span data-bind="text: name, click: edit"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -219,9 +219,7 @@
             map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
             model = new AppContainer(raw, map);
 
-            ko.applyBindings(model);
-            window.onhashchange = model.syncState;
-            
+            ko.applyBindings(model);            
             model.init();
         }
 
