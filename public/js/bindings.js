@@ -24,6 +24,27 @@ ko.bindingHandlers.debug = {
     }
 };
 
+ko.bindingHandlers.page = {
+    init: function (element, valueAccessor) {
+        var ele = $(element),
+            val = valueAccessor(),
+            curr = "";
+
+        function change() {
+            curr = window.location.hash;
+            if (curr) curr = curr.substr(1);
+            if (curr === val) {
+                ele.show();
+            } else {
+                ele.hide();
+            }
+        };
+        change();
+
+        window.addEventListener("hashchange", change);
+    }
+};
+
 ko.bindingHandlers.slide = {
     update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
         var ele = $(element),

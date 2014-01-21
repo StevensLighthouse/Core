@@ -264,6 +264,7 @@ var TourContainerViewModel = function (raw, parent) {
     self.createNewTour = function () {
         self.focusedTour(new TourViewModel(null, self));
         self.focusedTour().edit();
+        return true;
     };
 
     self.availableStops = ko.computed(function () {
