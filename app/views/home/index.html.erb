@@ -265,9 +265,9 @@
                                     <div class="col-sm-6" data-bind="page: 'preview-tour', onVisible: tourContainer.preview, with: tourContainer.focusedTour">
                                         <h3 data-bind="text: name"></h3>
                                         <p data-bind="text: description"></p>
-                                        <ul data-bind="foreach: stops">
+                                        <ol data-bind="foreach: stops">
                                             <li data-bind="text: name"></li>
-                                        </ul>
+                                        </ol>
                                     </div>
                                     <div class="col-sm-6">
                                         <div id="map-canvas"></div>
