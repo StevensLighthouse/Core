@@ -18,7 +18,13 @@
                 </script>
 
                 <ul class="nav nav-list">
-                    <li class="active open">
+                    <li class="active">
+                        <a href="#">
+                            <i class="icon-dashboard"></i>
+                            <span class="menu-text"> Home </span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-desktop"></i>
                             <span class="menu-text">My Tours</span>
@@ -67,7 +73,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="active open">
+                    <li>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-list"></i>
                             <span class="menu-text">My Stops</span>
@@ -123,7 +129,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="active open">
+                    <li>
                         <a href="#" class="dropdown-toggle">
                             <i class="icon-edit"></i>
                             <span class="menu-text">My Users</span>
@@ -184,6 +190,23 @@
                 </div>
 
                 <div class="page-content">
+                    <div data-bind="page: ''">
+						<div class="page-header">
+                            <h1>Welcome home!</h1>
+                        </div>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="row">
+									<div class="col-sm-6">
+										<h2>h2. Heading 2</h2>
+										<p>
+											Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+										</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div data-bind="page: 'create-tour', onVisible: refresh">
                         hi phil
                         <div id="map-canvas"></div>
