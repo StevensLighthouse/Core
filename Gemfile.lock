@@ -137,7 +137,7 @@ DEPENDENCIES
   guard-rspec
   mysql2
   pg
-  protected_attributes
+  protected_attributes (= 1.0.3)
   rack-test
   rake
   rspec
