@@ -647,30 +647,64 @@ var StopContainerViewModel = function (parent) {
     }());
 };
 
-var UserViewModel = function (raw) {
+var UserViewModel = function (raw, parent) {
     this.id = ko.observable(raw.id);
     this.email = ko.observable(raw.email);
     this.permission = ko.observable(raw.permission);
+    this.groupId = ko.observable(raw.group_id);
+
     this.role = ko.computed(function () {
         return UserRoles[this.permission()];
     }, this);
+
+    this.groupName = ko.computed(function () {
+        if (!this.groupId()) return "No Group";
+        var group = parent.getGroup(this.groupId());
+        if (!group) return "No Group";
+        return group.name();
+    }, this);
+};
+
+var GroupViewModel = function (raw) {
+    var self = this;
+
+    this.id = ko.observable(raw.id);
+    this.name = ko.obserable(raw.name);
+    this.description = ko.observable(raw.description);
 };
 
 var UserContainer = function () {
     var self = this;
 
     this.polling = ko.observable(false);
+    this.groups = ko.observableArray();
     this.users = ko.observableArray();
+
     this.newEmail = ko.observable("");
     this.newPermission = ko.observable(0);
+    this.newGroup = ko.observable(null);
     this.newPassword = ko.observable("");
     this.newPasswordConfirm = ko.observable("");
+    
+    this.getGroup = function (id) {
+        var groups = this.groups(),
+            curr,
+            i;
+
+        for(i = 0; i < groups.length; i++){
+            curr = groups[i];
+            if(curr.id() === id) return curr;
+        }
+
+        return null;
+    };
 
     this.createUser = function () {
         self.newEmail("");
         self.newPermission(1);
         self.newPassword("");
         self.newPasswordConfirm("");
+        self.newGroup(null);
     };
 
     this.saveUser = function () {
@@ -688,7 +722,8 @@ var UserContainer = function () {
             data: {
                 email: self.newEmail(),
                 permission: self.newPermission(),
-                password: self.newPassword()
+                password: self.newPassword(),
+                group_id: self.newGroup()
             }
         }).done(function (response) {
             self.users.push(new UserViewModel(response.user));
@@ -700,8 +735,7 @@ var UserContainer = function () {
 
         return true;
     };
-    
-    
+
     this.init = function () {
         $.ajax({
             url: "/users",
@@ -713,7 +747,7 @@ var UserContainer = function () {
             dataType: "json"
         });
     };
-    
+
     this.init();
 };
 
