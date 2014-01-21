@@ -39,6 +39,22 @@ post '/groups' do
   end
 end
 
+# PUT /groups
+# Update a group
+put '/groups/:id' do |id|
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  if @current_user.is_site_admin?
+    @group = Group.find(id)
+
+    if @group.update(group_params)
+      { :group => @group }.to_json
+    else
+      { :errors => @group.errors, :status => :unprocessable_entity }.to_json
+    end
+  end
+end
+
 def group_params
   params.allow(:name, :description)
 end
