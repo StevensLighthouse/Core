@@ -395,27 +395,5 @@
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
-
-        function navChange() {
-            if(window.location.hash){
-                var navList = $(".nav.nav-list"),
-                    target = "a[href='" + (window.location.hash) + "']";
-
-                navList.find(".active").removeClass("active").removeClass(".open");
-
-                navList.find(target).each(function(e){
-
-                    if(!$(this).hasClass("dropdown-toggle")){
-                        $(this).parents(".targetable").addClass("active").addClass("open");
-                    } else{
-                        console.log("is a toggler");
-                    }
-                });
-            }
-        };
-
-        navChange();
-        
-        window.addEventListener("hashchange", navChange);
     </script>
     <% end %>
