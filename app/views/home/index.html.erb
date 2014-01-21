@@ -18,13 +18,19 @@
             </script>
 
             <ul class="nav nav-list">
-                <li class="active">
-                    <a href="#">
+                <li class="targetable">
+                    <a href="#home">
                         <i class="icon-dashboard"></i>
                         <span class="menu-text">Home</span>
                     </a>
                 </li>
-                <li>
+                <li class="targetable">
+                    <a href="#groups">
+                        <i class="icon-dashboard"></i>
+                        <span class="menu-text">Groups</span>
+                    </a>
+                </li>
+                <li class="targetable">
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-desktop"></i>
                         <span class="menu-text">My Tours</span>
@@ -47,7 +53,7 @@
                             </a>
                             <ul class="submenu" data-bind="foreach: tourContainer.tours">
                                 <li>
-                                    <a href="#" data-bind="attr: {href: '#preview-tour/' + id() }">
+                                    <a data-bind="attr: {href: '#preview-tour/' + id() }">
                                         <i class="icon-leaf"></i>
                                         <span data-bind="text: name"></span>
                                     </a>
@@ -73,7 +79,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="targetable">
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-list"></i>
                         <span class="menu-text">My Stops</span>
@@ -129,7 +135,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="targetable">
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-edit"></i>
                         <span class="menu-text">My Users</span>
@@ -190,7 +196,7 @@
             </div>
 
             <div class="page-content">
-                <div data-bind="page: ''">
+                <div data-bind="page: ['', 'home']">
                     <div class="page-header">
                         <h1>Welcome home!</h1>
                     </div>
@@ -389,5 +395,27 @@
         }
 
         google.maps.event.addDomListener(window, 'load', initialize);
+
+        function navChange() {
+            if(window.location.hash){
+                var navList = $(".nav.nav-list"),
+                    target = "a[href='" + (window.location.hash) + "']";
+
+                navList.find(".active").removeClass("active").removeClass(".open");
+
+                navList.find(target).each(function(e){
+
+                    if(!$(this).hasClass("dropdown-toggle")){
+                        $(this).parents(".targetable").addClass("active").addClass("open");
+                    } else{
+                        console.log("is a toggler");
+                    }
+                });
+            }
+        };
+
+        navChange();
+        
+        window.addEventListener("hashchange", navChange);
     </script>
     <% end %>

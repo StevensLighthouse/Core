@@ -2,6 +2,9 @@
 var enableDebug = true;
 var baseGeocoderUrl = "http://maps.googleapis.com/maps/api/geocode/json";
 
+/**
+ * An empty function that will be used to hide debug information in production.
+ */
 function emptyFunc() {
 
 }
