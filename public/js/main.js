@@ -14,21 +14,10 @@ if (!enableDebug) {
 }
 
 /**
- * Enum for the page we want to load
+ * Enum for the roles of a user
  * @readonly
  * @enum {string}
  */
-var SiteState = {
-    Loading: "loading",
-    TourList: "Tour List",
-    ViewTour: "View Tour",
-    EditTour: "Edit Tour",
-    StopList: "Stop List",
-    ViewStop: "View Stop",
-    EditStop: "Edit Stop",
-    FindStop: "Find Stop"
-};
-
 var UserRoles = {
     0: "Deactivated",
     1: "Editor",
@@ -176,7 +165,7 @@ var TourViewModel = function (raw, parent) {
      * @function
      */
     self.load = function () {
-        parent.loadTour(self, SiteState.ViewTour);
+        parent.loadTour(self);
         return true;
     };
 
@@ -189,7 +178,7 @@ var TourViewModel = function (raw, parent) {
         self.newDescription(self.description());
         self.newVisibilty(self.visibility());
         self.newStops(self.stops().slice(0));
-        parent.loadTour(self, SiteState.EditTour);
+        parent.loadTour(self);
         return true;
     };
 
@@ -314,16 +303,14 @@ var TourContainerViewModel = function (raw, parent) {
      * Loads a tour to be visible on the map, as well as come into some sort of focus
      * @function
      */
-    self.loadTour = function (tour, state) {
+    self.loadTour = function (tour) {
         var lat = tour.lat(),
             lon = tour.lon(),
             stops = tour.stops(),
             i,
             currStop;
 
-        parent.state(SiteState.Loading);
         self.focusedTour(tour);
-        parent.state(state);
 
         if (stops.length > 0) {
             for (i = 0; i < stops.length; i++) {
@@ -342,7 +329,6 @@ var TourContainerViewModel = function (raw, parent) {
      */
     self.cancelFocus = function () {
         self.focusedTour(null);
-        parent.state(SiteState.TourList);
         parent.clearMap();
     };
 
@@ -416,7 +402,7 @@ var StopViewModel = function (raw, parent) {
         self.newDescription(self.description());
         self.newVisibilty(self.visibility());
         self.newAddress("");
-        parent.loadStop(self, SiteState.EditStop);
+        parent.loadStop(self);
     };
 
     self.deleteStop = function () {
@@ -559,10 +545,8 @@ var StopContainerViewModel = function (raw, parent) {
      * Loads a stop to be visible on the map, as well as come into some sort of focus
      * @function
      */
-    self.loadStop = function (stop, state) {
-        parent.state(SiteState.Loading);
+    self.loadStop = function (stop) {
         self.focusedStop(stop);
-        parent.state(state);
 
         if (stop.id()) {
             miniMapOptions.center = new google.maps.LatLng(stop.lat(), stop.lon());
@@ -584,7 +568,6 @@ var StopContainerViewModel = function (raw, parent) {
      */
     self.cancelFocus = function () {
         self.focusedStop(null);
-        parent.state(SiteState.StopList);
     };
 
     // Map operations
@@ -725,56 +708,9 @@ var AppContainer = function (raw, map) {
 
     self.map = map;
 
-    // Determines what's actually visible on the page.
-    self.state = ko.observable(SiteState.Loading);
-
     self.userContainer = new UserContainer();
     self.stopContainer = new StopContainerViewModel(raw.stops, self);
     self.tourContainer = new TourContainerViewModel(raw.tours, self);
-
-    self.showTourList = ko.computed(function () {
-        return self.state() === SiteState.TourList;
-    });
-
-    self.showLoadingPage = ko.computed(function () {
-        return self.state() === SiteState.Loading;
-    });
-
-    self.showViewTourPage = ko.computed(function () {
-        return self.state() === SiteState.ViewTour;
-    });
-
-    self.showEditTourPage = ko.computed(function () {
-        return self.state() === SiteState.EditTour;
-    });
-
-    self.manageStops = function () {
-        self.state(SiteState.StopList);
-    };
-
-    self.manageTours = function () {
-        self.state(SiteState.TourList);
-    };
-
-    self.managingTours = ko.computed(function () {
-        return self.showTourList() || self.showViewTourPage() || self.showEditTourPage();
-    });
-
-    self.showStopList = ko.computed(function () {
-        return self.state() === SiteState.StopList;
-    });
-
-    self.showEditStopPage = ko.computed(function () {
-        return self.state() === SiteState.EditStop;
-    });
-
-    self.showViewStopPage = ko.computed(function () {
-        return self.state() === SiteState.ViewStop;
-    })
-
-    self.managingStops = ko.computed(function () {
-        return self.showStopList() || self.showEditStopPage();
-    });
 
     // Map operations
 
@@ -884,6 +820,5 @@ var AppContainer = function (raw, map) {
      * @function
      */
     self.init = function () {
-        self.state(SiteState.TourList);
     };
 };
