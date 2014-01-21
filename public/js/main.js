@@ -730,7 +730,7 @@ var UserContainer = function () {
                 email: self.newEmail(),
                 permission: self.newPermission(),
                 password: self.newPassword(),
-                group: self.newGroup()
+                group_id: self.newGroup()
             }
         }).done(function (response) {
             self.users.push(new UserViewModel(response.user, self));
