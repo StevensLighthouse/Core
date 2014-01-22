@@ -232,11 +232,6 @@ var TourViewModel = function (raw, parent) {
             self.lon(raw.lon);
             self.visibility(raw.visibility);
             self.importStops(raw.stops);
-        } else {
-            // If raw is unsupplied, then we will simply pre-seed with starter data because that means the tour is new
-            self.name("My New Tour");
-            self.description("A tour of my favorite places");
-            self.visibility(true);
         }
     };
 
@@ -257,8 +252,9 @@ var TourContainerViewModel = function (parent) {
     // Allows us climb up the chain fo rwhen we want to import stops
     self.parent = parent;
 
+    self.tours = ko.observableArray([]);
     self.newTourName = ko.observable("");
-    self.newTourDescription = ko.observable("");    
+    self.newTourDescription = ko.observable("");
     self.newTourList = ko.observableArray();
     self.newTourPool = ko.observableArray();
     self.newTourVisibility = ko.observable(true);
@@ -266,7 +262,7 @@ var TourContainerViewModel = function (parent) {
     self.toggleNewVisibility = function () {
         self.newTourVisibility(!self.newTourVisibility())
     };
-    
+
     self.createTour = function () {
         self.newTourName("");
         self.newTourDescription("");
@@ -274,22 +270,49 @@ var TourContainerViewModel = function (parent) {
         self.newTourVisibility(true);
         self.newTourPool(parent.stopContainer.stops().slice(0));
     };
-    
+
     self.listToPool = function (data) {
         self.newTourPool.push(data);
         self.newTourList.remove(data);
 
         return false;
     };
-    
-    self.poolToList = function(data) {
+
+    self.poolToList = function (data) {
         self.newTourList.push(data);
         self.newTourPool.remove(data);
 
         return false;
     }
-    
-    self.tours = ko.observableArray([]);
+
+    self.saveTour = function () {
+        if (!self.newTourName()) return false;
+        if (!self.newTourDescription()) return false;
+        if (!self.newTourList().length) return false;
+
+        var stopIds = ko.utils.arrayMap(self.newTourList(), function (stop) {
+            return stop.id();
+        });
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: "/tours",
+            data: {
+                name: self.newTourName(),
+                description: self.newTourDescription(),
+                visibility: self.newTourVisibility(),
+                lat: 40.7435753309731,
+                lon: -74.02875912059483,
+                stops: stopIds
+            }
+        }).done(function (response) {
+            self.tours.push(new TourViewModel(response.tour, self));
+        }).fail(function (r) {
+            console.log(r);
+        });
+        return true;
+    };
 
     // When we want to focus on one tour to view / edit it
     self.focusedTour = ko.observable();
@@ -379,8 +402,6 @@ var TourContainerViewModel = function (parent) {
                 var tours = ko.utils.arrayMap(data.tours, function (tour) {
                     return new TourViewModel(tour, self);
                 });
-
-                // We do a .push.apply to only update once
                 self.tours(tours);
             }
         });
