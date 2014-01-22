@@ -257,6 +257,38 @@ var TourContainerViewModel = function (parent) {
     // Allows us climb up the chain fo rwhen we want to import stops
     self.parent = parent;
 
+    self.newTourName = ko.observable("");
+    self.newTourDescription = ko.observable("");    
+    self.newTourList = ko.observableArray();
+    self.newTourPool = ko.observableArray();
+    self.newTourVisibility = ko.observable(true);
+
+    self.toggleNewVisibility = function () {
+        self.newTourVisibility(!self.newTourVisibility())
+    };
+    
+    self.createTour = function () {
+        self.newTourName("");
+        self.newTourDescription("");
+        self.newTourList([]);
+        self.newTourVisibility(true);
+        self.newTourPool(parent.stopContainer.stops().slice(0));
+    };
+    
+    self.listToPool = function (data) {
+        self.newTourPool.push(data);
+        self.newTourList.remove(data);
+
+        return false;
+    };
+    
+    self.poolToList = function(data) {
+        self.newTourList.push(data);
+        self.newTourPool.remove(data);
+
+        return false;
+    }
+    
     self.tours = ko.observableArray([]);
 
     // When we want to focus on one tour to view / edit it

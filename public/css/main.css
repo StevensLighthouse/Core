@@ -19,3 +19,7 @@
 .full-editor {
     padding: 10px;
 }
+
+.clickable {
+    cursor: pointer;
+}
