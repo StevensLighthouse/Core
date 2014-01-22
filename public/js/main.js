@@ -613,6 +613,9 @@ var StopContainerViewModel = function (parent) {
         };
 
     self.stops = ko.observableArray([]);
+    self.stops.subscribe(function (newVal) {
+        parent.tourContainer.newTourPool(newVal.slice(0));
+    });
 
     // When we want to focus on one stop to view / edit it
     self.focusedStop = ko.observable();
