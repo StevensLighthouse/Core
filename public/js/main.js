@@ -154,33 +154,6 @@ var TourViewModel = function (raw, parent) {
     };
 
     /**
-     * Sets up the tour to be edited.
-     * @function
-     */
-    self.edit = function () {
-        var allStops = parent.parent.stopContainer.stops.slice(0),
-            i,
-            curr;
-
-        self.newName(self.name());
-        self.newDescription(self.description());
-        self.newVisibilty(self.visibility());
-        self.newStops(self.stops().slice(0));
-        self.newStopPool([]);
-
-        for (var i = 0; i < allStops.length; i++) {
-            curr = allStops[i];
-            if (self.newStops.indexOf(curr) < 0) {
-                self.newStopPool.push(curr);
-            }
-        }
-
-        parent.loadTour(self);
-
-        return true;
-    };
-
-    /**
      * Cancels the fact that we're focusing on this tour
      * Clears out any data that we may have been editing
      * @function
@@ -384,10 +357,29 @@ var TourContainerViewModel = function (parent) {
     self.editingTour = ko.computed(function () {
         var newTour = self.tourFromId(self.editingTourId());
         if (!newTour) return null;
-        newTour.edit();
         return newTour;
     });
-    self.editingTour.subscribe(self.loadTour);
+
+    self.editingTour.subscribe(function (newVal) {
+        var allStops = parent.stopContainer.stops.slice(0),
+            i,
+            curr;
+        self.loadTour(newVal);
+        if (!newVal) return;
+        self.newTourName(newVal.name());
+        self.newTourDescription(newVal.description());
+        self.newTourVisibility(newVal.visibility());
+
+        self.newTourStopList(newVal.stops().slice(0));
+        self.newTourStopPool([]);
+
+        for (var i = 0; i < allStops.length; i++) {
+            curr = allStops[i];
+            if (self.newTourStopList.indexOf(curr) < 0) {
+                self.newTourStopPool.push(curr);
+            }
+        }
+    });
 
     self.preview = function (id) {
         self.previewingTourId(id);
@@ -447,6 +439,10 @@ var StopViewModel = function (raw, parent) {
 
     self.visibility = ko.observable(true);
     self.newVisibilty = ko.observable();
+    
+    self.centerOnMap = function (stop) {
+        parent.parent.setCenter(self.lat(), self.lon());
+    };
 
     self.visibilityText = ko.computed(function () {
         return self.visibility() ? "visible" : "not visible";
@@ -609,6 +605,7 @@ var StopContainerViewModel = function (parent) {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
+    self.parent = parent;
     self.stops = ko.observableArray([]);
     self.stops.subscribe(function (newVal) {
         parent.tourContainer.newTourStopPool(newVal.slice(0));
