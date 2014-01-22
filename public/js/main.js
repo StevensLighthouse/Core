@@ -311,6 +311,7 @@ var TourContainerViewModel = function (parent) {
         }).fail(function (r) {
             console.log(r);
         });
+
         return true;
     };
 
