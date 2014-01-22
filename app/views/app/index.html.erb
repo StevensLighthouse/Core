@@ -283,7 +283,7 @@
                                 <h3 data-bind="text: name"></h3>
                                 <p data-bind="text: description"></p>
                                 <ol data-bind="foreach: stops">
-                                    <li data-bind="text: name"></li>
+                                    <li><a href="#" data-bind="text: name, click: $parent.centerOnStop"></a></li>
                                 </ol>
                             </div>
                             <div class="col-sm-6">
