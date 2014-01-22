@@ -24,32 +24,61 @@ ko.bindingHandlers.debug = {
     }
 };
 
+var StateEnum = {
+    Starting: 0,
+    Invisible: 1,
+    Visible: 2
+};
+
 ko.bindingHandlers.page = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         var ele = $(element),
             val = valueAccessor(),
             type = val.constructor,
             allBindings = allBindingsAccessor(),
+            onVisibleDo = allBindings.onVisible,
+            onVisible = (onVisibleDo && typeof onVisibleDo === "function"),
+            onHideDo = allBindings.onHide,
+            onHide = (onHideDo && typeof onHideDo === "function"),
             curr = "",
-            params;
+            params,
+            startingState = StateEnum.Starting,
+            newState = null,
+            flip = false;
 
         function change() {
             curr = window.location.hash;
             if (curr) curr = curr.substr(1);
             params = curr.split("/");
+
             if (params.length > 0) {
                 curr = params[0];
                 params = params.splice(1);
             }
-            if ((type === String && val === curr) || (type === Array && val.indexOf(curr) >= 0)) {
-                ele.show();
 
-                if (allBindings.onVisible && typeof allBindings.onVisible === "function") {
-                    allBindings.onVisible.apply(window, params);
+            if ((type === String && val === curr) || (type === Array && val.indexOf(curr) >= 0)) {
+                newState = StateEnum.Visible;
+
+                if (startingState !== newState) {
+                    ele.show();
+
+                    if (onVisible) {
+                        onVisibleDo.apply(window, params);
+                    }
                 }
             } else {
-                ele.hide();
+                newState = StateEnum.Invisible;
+
+                if (startingState !== newState) {
+                    ele.hide();
+
+                    if (onHide) {
+                        onHideDo.apply(window, params);
+                    }
+                }
             }
+
+            startingState = newState;
         };
 
         change();

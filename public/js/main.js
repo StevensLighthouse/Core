@@ -343,13 +343,32 @@ var TourContainerViewModel = function (parent) {
         }
     };
 
-    self.preview = function (id) {
-        self.focusOn(id);
+    self.focusedTourId = ko.observable(null);
+    self.focusedTourComputed = function () {
+        var target = self.focusedTourId(),
+            tourList = self.tours(),
+            i,
+            curr;
+        if (!target || !tourList.length) return null;
 
+        for (i = 0; i < tourList.length; i++) {
+            curr = tourList[i];
+            if (curr.id() == target) return curr;
+        }
+        return null;
+    };
+
+    self.preview = function (id) {
+        self.focusedTourId(id);
         if (!self.focusedTour()) return false;
 
         return true;
     };
+
+    self.hidePreview = function () {
+        console.log("foo");
+        self.focusedTourId(null);
+    }
 
     self.edit = function (id) {
         self.focusOn(id);
