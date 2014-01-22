@@ -360,7 +360,6 @@ var TourContainerViewModel = function (parent) {
             }
         }
 
-        console.log("foo");
         return null;
     }, this);
 
