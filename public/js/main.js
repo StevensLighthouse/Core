@@ -40,13 +40,10 @@ var TourViewModel = function (raw, parent) {
 
     self.id = ko.observable("");
     self.name = ko.observable("");
-    self.newName = ko.observable("");
 
     self.description = ko.observable("");
-    self.newDescription = ko.observable("");
 
     self.visibility = ko.observable(true);
-    self.newVisibilty = ko.observable();
 
     self.visibilityText = ko.computed(function () {
         return self.visibility() ? "visible" : "not visible";
@@ -57,82 +54,9 @@ var TourViewModel = function (raw, parent) {
     self.lon = ko.observable(0);
 
     self.stops = ko.observableArray([]);
-    self.newStops = ko.observableArray([]);
-    self.newStopPool = ko.observableArray();
-
-    self.listToPool = function (data) {
-        console.log(data);
-        self.newStopPool.push(data);
-        self.newStops.remove(data);
-        return false;
-    };
-
-    self.poolToList = function (data) {
-        console.log(data);
-        self.newStops.push(data);
-        self.newStopPool.remove(data);
-
-        return false;
-    }
-
-    self.addNewStop = function () {
-        var newStop = self.newStop();
-        if (self.newStops.indexOf(newStop) < 0) {
-            self.newStops.push(newStop);
-            parent.parent.addMarker(newStop, self);
-            parent.parent.setCenter(newStop.lat(), newStop.lon());
-            self.newStop(null);
-        }
-    };
-
-    self.detachStop = function (stop) {
-        self.newStops.remove(stop);
-        parent.parent.removeMarker(stop, self);
-    };
-
-    self.tourUpdateText = ko.computed(function () {
-        return self.id() ? "Update Tour" : "Create Tour";
-    });
-
-    self.canSaveTour = ko.computed(function () {
-        return self.newName() && self.newName() !== "";
-    });
-
-    self.disableSave = ko.computed(function () {
-        return !self.canSaveTour();
-    })
 
     self.centerOnStop = function (stop) {
         parent.parent.setCenter(stop.lat(), stop.lon());
-    };
-
-    /**
-     * Saves or updates a tour on the server
-     * @function
-     */
-    self.saveTour = function () {
-        if (!self.canSaveTour()) return;
-
-        self.name(self.newName());
-        self.description(self.newDescription());
-        self.visibility(self.newVisibilty());
-
-        $.ajax({
-            dataType: "json",
-            type: "PUT",
-            url: "/tours/" + self.id(),
-            data: {
-                name: self.name(),
-                description: self.description(),
-                visibility: self.visibility(),
-                lat: self.lat(),
-                lon: self.lon()
-            }
-        }).done(function (response) {
-            self.id(response.tour.id);
-        }).fail(function (r) {
-            console.log(r);
-        });
     };
 
     /**
@@ -153,28 +77,15 @@ var TourViewModel = function (raw, parent) {
         }
     };
 
-    /**
-     * Cancels the fact that we're focusing on this tour
-     * Clears out any data that we may have been editing
-     * @function
-     */
-    self.cancelFocus = function () {
-        self.newName("");
-        self.newDescription("");
-        self.newVisibilty(false);
-
-        parent.cancelFocus();
-    };
-
-    self.importStops = function (rawStops) {
+    self.importStops = function () {
         var stopList = parent.parent.stopContainer.stops(),
             i,
             stopHashTable,
             currStop;
 
         // first we set up an associative array that states what the stops are in this 
-        for (i = 0, stopHashTable = []; i < rawStops.length; i++) {
-            currStop = rawStops[i];
+        for (i = 0, stopHashTable = []; i < raw.stops.length; i++) {
+            currStop = raw.stops[i];
             stopHashTable[currStop.id] = true;
         }
 
@@ -199,7 +110,7 @@ var TourViewModel = function (raw, parent) {
             self.lat(raw.lat);
             self.lon(raw.lon);
             self.visibility(raw.visibility);
-            self.importStops(raw.stops);
+            self.importStops();
         }
     };
 
@@ -226,6 +137,17 @@ var TourContainerViewModel = function (parent) {
     self.newTourStopList = ko.observableArray();
     self.newTourStopPool = ko.observableArray();
     self.newTourVisibility = ko.observable(true);
+
+    self.dumpStops = function (newStops) {
+        var i, curr, tours = self.tours();
+
+        parent.tourContainer.newTourStopPool(newStops);
+
+        for (i = 0; i < tours.length; i++) {
+            curr = tours[i];
+            curr.importStops();
+        }
+    }
 
     self.toggleNewVisibility = function () {
         self.newTourVisibility(!self.newTourVisibility())
@@ -617,7 +539,7 @@ var StopContainerViewModel = function (parent) {
     self.parent = parent;
     self.stops = ko.observableArray([]);
     self.stops.subscribe(function (newVal) {
-        parent.tourContainer.newTourStopPool(newVal.slice(0));
+        parent.tourContainer.dumpStops(newVal.slice(0));
     });
 
     // When we want to focus on one stop to view / edit it
