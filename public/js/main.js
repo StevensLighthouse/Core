@@ -353,9 +353,9 @@ var TourContainerViewModel = function (parent) {
         }
     };
 
-    self.focusedTourId = ko.observable(null);
-    self.focusedTourComputed = ko.computed(function () {
-        var target = parseInt(self.focusedTourId()),
+    self.previewingTourId = ko.observable(null);
+    self.previewingTour = ko.computed(function () {
+        var target = parseInt(self.previewingTourId()),
             tourList = self.tours(),
             i,
             curr;
@@ -373,19 +373,19 @@ var TourContainerViewModel = function (parent) {
         return null;
     }, this);
 
-    self.focusedTourComputed.subscribe(self.loadTour);
+    self.previewingTour.subscribe(self.loadTour);
 
     self.preview = function (id) {
-        self.focusedTourId(id);
+        self.previewingTourId(id);
         return true;
     };
 
     self.hidePreview = function () {
-        self.focusedTourId(null);
+        self.previewingTourId(null);
     }
 
     self.edit = function (id) {
-        self.focusedTourId(id);
+        self.previewingTourId(id);
         return true;
     };
 
