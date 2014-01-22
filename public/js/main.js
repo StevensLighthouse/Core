@@ -336,9 +336,6 @@ var TourContainerViewModel = function (parent) {
         return true;
     };
 
-    // When we want to focus on one tour to view / edit it
-    self.focusedTour = ko.observable();
-
     self.availableStops = ko.computed(function () {
         return parent.stopContainer.stops();
     });
@@ -350,8 +347,7 @@ var TourContainerViewModel = function (parent) {
 
         for (var i = 0; i < self.tours().length; i++) {
             if (self.tours()[i].id() === asNum) {
-                self.focusedTour(self.tours()[i]);
-                self.loadTour(self.focusedTour());
+                self.loadTour(self.tours()[i]);
                 return;
             }
         }
@@ -389,9 +385,7 @@ var TourContainerViewModel = function (parent) {
     }
 
     self.edit = function (id) {
-        self.focusOn(id);
-        if (!self.focusedTour()) return false;
-        self.focusedTour().edit();
+        self.focusedTourId(id);
         return true;
     };
 
@@ -400,7 +394,6 @@ var TourContainerViewModel = function (parent) {
      * @function
      */
     self.cancelFocus = function () {
-        self.focusedTour(null);
         parent.clearMap();
     };
 
