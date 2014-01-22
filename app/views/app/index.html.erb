@@ -474,6 +474,18 @@
 </div>
 <!-- /.main-container -->
 
+<div style="display: none">
+    <div id="hidden-info-window-helper" data-bind="with: infoWindowStop">
+        <div style="min-height: 150px; width: 150px; overflow: scroll">
+            <h5 data-bind="text: name"></h5>
+            <p data-bind="text: description"></p>
+        </div>
+        <div data-bind="visible: $root.showEditTourPage">
+            <a href="#" class="trash-stop-from-tour" data-bind="click: $root.deleteStopFromTripHelper">Delete</a>
+        </div>
+    </div>
+</div>
+
 <% content_for :scripts do %>
     <script type="text/javascript">
         var map,

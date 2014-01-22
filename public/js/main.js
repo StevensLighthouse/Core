@@ -256,6 +256,9 @@ var TourContainerViewModel = function (parent) {
     self.newTourName = ko.observable("");
     self.newTourDescription = ko.observable("");
     self.newTourList = ko.observableArray();
+    self.newTourList.subscribe(function(newVal) {
+        console.log(newVal);
+    });
     self.newTourPool = ko.observableArray();
     self.newTourVisibility = ko.observable(true);
 
