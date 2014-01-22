@@ -184,6 +184,7 @@ var TourContainerViewModel = function (parent) {
         self.newTourStopList([]);
         self.newTourVisibility(true);
         self.newTourStopPool(parent.stopContainer.stops().slice(0));
+        parent.clearMap();
     };
 
     self.listToPool = function (data) {
