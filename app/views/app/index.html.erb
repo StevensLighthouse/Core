@@ -272,12 +272,12 @@
                                     <div class="space-4"></div>
                                     <div class="clearfix form-actions">
                                         <div class="col-md-9">
-                                            <button class="btn btn-info" type="submit">
+                                            <button class="btn btn-info" type="submit" data-bind="click: tourContainer.saveTour">
                                                 <i class="icon-ok bigger-110"></i>
-                                                <span data-bind="page: 'create-tour', onVisible: tourContainer.createTour, click: tourContainer.saveTour">
+                                                <span data-bind="page: 'create-tour', onVisible: tourContainer.createTour">
                                                     Create Tour
                                                 </span>
-                                                <span data-bind="page: 'edit-tour', onVisible: tourContainer.edit, click: tourContainer.saveTour">
+                                                <span data-bind="page: 'edit-tour', onVisible: tourContainer.edit">
                                                     Save Tour
                                                 </span>
                                             </button>

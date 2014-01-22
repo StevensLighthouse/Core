@@ -283,23 +283,32 @@ var TourContainerViewModel = function (parent) {
         if (!self.newTourDescription()) return false;
         if (!self.newTourStopList().length) return false;
 
-        var stopIds = ko.utils.arrayMap(self.newTourStopList(), function (stop) {
-            return stop.id();
-        }),
-            center = parent.getCenter();
-
-        $.ajax({
-            dataType: "json",
-            type: "POST",
-            url: "/tours",
-            data: {
+        var isEditing = self.editingTourId() && self.editingTourId() !== null,
+            type = isEditing ? "PUT" : "POST",
+            path = "/tours" + (isEditing ? ("/" + self.editingTourId()) : ""),
+            stopIds = ko.utils.arrayMap(self.newTourStopList(), function (stop) {
+                return stop.id();
+            }),
+            center = parent.getCenter(),
+            request = {
                 name: self.newTourName(),
                 description: self.newTourDescription(),
                 visibility: self.newTourVisibility(),
                 lat: center.lat,
                 lon: center.lng,
                 stops: stopIds
-            }
+            };
+
+        if (isEditing) {
+            request.id = self.editingTourId()
+            self.tours.remove(self.editingTour());
+        }
+
+        $.ajax({
+            dataType: "json",
+            type: type,
+            url: path,
+            data: request
         }).done(function (response) {
             self.tours.push(new TourViewModel(response.tour, self));
         }).fail(function (r) {
@@ -439,7 +448,7 @@ var StopViewModel = function (raw, parent) {
 
     self.visibility = ko.observable(true);
     self.newVisibilty = ko.observable();
-    
+
     self.centerOnMap = function (stop) {
         parent.parent.setCenter(self.lat(), self.lon());
     };
