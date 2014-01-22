@@ -280,11 +280,11 @@
                             <div class="col-sm-6" data-bind="page: 'edit-tour', onVisible: tourContainer.edit, with: tourContainer.focusedTour">
                             </div>
                             <div class="col-sm-6" data-bind="page: 'preview-tour', onVisible: tourContainer.preview, onHide: tourContainer.hidePreview, with: tourContainer.focusedTourComputed">
-                                    <h3 data-bind="text: name"></h3>
-                                    <p data-bind="text: description"></p>
-                                    <ol data-bind="foreach: stops">
-                                        <li data-bind="text: name"></li>
-                                    </ol>
+                                <h3 data-bind="text: name"></h3>
+                                <p data-bind="text: description"></p>
+                                <ol data-bind="foreach: stops">
+                                    <li data-bind="text: name"></li>
+                                </ol>
                             </div>
                             <div class="col-sm-6">
                                 <div id="map-canvas"></div>
@@ -305,7 +305,9 @@
                             </thead>
                             <tbody data-bind="foreach: tourContainer.tours">
                                 <tr>
-                                    <td><a data-bind="text: name, attr: {href: '#preview-tour/' + id()} "></a></td>
+                                    <td>
+                                        <a data-bind="text: name, attr: {href: '#preview-tour/' + id()} "></a>
+                                    </td>
                                     <td data-bind="text: description"></td>
                                     <td data-bind="text: stops().length"></td>
                                     <td>
