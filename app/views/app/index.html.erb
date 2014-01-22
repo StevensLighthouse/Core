@@ -239,7 +239,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label no-padding-right">Stops</label>
                                         <div class="col-sm-9 col-sm-offset-1">
-                                            <ul class="item-list" data-bind="sortable: tourContainer.newTourList">
+                                            <ul class="item-list" data-bind="sortable: tourContainer.newTourStopList">
                                                 <li class="item-blue clearfix">
                                                     <label class="inline" data-bind="text: name"></label>
                                                     <div class="pull-right action-buttons">
@@ -253,7 +253,7 @@
                                     </div>
                                     <div class="space-4"></div>
                                     <div class="form-group">
-                                        <div class="col-sm-9 col-sm-offset-3" data-bind="foreach: tourContainer.newTourPool">
+                                        <div class="col-sm-9 col-sm-offset-3" data-bind="foreach: tourContainer.newTourStopPool">
                                             <span class="label clickable" data-bind="click: $parent.tourContainer.poolToList, text: name"></span>
                                         </div>
                                     </div>
@@ -277,13 +277,61 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-sm-6" data-bind="page: 'edit-tour', onVisible: tourContainer.edit">
+                            <div class="col-sm-6" data-bind="page: 'edit-tour', onVisible: tourContainer.edit, with: tourContainer.editingTour">
+                                <form role="form" class="form-horizontal" action="#tours" method="get">
+                                    <div class="form-group">
+                                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="col-xs-12 col-sm-12" placeholder="My New Tour" data-bind="value: newName">
+                                        </div>
+                                    </div>
+                                    <div class="space-4"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label no-padding-right">Description</label>
+                                        <div class="col-sm-9">
+                                            <textarea class="form-control" id="" placeholder="Tell us about your tour" data-bind="value: newDescription"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="space-4"></div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label no-padding-right">Stops</label>
+                                        <div class="col-sm-9 col-sm-offset-1">
+                                            <ul class="item-list" data-bind="sortable: newStops">
+                                                <li class="item-blue clearfix">
+                                                    <label class="inline" data-bind="text: name"></label>
+                                                    <div class="pull-right action-buttons">
+                                                        <a href="#" class="red" data-bind="click: $parent.listToPool">
+                                                            <i class="icon-trash bigger-130"></i>
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="space-4"></div>
+                                    <div class="form-group">
+                                        <div class="col-sm-9 col-sm-offset-3" data-bind="foreach: newStopPool">
+                                            <span class="label clickable" data-bind="click: $parent.poolToList, text: name"></span>
+                                        </div>
+                                    </div>
+                                    <div class="space-4"></div>
+                                    <div class="clearfix form-actions">
+                                        <div class="col-md-9">
+                                            <button class="btn btn-info" type="submit" data-bind="click: saveTour">
+                                                <i class="icon-ok bigger-110"></i>
+                                                Save Tour
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="col-sm-6" data-bind="page: 'preview-tour', onVisible: tourContainer.preview, onHide: tourContainer.hidePreview, with: tourContainer.previewingTour">
                                 <h3 data-bind="text: name"></h3>
                                 <p data-bind="text: description"></p>
                                 <ol data-bind="foreach: stops">
-                                    <li><a href="#" data-bind="text: name, click: $parent.centerOnStop"></a></li>
+                                    <li>
+                                        <a href="#" data-bind="text: name, click: $parent.centerOnStop"></a>
+                                    </li>
                                 </ol>
                             </div>
                             <div class="col-sm-6">
