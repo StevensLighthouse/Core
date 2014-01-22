@@ -344,23 +344,28 @@ var TourContainerViewModel = function (parent) {
     };
 
     self.focusedTourId = ko.observable(null);
-    self.focusedTourComputed = function () {
-        var target = self.focusedTourId(),
+    self.focusedTourComputed = ko.computed(function () {
+        var target = parseInt(self.focusedTourId()),
             tourList = self.tours(),
             i,
-            curr;
+            curr;   
+        
         if (!target || !tourList.length) return null;
 
         for (i = 0; i < tourList.length; i++) {
             curr = tourList[i];
-            if (curr.id() == target) return curr;
+
+            if (curr.id() === target) {
+                return curr;
+            }
         }
+
+        console.log("foo");
         return null;
-    };
+    }, this);
 
     self.preview = function (id) {
         self.focusedTourId(id);
-        if (!self.focusedTour()) return false;
 
         return true;
     };
