@@ -292,7 +292,8 @@ var TourContainerViewModel = function (parent) {
 
         var stopIds = ko.utils.arrayMap(self.newTourList(), function (stop) {
             return stop.id();
-        });
+        }),
+            center = parent.getCenter();
 
         $.ajax({
             dataType: "json",
@@ -302,8 +303,8 @@ var TourContainerViewModel = function (parent) {
                 name: self.newTourName(),
                 description: self.newTourDescription(),
                 visibility: self.newTourVisibility(),
-                lat: 40.7435753309731,
-                lon: -74.02875912059483,
+                lat: center.lat,
+                lon: center.lng,
                 stops: stopIds
             }
         }).done(function (response) {
@@ -348,8 +349,8 @@ var TourContainerViewModel = function (parent) {
         var target = parseInt(self.focusedTourId()),
             tourList = self.tours(),
             i,
-            curr;   
-        
+            curr;
+
         if (!target || !tourList.length) return null;
 
         for (i = 0; i < tourList.length; i++) {
@@ -370,7 +371,6 @@ var TourContainerViewModel = function (parent) {
     };
 
     self.hidePreview = function () {
-        console.log("foo");
         self.focusedTourId(null);
     }
 
@@ -905,6 +905,13 @@ var AppContainer = function (map) {
     self.setCenter = function (lat, lon) {
         map.setCenter(new google.maps.LatLng(lat, lon));
     };
+
+    self.getCenter = function () {
+        return {
+            lat: map.getCenter().lat(),
+            lng: map.getCenter().lng()
+        };
+    }
 
     self.closeInfoWindows = function () {
         for (var i = 0; i < self.infoWindows.length; i++) {
