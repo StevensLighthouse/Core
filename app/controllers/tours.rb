@@ -21,6 +21,7 @@ post '/tours' do
   @current_user = current_user()
   if @current_user.is_builder?
     @tour = Tour.create(tour_params)
+    @tour.stops = Stop.find_all_by_id(params[:stops])
     if @tour.save
       { :status => :created, :tour => @tour }.to_json
     else
@@ -46,7 +47,7 @@ put '/tours/:id' do |id|
   @current_user = current_user()
   if @current_user.is_editor?
     @tour = Tour.find(id)
-
+    @tour.stops = Stop.find_all_by_id(params[:stops])
     if @tour.update(tour_params)
       { :tour => @tour }.to_json
     else
