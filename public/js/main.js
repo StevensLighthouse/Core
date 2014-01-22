@@ -164,15 +164,6 @@ var TourViewModel = function (raw, parent) {
     };
 
     /**
-     * Loads a new tour to be displayed
-     * @function
-     */
-    self.load = function () {
-        parent.loadTour(self);
-        return true;
-    };
-
-    /**
      * Sets up the tour to be edited.
      * @function
      */
@@ -256,7 +247,7 @@ var TourContainerViewModel = function (parent) {
     self.newTourName = ko.observable("");
     self.newTourDescription = ko.observable("");
     self.newTourList = ko.observableArray();
-    self.newTourList.subscribe(function(newVal) {
+    self.newTourList.subscribe(function (newVal) {
         console.log(newVal);
     });
     self.newTourPool = ko.observableArray();
@@ -264,6 +255,32 @@ var TourContainerViewModel = function (parent) {
 
     self.toggleNewVisibility = function () {
         self.newTourVisibility(!self.newTourVisibility())
+    };
+
+
+    /**
+     * Loads a tour to be visible on the map, as well as come into some sort of focus
+     * @function
+     */
+    self.loadTour = function (tour) {
+        if (!tour) return;
+        var lat = tour.lat(),
+            lon = tour.lon(),
+            stops = tour.stops(),
+            i,
+            currStop;
+
+        parent.clearMap();
+
+        if (stops.length > 0) {
+            for (i = 0; i < stops.length; i++) {
+                curr = stops[i];
+                parent.addMarker(curr, tour);
+            }
+        }
+        if (lat && lon) {
+            parent.setCenter(lat, lon);
+        }
     };
 
     self.createTour = function () {
@@ -322,13 +339,6 @@ var TourContainerViewModel = function (parent) {
     // When we want to focus on one tour to view / edit it
     self.focusedTour = ko.observable();
 
-    // Sets us up to create a new tour
-    self.createNewTour = function () {
-        self.focusedTour(new TourViewModel(null, self));
-        self.focusedTour().edit();
-        return true;
-    };
-
     self.availableStops = ko.computed(function () {
         return parent.stopContainer.stops();
     });
@@ -341,7 +351,7 @@ var TourContainerViewModel = function (parent) {
         for (var i = 0; i < self.tours().length; i++) {
             if (self.tours()[i].id() === asNum) {
                 self.focusedTour(self.tours()[i]);
-                self.focusedTour().load();
+                self.loadTour(self.focusedTour());
                 return;
             }
         }
@@ -367,9 +377,10 @@ var TourContainerViewModel = function (parent) {
         return null;
     }, this);
 
+    self.focusedTourComputed.subscribe(self.loadTour);
+
     self.preview = function (id) {
         self.focusedTourId(id);
-
         return true;
     };
 
@@ -382,30 +393,6 @@ var TourContainerViewModel = function (parent) {
         if (!self.focusedTour()) return false;
         self.focusedTour().edit();
         return true;
-    };
-
-    /**
-     * Loads a tour to be visible on the map, as well as come into some sort of focus
-     * @function
-     */
-    self.loadTour = function (tour) {
-        var lat = tour.lat(),
-            lon = tour.lon(),
-            stops = tour.stops(),
-            i,
-            currStop;
-
-        self.focusedTour(tour);
-
-        if (stops.length > 0) {
-            for (i = 0; i < stops.length; i++) {
-                curr = stops[i];
-                parent.addMarker(curr, tour);
-            }
-        }
-        if (lat && lon) {
-            parent.setCenter(lat, lon);
-        }
     };
 
     /**
