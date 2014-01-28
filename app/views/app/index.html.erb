@@ -30,7 +30,7 @@
                         <span class="menu-text">My Tours</span>
                         <b class="arrow icon-angle-down"></b>
                     </a>
-                    <ul class="submenu" data-bind="">
+                    <ul class="submenu">
                         <li>
                             <a href="#tours">
                                 <i class="icon-double-angle-right"></i>
@@ -49,55 +49,20 @@
                     <a href="#" class="dropdown-toggle">
                         <i class="icon-list"></i>
                         <span class="menu-text">My Stops</span>
-
                         <b class="arrow icon-angle-down"></b>
                     </a>
-
                     <ul class="submenu">
                         <li>
-                            <a href="elements.html">
+                            <a href="#stops">
+                                <i class="icon-double-angle-right"></i>
+                                Manage Stops
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#create-stop">
                                 <i class="icon-double-angle-right"></i>
                                 Create Stop
                             </a>
-                        </li>
-                        <li>
-                            <a href="elements.html">
-                                <i class="icon-double-angle-right"></i>
-                                Find More Stops
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="dropdown-toggle">
-                                <i class="icon-double-angle-right"></i>
-                                Preview Stop
-                                <b class="arrow icon-angle-down"></b>
-                            </a>
-
-                            <ul class="submenu">
-                                <li>
-                                    <a href="#">
-                                        <i class="icon-leaf"></i>
-                                        Stop 1
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="#" class="dropdown-toggle">
-                                <i class="icon-double-angle-right"></i>
-                                Edit Stop
-                                <b class="arrow icon-angle-down"></b>
-                            </a>
-
-                            <ul class="submenu">
-                                <li>
-                                    <a href="#">
-                                        <i class="icon-leaf"></i>
-                                        Stop 1
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </li>
@@ -153,47 +118,24 @@
             <div class="sidebar-collapse" id="sidebar-collapse">
                 <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
             </div>
-
-            <script type="text/javascript">
-                try {
-                        ace.settings.check('sidebar', 'collapsed')
-                    } catch (e) {}
-            </script>
         </div>
 
         <div class="main-content">
-            <div class="breadcrumbs" id="breadcrumbs">
-                <script type="text/javascript">
-                    try {
-                            ace.settings.check('breadcrumbs', 'fixed')
-                        } catch (e) {}
-                </script>
-                <!--
-                    <ul class="breadcrumb">
-                        <li>
-                            <i class="icon-home home-icon"></i>
-                            <a href="#">Home</a>
-                        </li>
-
-                        <li>
-                            <a href="#">Other Pages</a>
-                        </li>
-                        <li class="active">Blank Page</li>
-                    </ul> -->
-                <!-- .breadcrumb -->
-            </div>
-
             <div class="page-content">
                 <div class="page-header">
                     <h1 data-bind="page: ['', 'home']">Welcome home!</h1>
+                    <h1 data-bind="page: 'tours'">My  Tours</h1>
                     <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
-                    <h1 data-bind="page: 'edit-tour'">Manage a Tour</h1>
-                    <h1 data-bind="page: 'tours'">Manage Tours</h1>
+                    <h1 data-bind="page: 'edit-tour'">Update a Tour</h1>
                     <h1 data-bind="page: 'preview-tour'">Preview Tour</h1>
                     <h1 data-bind="page: 'users'">Manage Users</h1>
                     <h1 data-bind="page: 'create-user'">Create a User</h1>
                     <h1 data-bind="page: 'groups'">Manage Groups</h1>
                     <h1 data-bind="page: 'create-group'">Create a Group</h1>
+                    <h1 data-bind="page: 'stops'">Manage Stops</h1>
+                    <h1 data-bind="page: 'create-stop'">Create a Stop</h1>
+                    <h1 data-bind="page: 'edit-stop'">Update a Stop</h1>
+                    <h1 data-bind="page: 'preview-stop'">Preview Stop</h1>
                 </div>
                 <div class="row" data-bind="page: ['', 'home']">
                     <div class="col-xs-12">
