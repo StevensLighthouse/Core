@@ -2,6 +2,9 @@
 var enableDebug = true;
 var baseGeocoderUrl = "http://maps.googleapis.com/maps/api/geocode/json";
 
+/**
+ * An empty function that will be used to hide debug information in production.
+ */
 function emptyFunc() {
 
 }
@@ -14,19 +17,16 @@ if (!enableDebug) {
 }
 
 /**
- * Enum for the page we want to load
+ * Enum for the roles of a user
  * @readonly
  * @enum {string}
  */
-var SiteState = {
-    Loading: "loading",
-    TourList: "Tour List",
-    ViewTour: "View Tour",
-    EditTour: "Edit Tour",
-    StopList: "Stop List",
-    ViewStop: "View Stop",
-    EditStop: "Edit Stop",
-    FindStop: "Find Stop"
+var UserRoles = {
+    0: "Deactivated",
+    1: "Editor",
+    2: "Builder",
+    3: "Group Admin",
+    4: "Site Admin"
 };
 
 /**
@@ -40,13 +40,10 @@ var TourViewModel = function (raw, parent) {
 
     self.id = ko.observable("");
     self.name = ko.observable("");
-    self.newName = ko.observable("");
 
     self.description = ko.observable("");
-    self.newDescription = ko.observable("");
 
     self.visibility = ko.observable(true);
-    self.newVisibilty = ko.observable();
 
     self.visibilityText = ko.computed(function () {
         return self.visibility() ? "visible" : "not visible";
@@ -57,92 +54,9 @@ var TourViewModel = function (raw, parent) {
     self.lon = ko.observable(0);
 
     self.stops = ko.observableArray([]);
-    self.newStop = ko.observable();
-    self.newStops = ko.observableArray([]);
-
-    self.addNewStop = function () {
-        var newStop = self.newStop();
-        if (self.newStops.indexOf(newStop) < 0) {
-            self.newStops.push(newStop);
-            parent.parent.addMarker(newStop, self);
-            parent.parent.setCenter(newStop.lat(), newStop.lon());
-            self.newStop(null);
-        }
-    };
-
-    self.detachStop = function (stop) {
-        self.newStops.remove(stop);
-        parent.parent.removeMarker(stop, self);
-    };
-    
-    self.tourUpdateText = ko.computed(function () {
-        return self.id() ? "Update Tour" : "Create Tour";
-    });
-
-    self.canSaveTour = ko.computed(function () {
-        return self.newName() && self.newName() !== "";
-    });
-
-    self.disableSave = ko.computed(function () {
-        return !self.canSaveTour();
-    })
 
     self.centerOnStop = function (stop) {
         parent.parent.setCenter(stop.lat(), stop.lon());
-    };
-
-    /**
-     * Saves or updates a tour on the server
-     * @function
-     */
-    self.saveTour = function () {
-        if (!self.canSaveTour()) return;
-
-        self.name(self.newName());
-        self.description(self.newDescription());
-        self.visibility(self.newVisibilty());
-        self.load();
-
-        // we want to save the tour
-        if (self.id() && self.id() !== "") {
-            $.ajax({
-                dataType: "json",
-                type: "PUT",
-                url: "/tours/" + self.id(),
-                data: {
-                    name: self.name(),
-                    description: self.description(),
-                    visibility: self.visibility(),
-                    lat: self.lat(),
-                    lon: self.lon()
-                }
-            }).done(function (response) {
-                self.id(response.tour.id);
-            }).fail(function (r) {
-                console.log(r);
-            });
-        } else {
-            // we want to create the tour
-            // No reason that I should have to supply lat, lon myself -- should be parsed from stops.
-            parent.tours.push(self);
-
-            $.ajax({
-                dataType: "json",
-                type: "POST",
-                url: "/tours",
-                data: {
-                    name: self.name(),
-                    description: self.description(),
-                    visibility: self.visibility(),
-                    lat: 40.7435753309731,
-                    lon: -74.02875912059483
-                }
-            }).done(function (response) {
-                self.id(response.tour.id);
-            }).fail(function (r) {
-                console.log(r);
-            });
-        }
     };
 
     /**
@@ -163,48 +77,15 @@ var TourViewModel = function (raw, parent) {
         }
     };
 
-    /**
-     * Loads a new tour to be displayed
-     * @function
-     */
-    self.load = function () {
-        parent.loadTour(self, SiteState.ViewTour);
-    };
-
-    /**
-     * Sets up the tour to be edited.
-     * @function
-     */
-    self.edit = function () {
-        self.newName(self.name());
-        self.newDescription(self.description());
-        self.newVisibilty(self.visibility());
-        self.newStops(self.stops().slice(0));
-        parent.loadTour(self, SiteState.EditTour);
-    };
-
-    /**
-     * Cancels the fact that we're focusing on this tour
-     * Clears out any data that we may have been editing
-     * @function
-     */
-    self.cancelFocus = function () {
-        self.newName("");
-        self.newDescription("");
-        self.newVisibilty(false);
-
-        parent.cancelFocus();
-    };
-
-    self.importStops = function (rawStops) {
-        var stopList = parent.parent.stopContainer().stops(),
+    self.importStops = function () {
+        var stopList = parent.parent.stopContainer.stops(),
             i,
             stopHashTable,
             currStop;
 
         // first we set up an associative array that states what the stops are in this 
-        for (i = 0, stopHashTable = []; i < rawStops.length; i++) {
-            currStop = rawStops[i];
+        for (i = 0, stopHashTable = []; i < raw.stops.length; i++) {
+            currStop = raw.stops[i];
             stopHashTable[currStop.id] = true;
         }
 
@@ -229,12 +110,7 @@ var TourViewModel = function (raw, parent) {
             self.lat(raw.lat);
             self.lon(raw.lon);
             self.visibility(raw.visibility);
-            self.importStops(raw.stops);
-        } else {
-            // If raw is unsupplied, then we will simply pre-seed with starter data because that means the tour is new
-            self.name("My New Tour");
-            self.description("A tour of my favorite places");
-            self.visibility(true);
+            self.importStops();
         }
     };
 
@@ -249,41 +125,47 @@ var TourViewModel = function (raw, parent) {
  * @param {object} [raw] The raw data to create tours.
  * @param {objet} [parent] A reference to the app container.
  */
-var TourContainerViewModel = function (raw, parent) {
+var TourContainerViewModel = function (parent) {
     var self = this;
 
     // Allows us climb up the chain fo rwhen we want to import stops
     self.parent = parent;
 
     self.tours = ko.observableArray([]);
+    self.newTourName = ko.observable("");
+    self.newTourDescription = ko.observable("");
+    self.newTourStopList = ko.observableArray();
+    self.newTourStopPool = ko.observableArray();
+    self.newTourVisibility = ko.observable(true);
 
-    // When we want to focus on one tour to view / edit it
-    self.focusedTour = ko.observable();
+    self.dumpStops = function (newStops) {
+        var i, curr, tours = self.tours();
 
-    // Sets us up to create a new tour
-    self.createNewTour = function () {
-        self.focusedTour(new TourViewModel(null, self));
-        self.focusedTour().edit();
+        parent.tourContainer.newTourStopPool(newStops);
+
+        for (i = 0; i < tours.length; i++) {
+            curr = tours[i];
+            curr.importStops();
+        }
+    }
+
+    self.toggleNewVisibility = function () {
+        self.newTourVisibility(!self.newTourVisibility())
     };
-
-    self.availableStops = ko.computed(function () {
-        return parent.stopContainer().stops();
-    });
 
     /**
      * Loads a tour to be visible on the map, as well as come into some sort of focus
      * @function
      */
-    self.loadTour = function (tour, state) {
+    self.loadTour = function (tour) {
+        if (!tour) return;
         var lat = tour.lat(),
             lon = tour.lon(),
             stops = tour.stops(),
             i,
             currStop;
 
-        parent.state(SiteState.Loading);
-        self.focusedTour(tour);
-        parent.state(state);
+        parent.clearMap();
 
         if (stops.length > 0) {
             for (i = 0; i < stops.length; i++) {
@@ -296,13 +178,160 @@ var TourContainerViewModel = function (raw, parent) {
         }
     };
 
+    self.createTour = function () {
+        self.newTourName("");
+        self.newTourDescription("");
+        self.newTourStopList([]);
+        self.newTourVisibility(true);
+        self.newTourStopPool(parent.stopContainer.stops().slice(0));
+        parent.clearMap();
+    };
+
+    self.listToPool = function (data) {
+        self.newTourStopPool.push(data);
+        self.newTourStopList.remove(data);
+
+        return false;
+    };
+
+    self.poolToList = function (data) {
+        self.newTourStopList.push(data);
+        self.newTourStopPool.remove(data);
+
+        return false;
+    }
+
+    self.saveTour = function () {
+        if (!self.newTourName()) return false;
+        if (!self.newTourDescription()) return false;
+        if (!self.newTourStopList().length) return false;
+
+        var isEditing = self.editingTourId() && self.editingTourId() !== null,
+            type = isEditing ? "PUT" : "POST",
+            path = "/tours" + (isEditing ? ("/" + self.editingTourId()) : ""),
+            stopIds = ko.utils.arrayMap(self.newTourStopList(), function (stop) {
+                return stop.id();
+            }),
+            center = parent.getCenter(),
+            request = {
+                name: self.newTourName(),
+                description: self.newTourDescription(),
+                visibility: self.newTourVisibility(),
+                lat: center.lat,
+                lon: center.lng,
+                stops: stopIds
+            };
+
+        if (isEditing) {
+            request.id = self.editingTourId()
+            self.tours.remove(self.editingTour());
+        }
+
+        $.ajax({
+            dataType: "json",
+            type: type,
+            url: path,
+            data: request
+        }).done(function (response) {
+            self.tours.push(new TourViewModel(response.tour, self));
+        }).fail(function (r) {
+            console.log(r);
+        });
+
+        return true;
+    };
+
+    self.availableStops = ko.computed(function () {
+        return parent.stopContainer.stops();
+    });
+
+    self.focusOn = function (id) {
+        // panic
+        var asNum = parseInt(id);
+        if (Number.isNaN(asNum)) return;
+
+        for (var i = 0; i < self.tours().length; i++) {
+            if (self.tours()[i].id() === asNum) {
+                self.loadTour(self.tours()[i]);
+                return;
+            }
+        }
+    };
+
+    self.tourFromId = function (id) {
+        var target = parseInt(id),
+            tourList = self.tours(),
+            i,
+            curr;
+
+        if (!target || !tourList.length) return null;
+
+        for (i = 0; i < tourList.length; i++) {
+            curr = tourList[i];
+
+            if (curr.id() === target) {
+                return curr;
+            }
+        }
+
+        return null;
+
+    };
+
+    self.previewingTourId = ko.observable(null);
+    self.previewingTour = ko.computed(function () {
+        return self.tourFromId(self.previewingTourId());
+    }, this);
+
+    self.previewingTour.subscribe(self.loadTour);
+
+    self.editingTourId = ko.observable(null);
+    self.editingTour = ko.computed(function () {
+        var newTour = self.tourFromId(self.editingTourId());
+        if (!newTour) return null;
+        return newTour;
+    });
+
+    self.editingTour.subscribe(function (newVal) {
+        var allStops = parent.stopContainer.stops.slice(0),
+            i,
+            curr;
+        self.loadTour(newVal);
+        if (!newVal) return;
+        self.newTourName(newVal.name());
+        self.newTourDescription(newVal.description());
+        self.newTourVisibility(newVal.visibility());
+
+        self.newTourStopList(newVal.stops().slice(0));
+        self.newTourStopPool([]);
+
+        for (var i = 0; i < allStops.length; i++) {
+            curr = allStops[i];
+            if (self.newTourStopList.indexOf(curr) < 0) {
+                self.newTourStopPool.push(curr);
+            }
+        }
+    });
+
+    self.preview = function (id) {
+        self.previewingTourId(id);
+        return true;
+    };
+
+    self.hidePreview = function () {
+        self.previewingTourId(null);
+    }
+
+    self.edit = function (id) {
+        self.editingTourId(id);
+        return true;
+    };
+
     /**
      * Clears out the focused tour field and brings us back to the tour list
      * @function
      */
     self.cancelFocus = function () {
-        self.focusedTour(null);
-        parent.state(SiteState.TourList);
         parent.clearMap();
     };
 
@@ -311,12 +340,16 @@ var TourContainerViewModel = function (raw, parent) {
      * @function
      */
     self.init = function () {
-        // We do a .push.apply to only 
-        var tours = ko.utils.arrayMap(raw, function (tour) {
-            return new TourViewModel(tour, self);
+        $.ajax({
+            dataType: "json",
+            url: "/tours.json",
+            success: function (data) {
+                var tours = ko.utils.arrayMap(data.tours, function (tour) {
+                    return new TourViewModel(tour, self);
+                });
+                self.tours(tours);
+            }
         });
-
-        self.tours.push.apply(self.tours, tours);
     };
 
     (function () {
@@ -338,6 +371,10 @@ var StopViewModel = function (raw, parent) {
 
     self.visibility = ko.observable(true);
     self.newVisibilty = ko.observable();
+
+    self.centerOnMap = function (stop) {
+        parent.parent.setCenter(self.lat(), self.lon());
+    };
 
     self.visibilityText = ko.computed(function () {
         return self.visibility() ? "visible" : "not visible";
@@ -376,7 +413,7 @@ var StopViewModel = function (raw, parent) {
         self.newDescription(self.description());
         self.newVisibilty(self.visibility());
         self.newAddress("");
-        parent.loadStop(self, SiteState.EditStop);
+        parent.loadStop(self);
     };
 
     self.deleteStop = function () {
@@ -491,7 +528,7 @@ var StopViewModel = function (raw, parent) {
 
 };
 
-var StopContainerViewModel = function (raw, parent) {
+var StopContainerViewModel = function (parent) {
     var self = this,
         miniMap,
         miniMapOptions = {
@@ -500,7 +537,11 @@ var StopContainerViewModel = function (raw, parent) {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
+    self.parent = parent;
     self.stops = ko.observableArray([]);
+    self.stops.subscribe(function (newVal) {
+        parent.tourContainer.dumpStops(newVal.slice(0));
+    });
 
     // When we want to focus on one stop to view / edit it
     self.focusedStop = ko.observable();
@@ -519,10 +560,8 @@ var StopContainerViewModel = function (raw, parent) {
      * Loads a stop to be visible on the map, as well as come into some sort of focus
      * @function
      */
-    self.loadStop = function (stop, state) {
-        parent.state(SiteState.Loading);
+    self.loadStop = function (stop) {
         self.focusedStop(stop);
-        parent.state(state);
 
         if (stop.id()) {
             miniMapOptions.center = new google.maps.LatLng(stop.lat(), stop.lon());
@@ -544,7 +583,6 @@ var StopContainerViewModel = function (raw, parent) {
      */
     self.cancelFocus = function () {
         self.focusedStop(null);
-        parent.state(SiteState.StopList);
     };
 
     // Map operations
@@ -594,15 +632,20 @@ var StopContainerViewModel = function (raw, parent) {
     };
 
     /**
-     * Initializes the tour list container; safe to self-invoke
+     * Initializes the stop list container; safe to self-invoke
      * @function
      */
     self.init = function () {
-        var stops = ko.utils.arrayMap(raw, function (stop) {
-            return new StopViewModel(stop, self);
+        $.ajax({
+            dataType: "json",
+            url: "/stops.json",
+            success: function (data) {
+                var stops = ko.utils.arrayMap(data.stops, function (stop) {
+                    return new StopViewModel(stop, self);
+                });
+                self.stops(stops);
+            }
         });
-
-        self.stops.push.apply(self.stops, stops);
     };
 
     (function () {
@@ -610,65 +653,162 @@ var StopContainerViewModel = function (raw, parent) {
     }());
 };
 
+var UserViewModel = function (raw, parent) {
+    this.id = ko.observable(raw.id);
+    this.email = ko.observable(raw.email);
+    this.permission = ko.observable(raw.permission);
+    this.groupId = ko.observable(raw.group_id);
+
+    this.role = ko.computed(function () {
+        return UserRoles[this.permission()];
+    }, this);
+
+    this.groupName = ko.computed(function () {
+        if (!this.groupId()) return "No Group";
+        var group = parent.getGroup(this.groupId());
+        if (!group) return "No Group";
+        return group.name();
+    }, this);
+};
+
+var GroupViewModel = function (raw) {
+    var self = this;
+
+    this.id = ko.observable(raw.id);
+    this.name = ko.observable(raw.name);
+    this.description = ko.observable(raw.description);
+};
+
+var UserContainer = function () {
+    var self = this;
+
+    this.polling = ko.observable(false);
+    this.groups = ko.observableArray();
+    this.users = ko.observableArray();
+
+    this.newEmail = ko.observable("");
+    this.newPermission = ko.observable(0);
+    this.newGroup = ko.observable(null);
+    this.newPassword = ko.observable("");
+    this.newPasswordConfirm = ko.observable("");
+    this.newGroupName = ko.observable("");
+    this.newGroupDescription = ko.observable("");
+
+    this.getGroup = function (id) {
+        var groups = this.groups(),
+            curr,
+            i;
+
+        for (i = 0; i < groups.length; i++) {
+            curr = groups[i];
+            if (curr.id() === id) return curr;
+        }
+
+        return null;
+    };
+
+    this.createUser = function () {
+        self.newEmail("");
+        self.newPermission(1);
+        self.newPassword("");
+        self.newPasswordConfirm("");
+        self.newGroup(null);
+    };
+
+    this.createGroup = function () {
+        self.newGroupName("");
+        self.newGroupDescription("");
+    };
+
+    this.saveUser = function () {
+        self.polling(true);
+
+        if (!self.newEmail()) return false;
+        if (!self.newPassword()) return false;
+        if (!self.newPermission()) return false;
+        if (self.newPassword() != self.newPasswordConfirm()) return false;
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: "/users",
+            data: {
+                email: self.newEmail(),
+                permission: self.newPermission(),
+                password: self.newPassword(),
+                group_id: self.newGroup()
+            }
+        }).done(function (response) {
+            self.users.push(new UserViewModel(response.user, self));
+            self.polling(false);
+        }).fail(function (r) {
+            console.log(r);
+            self.polling(false);
+        });
+
+        return true;
+    };
+
+    this.saveGroup = function () {
+        if (!self.newGroupName()) return false;
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: "/groups",
+            data: {
+                name: self.newGroupName(),
+                description: self.newGroupDescription()
+            }
+        }).done(function (response) {
+            self.groups.push(new GroupViewModel(response.group));
+            self.polling(false);
+        }).fail(function (r) {
+            console.log(r);
+            self.polling(false);
+        });
+
+        return true;
+    };
+
+    this.init = function () {
+        $.ajax({
+            url: "/users",
+            success: function (data) {
+                self.users(ko.utils.arrayMap(data.users, function (x) {
+                    return new UserViewModel(x, self);
+                }));
+            },
+            dataType: "json"
+        });
+
+        $.ajax({
+            url: "/groups.json",
+            success: function (data) {
+                self.groups(ko.utils.arrayMap(data.groups, function (x) {
+                    return new GroupViewModel(x);
+                }));
+            },
+            dataType: "json"
+        });
+    };
+
+    this.init();
+};
+
 /**
  * A container around our application.
  * @constructor
- * @param {object} [raw] The raw data that will
+ * @param {google_map} [map] The google map object
  */
-var AppContainer = function (raw, map) {
+var AppContainer = function (map) {
     var self = this;
 
     self.map = map;
 
-    // Determines what's actually visible on the page.
-    self.state = ko.observable(SiteState.Loading);
-
-    self.tourContainer = ko.observable();
-    self.stopContainer = ko.observable();
-
-    self.showTourList = ko.computed(function () {
-        return self.state() === SiteState.TourList;
-    });
-
-    self.showLoadingPage = ko.computed(function () {
-        return self.state() === SiteState.Loading;
-    });
-
-    self.showViewTourPage = ko.computed(function () {
-        return self.state() === SiteState.ViewTour;
-    });
-
-    self.showEditTourPage = ko.computed(function () {
-        return self.state() === SiteState.EditTour;
-    });
-
-    self.manageStops = function () {
-        self.state(SiteState.StopList);
-    };
-
-    self.manageTours = function () {
-        self.state(SiteState.TourList);
-    };
-
-    self.managingTours = ko.computed(function () {
-        return self.showTourList() || self.showViewTourPage() || self.showEditTourPage();
-    });
-
-    self.showStopList = ko.computed(function () {
-        return self.state() === SiteState.StopList;
-    });
-
-    self.showEditStopPage = ko.computed(function () {
-        return self.state() === SiteState.EditStop;
-    });
-
-    self.showViewStopPage = ko.computed(function () {
-        return self.state() === SiteState.ViewStop;
-    })
-
-    self.managingStops = ko.computed(function () {
-        return self.showStopList() || self.showEditStopPage();
-    });
+    self.userContainer = new UserContainer();
+    self.stopContainer = new StopContainerViewModel(self);
+    self.tourContainer = new TourContainerViewModel(self);
 
     // Map operations
 
@@ -695,12 +835,19 @@ var AppContainer = function (raw, map) {
         map.setCenter(new google.maps.LatLng(lat, lon));
     };
 
-    self.closeInfoWindows = function() {
-        for(var i = 0; i < self.infoWindows.length; i++) {
+    self.getCenter = function () {
+        return {
+            lat: map.getCenter().lat(),
+            lng: map.getCenter().lng()
+        };
+    }
+
+    self.closeInfoWindows = function () {
+        for (var i = 0; i < self.infoWindows.length; i++) {
             self.infoWindows[i].close();
         }
     };
-    
+
     self.infoWindowStop = ko.observable();
     self.infoWindowTrip = ko.observable();
     self.infoWindowMarker = ko.observable();
@@ -714,7 +861,7 @@ var AppContainer = function (raw, map) {
         var lat = stop.lat(),
             lon = stop.lon(),
             title = stop.name(),
-            description = stop.description(),            
+            description = stop.description(),
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, lon),
                 map: map,
@@ -723,17 +870,17 @@ var AppContainer = function (raw, map) {
             infowindow = new google.maps.InfoWindow({
                 content: ""
             });
-        
+
         // Little hacky, but what can you do? :|
         marker.stopId = stop.id();
-        
+
         window.google.maps.event.addListener(marker, "click", function () {
             // this is actually, legitly voodoo. I am not very pleased with this
             self.closeInfoWindows();
             self.infoWindowStop(stop);
             self.infoWindowTrip(trip);
             self.infoWindowMarker(marker);
-            
+
             infowindow.setContent($('#hidden-info-window-helper').clone(true)[0]);
 
             infowindow.open(map, marker);
@@ -741,14 +888,14 @@ var AppContainer = function (raw, map) {
 
         self.markers.push(marker);
         self.infoWindows.push(infowindow);
-        
+
         return marker;
     };
-    
+
     self.removeMarker = function (stop) {
-        for(var i = 0, desiredId = stop.id(), found = false, curr = null; !found && i < self.markers.length; i++) {
+        for (var i = 0, desiredId = stop.id(), found = false, curr = null; !found && i < self.markers.length; i++) {
             curr = self.markers[i];
-            if(curr.stopId === desiredId){
+            if (curr.stopId === desiredId) {
                 found = true;
                 curr.setMap(null);
             }
@@ -777,10 +924,5 @@ var AppContainer = function (raw, map) {
      * Initializes the application
      * @function
      */
-    self.init = function () {
-        self.state(SiteState.TourList);
-
-        self.stopContainer(new StopContainerViewModel(raw.stops, self));
-        self.tourContainer(new TourContainerViewModel(raw.tours, self));
-    };
+    self.init = function () {};
 };

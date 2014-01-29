@@ -30,7 +30,7 @@ post '/groups' do
   redirect to('/login') unless current_user()
   @current_user = current_user()
   if @current_user.is_site_admin?
-    @group = Groups.create(group_params)
+    @group = Group.create(group_params)
     if @group.save
       { :status => :created, :group => @group }.to_json
     else

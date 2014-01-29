@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :password, :password_confirmation, :permission
+  attr_accessible :email, :password, :password_confirmation, :permission, :group_id, :group
 
   # associations
   has_one :creator, :class_name => 'User'
@@ -63,5 +63,9 @@ class User < ActiveRecord::Base
     return true if self.permission == 0
     false
   end
+    
+  def as_json(options={})
+      super(options.merge(:except=>[:hashed_password, :password_salt, :last_login, :creator_id, :editor_id, :updated_at, :created_at]))
+  end;
 
 end

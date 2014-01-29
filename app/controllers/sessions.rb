@@ -1,13 +1,5 @@
 enable :sessions
 
-# GET /login
-# Provides a login page
-get '/login' do 
-  respond_to do |format|
-    format.html { erb :'sessions/login' }
-  end
-end
-
 get '/logged_in' do
   user = current_user()
 
@@ -31,7 +23,7 @@ post '/login' do
       # user is logged in
       session[:user_id] = user.id
       respond_to do |wants|
-        wants.html { "Log out" }
+          redirect to('/')
       end
     else
       # unexpected error occured
