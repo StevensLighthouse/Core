@@ -112,14 +112,13 @@
                 <div class="page-header">
                     <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
                     <h1 data-bind="page: 'edit-tour'">Update a Tour</h1>
-                    <h1 data-bind="page: 'preview-tour'">Preview Tour</h1>
                     <h1 data-bind="page: 'create-user'">Create a User</h1>
                     <h1 data-bind="page: 'create-group'">Create a Group</h1>
                     <h1 data-bind="page: 'create-stop'">Create a Stop</h1>
                     <h1 data-bind="page: 'edit-stop'">Update a Stop</h1>
                     <h1 data-bind="page: 'preview-stop'">Preview Stop</h1>
                 </div>
-                <div class="row" data-bind="page: ['create-tour', 'edit-tour', 'preview-tour'], onVisible: refresh">
+                <div class="row" data-bind="page: ['create-tour', 'edit-tour'], onVisible: refresh">
                     <div class="col-xs-12">
                         <div class="row">
                             <div class="col-sm-6" data-bind="page: ['edit-tour', 'create-tour']">
@@ -187,15 +186,6 @@
                                         </div>
                                     </div>
                                 </form>
-                            </div>
-                            <div class="col-sm-6" data-bind="page: 'preview-tour', onVisible: tourContainer.preview, onHide: tourContainer.hidePreview, with: tourContainer.previewingTour">
-                                <h3 data-bind="text: name"></h3>
-                                <p data-bind="text: description"></p>
-                                <ol data-bind="foreach: stops">
-                                    <li>
-                                        <a href="#" data-bind="text: name, click: centerOnMap"></a>
-                                    </li>
-                                </ol>
                             </div>
                             <div class="col-sm-6">
                                 <div id="map-canvas"></div>

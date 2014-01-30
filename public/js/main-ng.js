@@ -1,4 +1,4 @@
-var coreApp = angular.module('core', ['ngRoute', 'coreControllers']);
+var coreApp = angular.module('core', ['google-maps', 'ngRoute', 'coreControllers']);
 
 var PermissionDict = {
     0: "Deactivated",
@@ -30,6 +30,30 @@ coreApp.factory("$dataService", function ($http) {
             self.tourList = data.tours;
             callback(self.tourList);
         });
+    };
+
+    this.getTour = function (id, callback) {
+        callback = (callback && typeof callback === "function") ? callback : function () {};
+
+        function findTour(id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.tourList, {
+                id: id
+            });
+        };
+
+        var tour = findTour(id);
+
+        if (!tour) {
+            this.getAllTours(function () {
+                callback(findTour(id));
+            });
+        } else {
+            callback(tour);
+        }
     };
 
     this.getAllStops = function (callback) {
@@ -113,6 +137,7 @@ coreApp.factory("$dataService", function ($http) {
 
         callback();
     };
+
     return this;
 });
 
@@ -126,6 +151,10 @@ coreApp.config(['$routeProvider',
         when('/tours', {
             templateUrl: 'partials/tours.html',
             controller: 'TourCtrl'
+        }).
+        when('/tours/:tourId', {
+            templateUrl: 'partials/tour-detail.html',
+            controller: 'TourDetailCtrl'
         }).
         when('/groups', {
             templateUrl: 'partials/groups.html',
@@ -155,6 +184,38 @@ coreControllers.controller('TourCtrl',
     function ($scope, $dataService) {
         $dataService.getAllTours(function (tours) {
             $scope.tours = tours;
+        });
+    });
+
+coreControllers.controller('TourDetailCtrl',
+    function ($scope, $routeParams, $dataService) {
+        $scope.tourId = $routeParams.tourId;
+
+        $scope.map = {
+            center: {
+                latitude: 45,
+                longitude: -73
+            },
+            zoom: 5
+        };
+        
+        $scope.setCenter = function(lat, lng){
+            $scope.map.center.latitude = lat;
+            $scope.map.center.longitude = lng;
+        }
+        
+        $scope.centerOn = function (stop) {
+            $scope.setCenter(stop.lat, stop.lon);
+        };
+
+        $dataService.getTour($scope.tourId, function (tour) {
+            console.log(tour);
+            $scope.name = tour.name;
+            $scope.stops = tour.stops;
+            $scope.description = tour.description;
+            $scope.map.center.latitude = parseFloat(tour.lat);
+            $scope.map.center.longitude = parseFloat(tour.lon);
+            $scope.map.zoom = 15;
         });
     });
 
