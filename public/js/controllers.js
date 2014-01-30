@@ -27,6 +27,10 @@ coreControllers.controller('TourDetailCtrl',
                 this.center.longitude = lng;
             }
         };
+        
+        $scope.centerOn = function(stop){
+            $scope.map.setCenter(stop.lat, stop.lon);
+        }
 
         $dataService.getTour($scope.tourId, function (tour) {
             $scope.name = tour.name;
@@ -85,7 +89,7 @@ coreControllers.controller('StopDetailCtrl',
         $scope.map = {
             center: {
                 latitude: 45,
-                longitude: -73
+                longitude: -74
             },
             zoom: 15,
             setCenter: function (lat, lng) {
