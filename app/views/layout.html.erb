@@ -53,12 +53,6 @@
 
 <body>
     <div class="navbar navbar-default" id="navbar">
-        <script type="text/javascript">
-            try {
-                ace.settings.check('navbar', 'fixed')
-            } catch (e) {}
-        </script>
-
         <div class="navbar-container" id="navbar-container">
             <div class="navbar-header pull-left">
                 <a href="#" class="navbar-brand">
@@ -130,17 +124,13 @@
         <script src="assets/js/bootstrap.min.js"></script>
         <script src="assets/js/typeahead-bs2.min.js"></script>
 		<script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>
-    
-        <!-- page specific plugin scripts -->
-
-        <!-- ace scripts -->
-
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>        
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-route.min.js"></script>        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+        <script src='js/vendor/angular-google-maps.min.js'></script>
         <script src="assets/js/ace-elements.min.js"></script>
         <script src="assets/js/ace.min.js"></script>
-        <script src="js/vendor/knockout.js"></script>
-        <script src="js/plugins.js"></script>
-        <script src="js/bindings.js"></script>
-        <script src="js/main.js"></script>
+        <script src="js/main-ng.js"></script>
 
         <!-- inline scripts related to this page -->
         <%= yield_content :scripts %>

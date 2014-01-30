@@ -3,11 +3,10 @@
         <a class="menu-toggler" id="menu-toggler" href="#">
             <span class="menu-text"></span>
         </a>
-
         <div class="sidebar" id="sidebar">
             <ul class="nav nav-list">
                 <li class="targetable">
-                    <a href="#home">
+                    <a href="#/home">
                         <i class="icon-dashboard"></i>
                         <span class="menu-text">Home</span>
                     </a>
@@ -20,13 +19,13 @@
                     </a>
                     <ul class="submenu">
                         <li>
-                            <a href="#tours">
+                            <a href="#/tours">
                                 <i class="icon-double-angle-right"></i>
                                 Manage Tours
                             </a>
                         </li>
                         <li>
-                            <a href="#create-tour">
+                            <a href="#/create-tour">
                                 <i class="icon-double-angle-right"></i>
                                 Create Tour
                             </a>
@@ -41,7 +40,7 @@
                     </a>
                     <ul class="submenu">
                         <li>
-                            <a href="#stops">
+                            <a href="#/stops">
                                 <i class="icon-double-angle-right"></i>
                                 Manage Stops
                             </a>
@@ -63,7 +62,7 @@
                     </a>
                     <ul class="submenu">
                         <li>
-                            <a href="#groups">
+                            <a href="#/groups">
                                 <i class="icon-double-angle-right"></i>
                                 Manage Groups
                             </a>
@@ -86,7 +85,7 @@
 
                     <ul class="submenu">
                         <li>
-                            <a href="#users">
+                            <a href="#/users">
                                 <i class="icon-double-angle-right"></i>
                                 Manage Users
                             </a>
@@ -108,44 +107,17 @@
             </div>
         </div>
 
-        <div class="main-content">
-            <div class="page-content">
+        <div class="main-content" ng-app="core">
+            <div class="page-content" ng-view>
                 <div class="page-header">
-                    <h1 data-bind="page: ['', 'home']">Welcome home!</h1>
-                    <h1 data-bind="page: 'tours'">My  Tours</h1>
                     <h1 data-bind="page: 'create-tour'">Create a Tour</h1>
                     <h1 data-bind="page: 'edit-tour'">Update a Tour</h1>
                     <h1 data-bind="page: 'preview-tour'">Preview Tour</h1>
-                    <h1 data-bind="page: 'users'">Manage Users</h1>
                     <h1 data-bind="page: 'create-user'">Create a User</h1>
-                    <h1 data-bind="page: 'groups'">Manage Groups</h1>
                     <h1 data-bind="page: 'create-group'">Create a Group</h1>
-                    <h1 data-bind="page: 'stops'">Manage Stops</h1>
                     <h1 data-bind="page: 'create-stop'">Create a Stop</h1>
                     <h1 data-bind="page: 'edit-stop'">Update a Stop</h1>
                     <h1 data-bind="page: 'preview-stop'">Preview Stop</h1>
-                </div>
-                <div class="row" data-bind="page: ['', 'home']">
-                    <div class="col-xs-12">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h2>How to add a trip</h2>
-                                <p>We'll think of some text here explaining how to user Core.</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h2>How to add a stop</h2>
-                                <p>We'll think of some text here explaining how to user Core.</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h2>Managing Users</h2>
-                                <p>We'll think of some text here explaining how to user Core.</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="row" data-bind="page: ['create-tour', 'edit-tour', 'preview-tour'], onVisible: refresh">
                     <div class="col-xs-12">
@@ -231,66 +203,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" data-bind="page: 'tours'">
-                    <div class="col-xs-12">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Stops</th>
-                                    <th>Manage</th>
-                                </tr>
-                            </thead>
-                            <tbody data-bind="foreach: tourContainer.tours">
-                                <tr>
-                                    <td>
-                                        <a data-bind="text: name, attr: {href: '#preview-tour/' + id()} "></a>
-                                    </td>
-                                    <td data-bind="text: description"></td>
-                                    <td data-bind="text: stops().length"></td>
-                                    <td>
-                                        <a class="btn btn-xs btn-info" data-bind="attr: {href: '#edit-tour/' + id()}">
-                                            <i class="icon-edit bigger-120"></i>
-                                        </a>
-                                        <button class="btn btn-xs btn-danger">
-                                            <i class="icon-trash bigger-120"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row" data-bind="page: 'users'">
-                    <div class="col-xs-12">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Email</th>
-                                    <th>Group</th>
-                                    <th>Account Type</th>
-                                    <th>Manage</th>
-                                </tr>
-                            </thead>
-                            <tbody data-bind="foreach: userContainer.users">
-                                <tr>
-                                    <td data-bind="text: email"></td>
-                                    <td data-bind="text: groupName"></td>
-                                    <td data-bind="text: role"></td>
-                                    <td>
-                                        <button class="btn btn-xs btn-info">
-                                            <i class="icon-edit bigger-120"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-danger">
-                                            <i class="icon-trash bigger-120"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
                 <div class="row" data-bind="page: 'create-user', onVisible: userContainer.createUser">
                     <div class="col-xs-12">
                         <form role="form" class="form-horizontal" action="#users" method="get">
@@ -351,33 +263,6 @@
                         </form>
                     </div>
                 </div>
-                <div class="row" data-bind="page: 'groups'">
-                    <div class="col-xs-12">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Manage</th>
-                                </tr>
-                            </thead>
-                            <tbody data-bind="foreach: userContainer.groups">
-                                <tr>
-                                    <td data-bind="text: name"></td>
-                                    <td data-bind="text: description"></td>
-                                    <td>
-                                        <button class="btn btn-xs btn-info">
-                                            <i class="icon-edit bigger-120"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-danger">
-                                            <i class="icon-trash bigger-120"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
                 <div class="row" data-bind="page: 'create-group', onVisible: userContainer.createGroup">
                     <div class="col-xs-12">
                         <form role="form" class="form-horizontal" action="#groups" method="get">
@@ -405,80 +290,8 @@
                         </form>
                     </div>
                 </div>
-                <div class="row" data-bind="page: 'stops', with: stopContainer">
-                    <div class="col-xs-12">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Images</th>
-                                    <th>Manage</th>
-                                </tr>
-                            </thead>
-                            <tbody data-bind="foreach: stops">
-                                <tr>
-                                    <td>
-                                        <a data-bind="text: name, attr: {href: '#preview-stop/' + id()} "></a>
-                                    </td>
-                                    <td data-bind="text: description"></td>
-                                    <td data-bind="text: 0"></td>
-                                    <td>
-                                        <a class="btn btn-xs btn-info" data-bind="attr: {href: '#edit-stop/' + id()}">
-                                            <i class="icon-edit bigger-120"></i>
-                                        </a>
-                                        <button class="btn btn-xs btn-danger">
-                                            <i class="icon-trash bigger-120"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
-        <!-- /.main-content -->
-    </div>
-    <!-- /.main-container-inner -->
-</div>
-<!-- /.main-container -->
-
-<div style="display: none">
-    <div id="hidden-info-window-helper" data-bind="with: infoWindowStop">
-        <div style="min-height: 150px; width: 150px; overflow: scroll">
-            <h5 data-bind="text: name"></h5>
-            <p data-bind="text: description"></p>
-        </div>
-        <div data-bind="visible: $root.showEditTourPage">
-            <a href="#" class="trash-stop-from-tour" data-bind="click: $root.deleteStopFromTripHelper">Delete</a>
-        </div>
     </div>
 </div>
 
-<% content_for :scripts do %>
-    <script type="text/javascript">
-        var map,
-            model;
-
-        function initialize() {
-            var mapOptions = {
-                zoom: 14,
-                center: new google.maps.LatLng(40.7435753309731, -74.02875912059483),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-
-            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-            model = new AppContainer(map);
-
-            ko.applyBindings(model);            
-            model.init();
-        }
-        
-        function refresh() {
-            google.maps.event.trigger(map, 'resize');            
-        }
-
-        google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-    <% end %>
