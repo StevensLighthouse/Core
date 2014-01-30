@@ -12,8 +12,8 @@
                     <th>Manage</th>
                 </tr>
             </thead>
-            <tbody ng-repeat="stop in stops">
-                <tr>
+            <tbody>
+                <tr ng-repeat="stop in stops">
                     <td>
                         <a href="#/stops/{{ stop.id }}">{{ stop.name }}</a>
                     </td>

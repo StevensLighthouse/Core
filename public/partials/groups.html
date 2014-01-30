@@ -11,8 +11,8 @@
                     <th>Manage</th>
                 </tr>
             </thead>
-            <tbody ng-repeat="group in groups">
-                <tr>
+            <tbody>
+                <tr ng-repeat="group in groups">
                     <td><a href="#/groups/{{ group.id }}">{{ group.name }}</a></td>
                     <td>{{ group.description }}</td>
                     <td>

@@ -6,11 +6,6 @@
         <div class="col-sm-6">
             <h3>{{ name }}</h3>
             <p>{{ description }}</p>
-            <ol ng-repeat="stop in stops">
-                <li>
-                    <a href="javascript:void(0)" ng-click="centerOn(stop)">{{ stop.name }}</a>
-                </li>
-            </ol>
         </div>
         <google-map class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true">
             <marker coords='stop.center'>

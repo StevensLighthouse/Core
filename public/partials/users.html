@@ -12,8 +12,8 @@
                     <th>Manage</th>
                 </tr>
             </thead>
-            <tbody ng-repeat="user in users">
-                <tr>
+            <tbody>
+                <tr ng-repeat="user in users">
                     <td>
                         <a href="#/users/{{ user.id }}">{{ user.email }}</a>
                     </td>
