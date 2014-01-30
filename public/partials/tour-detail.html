@@ -6,8 +6,8 @@
         <div class="col-sm-6">
             <h3>{{ name }}</h3>
             <p>{{ description }}</p>
-            <ol ng-repeat="stop in stops">
-                <li>
+            <ol>
+                <li ng-repeat="stop in stops">
                     <a href="javascript:void(0)" ng-click="centerOn(stop)">{{ stop.name }}</a>
                 </li>
             </ol>
