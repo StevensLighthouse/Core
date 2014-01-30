@@ -88,6 +88,30 @@ coreApp.factory("$dataService", function ($http) {
         });
     };
 
+    this.getGroup = function (id, callback) {
+        callback = (callback && typeof callback === "function") ? callback : function () {};
+
+        function findGroup(id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.groupList, {
+                id: id
+            });
+        };
+
+        var group = findGroup(id);
+
+        if (!group) {
+            this.getAllGroups(function () {
+                callback(findGroup(id));
+            });
+        } else {
+            callback(group);
+        }
+    };
+
     this.getAllUsers = function (callback) {
         callback = (callback && typeof callback === "function") ? callback : function () {};
 
@@ -160,6 +184,10 @@ coreApp.config(['$routeProvider',
             templateUrl: 'partials/groups.html',
             controller: 'GroupCtrl'
         }).
+        when('/groups/:groupId', {
+            templateUrl: 'partials/group-detail.html',
+            controller: 'GroupDetailCtrl'
+        }).
         when('/users', {
             templateUrl: 'partials/users.html',
             controller: 'UserCtrl'
@@ -198,12 +226,12 @@ coreControllers.controller('TourDetailCtrl',
             },
             zoom: 5
         };
-        
-        $scope.setCenter = function(lat, lng){
+
+        $scope.setCenter = function (lat, lng) {
             $scope.map.center.latitude = lat;
             $scope.map.center.longitude = lng;
         }
-        
+
         $scope.centerOn = function (stop) {
             $scope.setCenter(stop.lat, stop.lon);
         };
@@ -215,6 +243,16 @@ coreControllers.controller('TourDetailCtrl',
             $scope.map.center.latitude = parseFloat(tour.lat);
             $scope.map.center.longitude = parseFloat(tour.lon);
             $scope.map.zoom = 15;
+        });
+    });
+
+coreControllers.controller('GroupDetailCtrl',
+    function ($scope, $routeParams, $dataService) {
+        $scope.groupId = $routeParams.groupId;
+
+        $dataService.getGroup($scope.groupId, function (group) {
+            $scope.name = group.name;
+            $scope.description = group.description;
         });
     });
 
