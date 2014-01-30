@@ -14,7 +14,14 @@
         </div>
         <google-map class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true">
             <div ng-repeat="stop in stops">
-                <marker coords='{latitude: stop.lat, longitude: stop.lon}'></marker>
+                <marker coords='{ latitude: stop.lat, longitude: stop.lon }'>
+                    <window coords='{ latitude: stop.lat, longitude: stop.lon }'>
+                        <div class="infowindow">
+                            <h5>{{ stop.name }}</h5>
+                            <p>{{ stop.description }}</p>
+                        </div>
+                    </window>
+                </marker>
             </div>
         </google-map>
     </div>

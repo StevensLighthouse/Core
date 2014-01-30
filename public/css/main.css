@@ -24,3 +24,7 @@
 .angular-google-map-container {
     height: 400px;
 }
+
+.infowindow {
+    min-height: 150px;
+}

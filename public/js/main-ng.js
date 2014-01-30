@@ -209,7 +209,6 @@ coreControllers.controller('TourDetailCtrl',
         };
 
         $dataService.getTour($scope.tourId, function (tour) {
-            console.log(tour);
             $scope.name = tour.name;
             $scope.stops = tour.stops;
             $scope.description = tour.description;
