@@ -1,4 +1,4 @@
-var coreApp = angular.module('core', ['google-maps', 'ngRoute', 'coreControllers']);
+var coreApp = angular.module('core', ['google-maps', 'ngRoute', 'ui.sortable', 'coreControllers']);
 
 var PermissionDict = {
     0: "Deactivated",
@@ -223,6 +223,10 @@ coreApp.config(['$routeProvider',
         when('/tours', {
             templateUrl: 'partials/tours.html',
             controller: 'TourCtrl'
+        }).
+        when('/tours/new', {
+            templateUrl: 'partials/edit-tour.html',
+            controller: 'NewTourCtrl'
         }).
         when('/tours/:tourId', {
             templateUrl: 'partials/tour-detail.html',

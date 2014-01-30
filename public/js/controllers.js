@@ -1,5 +1,18 @@
 var coreControllers = angular.module('coreControllers', []);
 
+function mapShim() {
+    this.center = {};
+    this.center.latitude = 40.77;
+    this.center.longitude = -73.98;
+    this.zoom = 15;
+    return this;
+};
+
+mapShim.prototype.setCenter = function (lat, lng) {
+    this.center.latitude = lat;
+    this.center.longitude = lng;
+};
+
 coreControllers.controller('HomeCtrl',
     function ($scope, $dataService) {
         $dataService.getAllData();
@@ -12,23 +25,47 @@ coreControllers.controller('TourCtrl',
         });
     });
 
+coreControllers.controller('NewTourCtrl',
+    function ($scope, $dataService) {
+        $scope.verb = "Create";
+        $scope.name = "";
+        $scope.description = "";
+        $scope.stops = [];
+        $scope.visibility = true;
+
+        $scope.map = new mapShim();
+
+        $dataService.getAllStops(function (stops) {
+            $scope.allStops = stops;
+        })
+
+        $scope.centerOnStop = function (stop) {
+            $scope.map.setCenter(stop.lat, stop.lon);
+        };
+
+        $scope.poolToList = function (stop) {
+            $scope.allStops = _.without($scope.allStops, stop);
+            $scope.stops.push(stop);
+            $scope.centerOnStop(stop);
+        };
+
+        $scope.listToPool = function (stop) {
+            $scope.allStops.push(stop);
+            $scope.stops = _.without($scope.stops, stop);
+        }
+        
+        $scope.saveTour = function () {
+            console.log("saving!");
+        };
+    });
+
 coreControllers.controller('TourDetailCtrl',
     function ($scope, $routeParams, $dataService) {
         $scope.tourId = $routeParams.tourId;
 
-        $scope.map = {
-            center: {
-                latitude: 45,
-                longitude: -73
-            },
-            zoom: 15,
-            setCenter: function (lat, lng) {
-                this.center.latitude = lat;
-                this.center.longitude = lng;
-            }
-        };
-        
-        $scope.centerOn = function(stop){
+        $scope.map = new mapShim();
+
+        $scope.centerOn = function (stop) {
             $scope.map.setCenter(stop.lat, stop.lon);
         }
 
@@ -85,29 +122,8 @@ coreControllers.controller('StopCtrl',
 coreControllers.controller('StopDetailCtrl',
     function ($scope, $routeParams, $dataService) {
         $scope.stopId = $routeParams.stopId;
-
-        $scope.map = {
-            center: {
-                latitude: 45,
-                longitude: -74
-            },
-            zoom: 15,
-            setCenter: function (lat, lng) {
-                this.center.latitude = lat;
-                this.center.longitude = lng;
-            }
-        };
-
-        $scope.stop = {
-            center: {
-                latitude: 45,
-                longitude: -73,
-            },
-            setCenter: function (lat, lng) {
-                this.center.latitude = lat;
-                this.center.longitude = lng;
-            }
-        };
+        $scope.map = new mapShim();
+        $scope.stop = new mapShim();
 
         $dataService.getStop($scope.stopId, function (stop) {
             $scope.name = stop.name;

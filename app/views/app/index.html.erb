@@ -25,7 +25,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#/create-tour">
+                            <a href="#/tours/new">
                                 <i class="icon-double-angle-right"></i>
                                 Create Tour
                             </a>
@@ -116,81 +116,6 @@
                     <h1 data-bind="page: 'create-group'">Create a Group</h1>
                     <h1 data-bind="page: 'create-stop'">Create a Stop</h1>
                     <h1 data-bind="page: 'edit-stop'">Update a Stop</h1>
-                </div>
-                <div class="row" data-bind="page: ['create-tour', 'edit-tour'], onVisible: refresh">
-                    <div class="col-xs-12">
-                        <div class="row">
-                            <div class="col-sm-6" data-bind="page: ['edit-tour', 'create-tour']">
-                                <form role="form" class="form-horizontal" action="#tours" method="get">
-                                    <div class="form-group">
-                                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Name</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="col-xs-12 col-sm-12" placeholder="My New Tour" data-bind="value: tourContainer.newTourName">
-                                        </div>
-                                    </div>
-                                    <div class="space-4"></div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label no-padding-right">Description</label>
-                                        <div class="col-sm-9">
-                                            <textarea class="form-control" id="" placeholder="Tell us about your tour" data-bind="value: tourContainer.newTourDescription"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="space-4"></div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label no-padding-right">Stops</label>
-                                        <div class="col-sm-9 col-sm-offset-1">
-                                            <ul class="item-list" data-bind="sortable: tourContainer.newTourStopList">
-                                                <li class="item-blue clearfix">
-                                                    <label class="inline" data-bind="text: name"></label>
-                                                    <div class="pull-right action-buttons">
-                                                        <a href="#" class="red" data-bind="click: $parent.tourContainer.listToPool">
-                                                            <i class="icon-trash bigger-130"></i>
-                                                        </a>
-                                                        <a href="#" class="blue" data-bind="click: centerOnMap">
-                                                            <i class="icon-globe bigger-130"></i>
-                                                        </a>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="space-4"></div>
-                                    <div class="form-group">
-                                        <div class="col-sm-9 col-sm-offset-3" data-bind="foreach: tourContainer.newTourStopPool">
-                                            <span class="label clickable" data-bind="click: $parent.tourContainer.poolToList, text: name"></span>
-                                        </div>
-                                    </div>
-                                    <div class="space-4"></div>
-                                    <div class="form-group">
-                                        <div class="checkbox">
-                                            <label data-bind="click: tourContainer.toggleNewVisibility">
-                                                <input type="checkbox" class="ace" data-bind="checked: tourContainer.newTourVisibility" />
-                                                <span class="lbl">This tour is visible to the public.</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="space-4"></div>
-                                    <div class="clearfix form-actions">
-                                        <div class="col-md-9">
-                                            <button class="btn btn-info" type="submit" data-bind="click: tourContainer.saveTour">
-                                                <i class="icon-ok bigger-110"></i>
-                                                <span data-bind="page: 'create-tour', onVisible: tourContainer.createTour">
-                                                    Create Tour
-                                                </span>
-                                                <span data-bind="page: 'edit-tour', onVisible: tourContainer.edit">
-                                                    Save Tour
-                                                </span>
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-sm-6">
-                                <div id="map-canvas"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="row" data-bind="page: 'create-user', onVisible: userContainer.createUser">
                     <div class="col-xs-12">
