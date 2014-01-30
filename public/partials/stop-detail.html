@@ -1,0 +1,26 @@
+<div class="page-header">
+    <h1>Preview a Stop</h1>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="col-sm-6">
+            <h3>{{ name }}</h3>
+            <p>{{ description }}</p>
+            <ol ng-repeat="stop in stops">
+                <li>
+                    <a href="javascript:void(0)" ng-click="centerOn(stop)">{{ stop.name }}</a>
+                </li>
+            </ol>
+        </div>
+        <google-map class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true">
+            <marker coords='stop.center'>
+                <window>
+                    <div class="infowindow">
+                        <h5>{{ name }}</h5>
+                        <p>{{ description }}</p>
+                    </div>
+                </window>
+            </marker>
+        </google-map>
+    </div>
+</div>

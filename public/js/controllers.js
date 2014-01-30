@@ -21,25 +21,25 @@ coreControllers.controller('TourDetailCtrl',
                 latitude: 45,
                 longitude: -73
             },
-            zoom: 5
-        };
-
-        $scope.setCenter = function (lat, lng) {
-            $scope.map.center.latitude = lat;
-            $scope.map.center.longitude = lng;
-        }
-
-        $scope.centerOn = function (stop) {
-            $scope.setCenter(stop.lat, stop.lon);
+            zoom: 15,
+            setCenter: function (lat, lng) {
+                this.center.latitude = lat;
+                this.center.longitude = lng;
+            }
         };
 
         $dataService.getTour($scope.tourId, function (tour) {
             $scope.name = tour.name;
             $scope.stops = tour.stops;
             $scope.description = tour.description;
-            $scope.map.center.latitude = parseFloat(tour.lat);
-            $scope.map.center.longitude = parseFloat(tour.lon);
-            $scope.map.zoom = 15;
+            $scope.map.setCenter(parseFloat(tour.lat), parseFloat(tour.lon));
+        });
+    });
+
+coreControllers.controller('GroupCtrl',
+    function ($scope, $dataService) {
+        $dataService.getAllGroups(function (groups) {
+            $scope.groups = groups;
         });
     });
 
@@ -53,13 +53,6 @@ coreControllers.controller('GroupDetailCtrl',
         });
     });
 
-coreControllers.controller('GroupCtrl',
-    function ($scope, $dataService) {
-        $dataService.getAllGroups(function (groups) {
-            $scope.groups = groups;
-        });
-    });
-
 coreControllers.controller('UserCtrl',
     function ($scope, $dataService) {
         $dataService.getAllUsers(function (users) {
@@ -67,7 +60,7 @@ coreControllers.controller('UserCtrl',
         });
     });
 
-coreControllers.controller('UserDetailCtrl', 
+coreControllers.controller('UserDetailCtrl',
     function ($scope, $routeParams, $dataService) {
         $scope.userId = $routeParams.userId;
 
@@ -82,5 +75,40 @@ coreControllers.controller('StopCtrl',
     function ($scope, $dataService) {
         $dataService.getAllStops(function (stops) {
             $scope.stops = stops;
+        });
+    });
+
+coreControllers.controller('StopDetailCtrl',
+    function ($scope, $routeParams, $dataService) {
+        $scope.stopId = $routeParams.stopId;
+
+        $scope.map = {
+            center: {
+                latitude: 45,
+                longitude: -73
+            },
+            zoom: 15,
+            setCenter: function (lat, lng) {
+                this.center.latitude = lat;
+                this.center.longitude = lng;
+            }
+        };
+
+        $scope.stop = {
+            center: {
+                latitude: 45,
+                longitude: -73,
+            },
+            setCenter: function (lat, lng) {
+                this.center.latitude = lat;
+                this.center.longitude = lng;
+            }
+        };
+
+        $dataService.getStop($scope.stopId, function (stop) {
+            $scope.name = stop.name;
+            $scope.description = stop.description;
+            $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+            $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
         });
     });

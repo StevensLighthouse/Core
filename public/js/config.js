@@ -72,6 +72,30 @@ coreApp.factory("$dataService", function ($http) {
         });
     };
 
+    this.getStop = function (id, callback) {
+        callback = (callback && typeof callback === "function") ? callback : function () {};
+
+        function findStop(id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.stopList, {
+                id: id
+            });
+        };
+
+        var stop = findStop(id);
+
+        if (!stop) {
+            this.getAllStops(function () {
+                callback(findStop(id));
+            });
+        } else {
+            callback(stop);
+        }
+    };
+
     this.getAllGroups = function (callback) {
         callback = (callback && typeof callback === "function") ? callback : function () {};
 
@@ -225,8 +249,8 @@ coreApp.config(['$routeProvider',
             controller: 'StopCtrl'
         }).
         when('/stops/:stopId', {
-            templateUrl: 'partials/user-detail.html',
-            controller: 'UserDetailCtrl'
+            templateUrl: 'partials/stop-detail.html',
+            controller: 'StopDetailCtrl'
         }).
         otherwise({
             redirectTo: '/home'
