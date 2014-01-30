@@ -3,7 +3,9 @@ class Tour < ActiveRecord::Base
   # associations
   belongs_to :creator, :class_name => 'User' 
   has_one :editor, :class_name => 'User'
-  has_and_belongs_to_many :stops, -> { uniq } 
+  #has_and_belongs_to_many :stops, -> { uniq } 
+  has_many :stop_tours
+  has_many :stops, :through => :stop_tours
 
   # validators
   validates :name, :presence => true
@@ -21,9 +23,11 @@ class Tour < ActiveRecord::Base
 
   # override default to_json to include stops association with tour
   def as_json(options = {})
-    options[:include] ||= []
-    options[:include] << :stops
-    super(options)
+    hash = super(options)
+    
+    # merge in the stops in the proper order
+    stops = self.stop_tours.order(:position).map { |st| st.stop.attributes.merge(:position => st.position) }
+    hash.merge!(:stops => stops)
   end
 
 end
