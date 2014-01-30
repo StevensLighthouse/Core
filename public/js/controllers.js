@@ -67,6 +67,17 @@ coreControllers.controller('UserCtrl',
         });
     });
 
+coreControllers.controller('UserDetailCtrl', 
+    function ($scope, $routeParams, $dataService) {
+        $scope.userId = $routeParams.userId;
+
+        $dataService.getUser($scope.userId, function (user) {
+            $scope.email = user.email;
+            $scope.role = user.role;
+            $scope.group = user.group;
+        });
+    });
+
 coreControllers.controller('StopCtrl',
     function ($scope, $dataService) {
         $dataService.getAllStops(function (stops) {

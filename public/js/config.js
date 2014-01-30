@@ -152,6 +152,30 @@ coreApp.factory("$dataService", function ($http) {
         self.getAllGroups(manageUsers);
     };
 
+    this.getUser = function (id, callback) {
+        callback = (callback && typeof callback === "function") ? callback : function () {};
+
+        function findUser(id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.userList, {
+                id: id
+            });
+        };
+
+        var user = findUser(id);
+
+        if (!user) {
+            this.getAllUsers(function () {
+                callback(findUser(id));
+            });
+        } else {
+            callback(user);
+        }
+    };
+
     this.getAllData = function (callback) {
         callback = (callback && typeof callback === "function") ? callback : function () {};
 
