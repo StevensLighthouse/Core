@@ -56,13 +56,9 @@
                     <div class="space-4"></div>
                     <div class="clearfix form-actions">
                         <div class="col-md-9">
-                            <button class="btn btn-info" type="submit">
-                                <i class="icon-ok bigger-110"></i>
-                                <span data-bind="page: 'create-tour', onVisible: tourContainer.createTour">
-                                    {{ verb }} Tour
-                                </span>
+                            <button class="btn btn-info" type="submit" ng-click="saveTour()">
+                                <i class="icon-ok bigger-110"></i> {{ verb }} Tour
                             </button>
-
                         </div>
                     </div>
                 </form>
