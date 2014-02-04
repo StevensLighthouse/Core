@@ -48,6 +48,40 @@ put '/stops/:id' do |id|
   end
 end
 
+# POST /stops/global/:id
+# Makes a stop into a global stop
+post '/stops/global/:id' do |id|
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  if @current_user.is_editor?
+    @stop = Stop.find(id)
+  
+    if @stop.update_column(:visibility, true)
+      { :stop => @stop }.to_json
+    else
+      { :errors => @stop.errors, :status => :unprocessable_entity }.to_json
+    end
+  end
+end
+
+# POST /stops/clone/:id
+# Clones the stop specified
+post '/stops/clone/:id' do |id|
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  if @current_user.is_builder?
+    @stop = Stop.find(id)
+
+    @new_stop = Stop.new(:name => @stop.name, :description => @stop.description, :editor_id => id, :creator_id => @stop.creator_id, :visibility => false, :lat => @stop.lat, :lon => @stop.lon, :parent_id => @stop.id)
+
+    if @new_stop.save
+      { :stop => @new_stop }.to_json
+    else
+      { :errors => @stop.errors, :status => :unprocessable_entity }.to_json
+    end
+  end
+end
+  
 # DELETE /stops/:id
 # Delete a specific stop by specifying an ID
 delete '/stops/:id' do |id|
