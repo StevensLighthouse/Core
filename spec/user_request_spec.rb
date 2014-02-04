@@ -17,7 +17,7 @@ describe "User API" do
 
     post "/login", :username => u.email, :password => u.password
 
-    last_response.body.should =~ /Log out/
+    last_response.body.should =~ /Welcome home!/
 
     session = Session.where(:user_id => u.id).last
     
@@ -31,7 +31,7 @@ describe "User API" do
 
     # log the user in
     post "/login", :username => u.email, :password => u.password
-    last_response.body.should =~ /Log out/
+    last_response.body.should =~ /Welcome home!/
 
 
     get '/logout'
