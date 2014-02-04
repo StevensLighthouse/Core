@@ -21,7 +21,10 @@ post '/tours' do
   @current_user = current_user()
   if @current_user.is_builder?
     @tour = Tour.create(tour_params)
-    @tour.stops = Stop.find_all_by_id(params[:stops])
+
+    stop_ids = params[:stops].map { |sid| Stop.find(sid) }
+    puts stop_ids
+    @tour.stop_tours = stop_ids.each_with_index.map { |s_id, index| StopTour.new(:tour => @tour, :stop => s_id, :position => index) } 
     if @tour.save
       { :status => :created, :tour => @tour }.to_json
     else
@@ -47,8 +50,16 @@ put '/tours/:id' do |id|
   @current_user = current_user()
   if @current_user.is_editor?
     @tour = Tour.find(id)
-    @tour.stops = Stop.find_all_by_id(params[:stops])
-    if @tour.update(tour_params)
+
+
+    stop_ids = params[:stops].map { |sid| Stop.find(sid) }
+
+    @tour.stop_tours = stop_ids.each_with_index.map do |stop, index| 
+      puts "Setting stop id #{stop.id} to position #{index}"
+      StopTour.new(:tour => @tour, :stop => stop, :position => index) 
+    end
+
+    if @tour.save and @tour.update(tour_params)
       { :tour => @tour }.to_json
     else
       { :errors => @tour.errors, :status => :unprocessable_entity }.to_json

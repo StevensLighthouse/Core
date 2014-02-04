@@ -20,6 +20,8 @@ class LighthouseCore < Sinatra::Application
     set :public_folder, 'public'
     set :sessions, true
     set :session_secret, 'secret'
+
+    set :protection, :except => [:json_csrf]
   end
 
 end

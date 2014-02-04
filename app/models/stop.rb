@@ -3,7 +3,9 @@ class Stop < ActiveRecord::Base
   # associations
   belongs_to :creator, :class_name => 'User'
   has_one :editor, :class_name => 'User'
-  has_and_belongs_to_many :tours, -> { uniq } 
+  #has_and_belongs_to_many :tours, -> { uniq } 
+  has_many :tours, :through => :stop_tours
+  has_many :stop_tours
   has_and_belongs_to_many :categories
 
   # validators
