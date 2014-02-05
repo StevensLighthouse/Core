@@ -1,3 +1,16 @@
+Array.prototype.remove = function () {
+    var what, a = arguments,
+        L = a.length,
+        ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+
 var coreApp = angular.module('core', ['google-maps', 'ngRoute', 'ui.sortable', 'coreControllers']);
 
 var PermissionDict = {
@@ -15,6 +28,31 @@ coreApp.factory("$dataService", function ($http) {
     this.stopList = [];
     this.userList = [];
     this.groupList = [];
+
+    this.eventDict = {};
+    this.addListener = function (event, onEvent) {
+        if (!typeof onEvent === "function") return;
+
+        if (!this.eventDict[event]) {
+            this.eventDict[event] = [];
+        }
+
+        this.eventDict[event].push(onEvent);
+    };
+
+    this.removeListener = function (event, onEvent) {
+        if (!typeof onEvent === "function") return;
+        if (!this.eventDict[event]) return;
+        this.eventDict[event].remove(onEvent);
+    };
+
+    this.runEvent = function (event, data) {
+        if (!this.eventDict[event]) return;
+
+        for (var i = 0; i < this.eventDict[event].length; i++) {
+            this.eventDict[event][i](data);
+        }
+    };
 
     // gets all the tours, naively caches them
     this.getAllTours = function (callback) {
@@ -55,6 +93,68 @@ coreApp.factory("$dataService", function ($http) {
             callback(tour);
         }
     };
+
+    this.addTour = function (name, description, visibility, lat, lon, stops) {
+        var stopIds = _.map(stops, function (stop) {
+            return stop.id;
+        }),
+            request = {
+                name: name,
+                description: description,
+                visibility: visibility,
+                lat: lat,
+                lon: lon,
+                stops: stopIds
+            };
+
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: "/tours",
+            data: request
+        }).done(function (response) {
+            self.tourList.push(response.tour);
+            self.runEvent("tourAdded", response.tour);
+        }).fail(function (r) {
+            console.log(r);
+        });
+    };
+
+    this.updateTour = function (id, name, description, visibility, lat, lon, stops) {
+        var stopIds = _.map(stops, function (stop) {
+            return stop.id;
+        }),
+            request = {
+                name: name,
+                description: description,
+                visibility: visibility,
+                lat: lat,
+                lon: lon,
+                stops: stopIds
+            };
+
+        $.ajax({
+            dataType: "json",
+            type: "PUT",
+            url: "/tours/" + id,
+            data: request
+        }).done(function (response) {
+            var tour = response.tour;
+            for (var i = 0; i < self.tourList.length; i++) {                
+                if (self.tourList[i].id === tour.id) {
+                    self.tourList[i] = tour;
+                    self.runEvent("tourUpdated", response.tour);
+                    return;
+                }
+            }
+
+            self.tourList.push(tour);
+            self.runEvent("tourAdded", tour);
+        }).fail(function (r) {
+            console.log(r);
+        });
+    };
+
 
     this.getAllStops = function (callback) {
         callback = (callback && typeof callback === "function") ? callback : function () {};
@@ -232,6 +332,10 @@ coreApp.config(['$routeProvider',
             templateUrl: 'partials/tour-detail.html',
             controller: 'TourDetailCtrl'
         }).
+        when('/tours/edit/:tourId', {
+            templateUrl: 'partials/edit-tour.html',
+            controller: 'TourEditCtrl'
+        }).
         when('/groups', {
             templateUrl: 'partials/groups.html',
             controller: 'GroupCtrl'
@@ -251,6 +355,10 @@ coreApp.config(['$routeProvider',
         when('/stops', {
             templateUrl: 'partials/stops.html',
             controller: 'StopCtrl'
+        }).
+        when('/stops/new', {
+            templateUrl: 'partials/edit-stop.html',
+            controller: 'NewStopCtrl'
         }).
         when('/stops/:stopId', {
             templateUrl: 'partials/stop-detail.html',
