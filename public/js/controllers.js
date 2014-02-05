@@ -22,24 +22,20 @@ coreControllers.controller('TourCtrl',
     function ($scope, $dataService) {
         $scope.tours = [];
 
-        $scope.tourAdded = function (tour) {
+        $scope.sync = function () {
             $scope.$apply();
         };
-
-        $scope.tourUpdated = function (tour) {
-            $scope.$apply();
-        };
-
+        
         $dataService.getAllTours(function (tours) {
             $scope.tours = tours;
         });
 
-        $dataService.addListener("tourAdded", $scope.tourAdded);
-        $dataService.addListener("tourUpdated", $scope.tourUpdated);
+        $dataService.addListener("tourAdded", $scope.sync);
+        $dataService.addListener("tourUpdated", $scope.sync);
 
         $scope.$on("$destroy", function () {
-            $dataService.removeListener("tourAdded", $scope.tourAdded);
-            $dataService.removeListener("tourUpdated", $scope.tourUpdated);
+            $dataService.removeListener("tourAdded", $scope.sync);
+            $dataService.removeListener("tourUpdated", $scope.sync);
         });
     });
 
