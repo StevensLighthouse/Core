@@ -72,7 +72,7 @@ post '/stops/clone/:id' do |id|
   if @current_user.is_builder?
     @stop = Stop.find(id)
 
-    @new_stop = Stop.new(:name => @stop.name, :description => @stop.description, :editor_id => id, :creator_id => @stop.creator_id, :visibility => false, :lat => @stop.lat, :lon => @stop.lon, :parent_id => @stop.id)
+    @new_stop = Stop.new(:name => @stop.name, :description => @stop.description, :editor_id => @current_user.id, :creator_id => @stop.creator_id, :visibility => false, :lat => @stop.lat, :lon => @stop.lon, :parent_id => @stop.id)
 
     if @new_stop.save
       { :stop => @new_stop }.to_json
