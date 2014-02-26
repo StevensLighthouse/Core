@@ -98,7 +98,12 @@ coreControllers.controller('TourEditCtrl',
         }
 
         $scope.saveTour = function () {
-            $dataService.updateTour($scope.tourId, $scope.name, $scope.description, $scope.visibility, $scope.map.center.latitude, $scope.map.center.longitude, $scope.stops);
+            $dataService.updateTour($scope.tourId, $scope.name, $scope.description, $scope.visibility, $scope.map.center.latitude, $scope.map.center.longitude, $scope.stops)
+                .then(function () {
+                    window.location = "#/tours";
+                }, function (errorList) {
+                    $scope.errorList = errorList;
+                });
         };
 
         $dataService.getTour($scope.tourId).then(function (tour) {

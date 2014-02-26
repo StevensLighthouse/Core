@@ -143,10 +143,11 @@ coreApp.factory("$dataService",
         };
 
         this.updateTour = function (id, name, description, visibility, lat, lon, stops) {
-            var stopIds = _.map(stops, function (stop) {
-                return stop.id;
-            }),
-                request = {
+            var d = $q.defer(),
+                stopIds = _.map(stops, function (stop) {
+                    return stop.id;
+                }),
+                param = {
                     name: name,
                     description: description,
                     visibility: visibility,
@@ -159,20 +160,33 @@ coreApp.factory("$dataService",
                 dataType: "json",
                 type: "PUT",
                 url: "/tours/" + id,
-                data: request
+                data: param
             }).done(function (response) {
-                var tour = response.tour;
-                for (var i = 0; i < self.tourList.length; i++) {
-                    if (self.tourList[i].id === tour.id) {
-                        self.tourList[i] = tour;
-                        return;
+                var tour = response.tour,
+                    found = false;
+
+                // TODO: STANDARDIZE RESPONSES
+                if (!tour) {
+                    d.reject(self.fixErrorList(response.errors));
+                } else {
+                    for (var i = 0; i < self.tourList.length && !found; i++) {
+                        if (self.tourList[i].id === tour.id) {
+                            self.tourList[i] = tour;
+                            found = true;
+                            d.resolve(tour);
+                        }
+                    }
+                    if (!found) {
+                        self.getAllTours().then(function () {
+                            d.resolve(tour);
+                        })
                     }
                 }
-
-                self.tourList.push(tour);
             }).fail(function (r) {
-                console.log(r);
+                d.reject(r);
             });
+
+            return d.promise;
         };
 
 
