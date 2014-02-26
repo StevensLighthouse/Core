@@ -272,6 +272,51 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.updateStop = function (id, name, description, visibility, lat, lon) {
+            var d = $q.defer(),
+                param = {
+                    name: name,
+                    description: description,
+                    visibility: visibility,
+                    lat: lat,
+                    lon: lon
+                };
+
+            if (name && description && lat && lon) {
+                $.ajax({
+                    dataType: "json",
+                    type: "PUT",
+                    url: "/stops/" + id,
+                    data: param
+                }).done(function (response) {
+                    var stop = response.stop,
+                        found = false;
+
+                    // TODO: STANDARDIZE RESPONSES
+                    if (!stop) {
+                        d.reject(self.fixErrorList(response.errors));
+                    } else {
+                        for (var i = 0; i < self.stopList.length && !found; i++) {
+                            if (self.stopList[i].id === stop.id) {
+                                self.stopList[i] = stop;
+                                found = true;
+                                d.resolve(stop);
+                            }
+                        }
+                        if (!found) {
+                            self.getAllStops().then(function () {
+                                d.resolve(stop);
+                            })
+                        }
+                    }
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+
+            }
+
+            return d.promise;
+        };
 
         this.getAllGroups = function () {
             var d = $q.defer();
@@ -349,6 +394,49 @@ coreApp.factory("$dataService",
                 d.reject(["Please provide all the data!"]);
             }
 
+            return d.promise;
+        };
+
+        this.updateGroup = function (id, name, description) {
+            var d = $q.defer(),
+                param = {
+                    name: name,
+                    description: description
+                };
+
+            if (name && description) {
+                $.ajax({
+                    dataType: "json",
+                    type: "PUT",
+                    url: "/groups/" + id,
+                    data: param
+                }).done(function (response) {
+                    var group = response.tour,
+                        found = false;
+
+                    // TODO: STANDARDIZE RESPONSES
+                    if (!group) {
+                        d.reject(self.fixErrorList(response.errors));
+                    } else {
+                        for (var i = 0; i < self.groupList.length && !found; i++) {
+                            if (self.groupList[i].id === group.id) {
+                                self.groupList[i] = group;
+                                found = true;
+                                d.resolve(group);
+                            }
+                        }
+                        if (!found) {
+                            self.getAllGroups().then(function () {
+                                d.resolve(group);
+                            })
+                        }
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+            }
 
             return d.promise;
         };
@@ -487,6 +575,10 @@ coreApp.config(['$routeProvider',
         when('/groups/:groupId', {
             templateUrl: 'partials/group-detail.html',
             controller: 'GroupDetailCtrl'
+        }).
+        when('/groups/edit/:groupId', {
+            templateUrl: 'partials/edit-group.html',
+            controller: 'GroupEditCtrl'
         }).
         when('/users', {
             templateUrl: 'partials/users.html',

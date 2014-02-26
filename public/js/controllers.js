@@ -167,6 +167,27 @@ coreControllers.controller('NewGroupCtrl',
         };
     });
 
+coreControllers.controller('GroupEditCtrl',
+    function ($scope, $routeParams, $dataService) {
+        $scope.groupId = $routeParams.groupId;
+        $scope.verb = "Update";
+        $scope.name = "";
+        $scope.description = "";
+
+        $dataService.getGroup($scope.groupId).then(function (group) {
+            $scope.name = group.name;
+            $scope.description = group.description;
+        });
+
+        $scope.saveGroup = function () {
+            $dataService.updateGroup($scope.groupId, $scope.name, $scope.description).then(function () {
+                window.location = "#/groups";
+            }, function (errorList) {
+                $scope.errorList = errorList;
+            });
+        };
+    });
+
 coreControllers.controller('GroupDetailCtrl',
     function ($scope, $routeParams, $dataService) {
         $scope.groupId = $routeParams.groupId;
@@ -284,7 +305,29 @@ coreControllers.controller('NewStopCtrl',
     });
 
 coreControllers.controller('StopEditCtrl',
-    function ($scope, $dataService) {
-        console.log("bar");
+    function ($scope, $routeParams, $dataService) {
+        $scope.stopId = $routeParams.stopId;
+        $scope.verb = "Update";
+        $scope.name = "";
+        $scope.address = "";
+        $scope.description = "";
+        $scope.visibility = true;
+        $scope.map = new mapShim();
+        $scope.stop = new mapShim();
 
+        $dataService.getStop($scope.stopId).then(function (stop) {
+            $scope.name = stop.name;
+            $scope.description = stop.description;
+            $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+            $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+        });
+
+        $scope.saveStop = function () {
+            $dataService.updateStop($scope.stopId, $scope.name, $scope.description, $scope.visibility, $scope.stop.center.latitude, $scope.stop.center.longitude)
+                .then(function () {
+                    window.location = "#/stops";
+                }, function (errorList) {
+                    $scope.errorList = errorList;
+                });
+        };
     });

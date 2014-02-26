@@ -17,6 +17,13 @@
                     <textarea class="form-control" id="" placeholder="About your group" ng-model="description"></textarea>
                 </div>
             </div>
+            <div class="alert alert-danger" ng-repeat="error in errorList">
+                <strong>
+                    We couldn't submit that!
+                </strong>
+                {{ error }}
+                <br>
+            </div>
             <div class="clearfix form-actions">
                 <div class="col-md-9">
                     <button class="btn btn-info" type="submit">
@@ -24,13 +31,6 @@
                         {{ verb }} Group
                     </button>
                 </div>
-            </div>
-            <div class="alert alert-danger" ng-repeat="error in errorList">
-                <strong>
-                    We couldn't submit that!
-                </strong>
-                {{ error }}
-                <br>
             </div>
         </form>
     </div>
