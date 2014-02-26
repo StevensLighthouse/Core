@@ -165,10 +165,7 @@ coreApp.factory("$dataService",
                 var tour = response.tour,
                     found = false;
 
-                // TODO: STANDARDIZE RESPONSES
-                if (!tour) {
-                    d.reject(self.fixErrorList(response.errors));
-                } else {
+                if (response.status === "updated") {
                     for (var i = 0; i < self.tourList.length && !found; i++) {
                         if (self.tourList[i].id === tour.id) {
                             self.tourList[i] = tour;
@@ -181,6 +178,8 @@ coreApp.factory("$dataService",
                             d.resolve(tour);
                         })
                     }
+                } else {
+                    d.reject(self.fixErrorList(response.errors));
                 }
             }).fail(function (r) {
                 d.reject(r);
@@ -292,10 +291,7 @@ coreApp.factory("$dataService",
                     var stop = response.stop,
                         found = false;
 
-                    // TODO: STANDARDIZE RESPONSES
-                    if (!stop) {
-                        d.reject(self.fixErrorList(response.errors));
-                    } else {
+                    if (response.status === "updated") {
                         for (var i = 0; i < self.stopList.length && !found; i++) {
                             if (self.stopList[i].id === stop.id) {
                                 self.stopList[i] = stop;
@@ -308,6 +304,8 @@ coreApp.factory("$dataService",
                                 d.resolve(stop);
                             })
                         }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
                     }
                 });
             } else {
@@ -414,10 +412,7 @@ coreApp.factory("$dataService",
                     var group = response.tour,
                         found = false;
 
-                    // TODO: STANDARDIZE RESPONSES
-                    if (!group) {
-                        d.reject(self.fixErrorList(response.errors));
-                    } else {
+                    if (response.status === "updated") {
                         for (var i = 0; i < self.groupList.length && !found; i++) {
                             if (self.groupList[i].id === group.id) {
                                 self.groupList[i] = group;
@@ -430,6 +425,8 @@ coreApp.factory("$dataService",
                                 d.resolve(group);
                             })
                         }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
                     }
                 }).fail(function (r) {
                     d.reject(r);
@@ -549,10 +546,7 @@ coreApp.factory("$dataService",
                     var user = response.user,
                         found = false;
 
-                    // TODO: STANDARDIZE RESPONSES
-                    if (!group) {
-                        d.reject(self.fixErrorList(response.errors));
-                    } else {
+                    if (response.status === "updated") {
                         for (var i = 0; i < self.userList.length && !found; i++) {
                             if (self.userList[i].id === group.id) {
                                 self.userList[i] = group;
@@ -565,6 +559,8 @@ coreApp.factory("$dataService",
                                 d.resolve(group);
                             })
                         }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
                     }
                 }).fail(function (r) {
                     d.reject(r);

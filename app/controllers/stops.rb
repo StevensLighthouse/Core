@@ -41,7 +41,7 @@ put '/stops/:id' do |id|
 
   # Attempt to update the stop
   if @stop.update(listing_params)
-    { :stop => @stop }.to_json
+    { :status => :updated, :stop => @stop }.to_json
   # The stop was not correctly updated, show errors
   else
     { :errors => @stop.errors, :status => :unprocessable_entity }.to_json

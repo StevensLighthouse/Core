@@ -60,7 +60,7 @@ put '/tours/:id' do |id|
     end
 
     if @tour.save and @tour.update(tour_params)
-      { :tour => @tour }.to_json
+      { :status => :updated, :tour => @tour }.to_json
     else
       { :errors => @tour.errors, :status => :unprocessable_entity }.to_json
     end
