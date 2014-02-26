@@ -68,7 +68,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#create-group">
+                            <a href="#/groups/new">
                                 <i class="icon-double-angle-right"></i>
                                 Add a group
                             </a>
@@ -109,39 +109,6 @@
 
         <div class="main-content" ng-app="core">
             <div class="page-content" ng-view>
-                <div class="page-header">
-                    <h1 data-bind="page: 'create-user'">Create a User</h1>
-                    <h1 data-bind="page: 'create-group'">Create a Group</h1>
-                    <h1 data-bind="page: 'create-stop'">Create a Stop</h1>
-                    <h1 data-bind="page: 'edit-stop'">Update a Stop</h1>
-                </div>
-                <div class="row" data-bind="page: 'create-group', onVisible: userContainer.createGroup">
-                    <div class="col-xs-12">
-                        <form role="form" class="form-horizontal" action="#groups" method="get">
-                            <div class="form-group">
-                                <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Group Name</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="col-xs-10 col-sm-5" placeholder="Group Name" data-bind="value: userContainer.newGroupName">
-                                </div>
-                            </div>
-                            <div class="space-4"></div>
-                            <div class="form-group">
-                                <label for="form-field-select-3" class="col-sm-3 control-label no-padding-right">About the group</label>
-                                <div class="col-sm-5">
-                                    <textarea class="form-control" id="" placeholder="About your group" data-bind="value: userContainer.newGroupDescription"></textarea>
-                                </div>
-                            </div>
-                            <div class="clearfix form-actions">
-                                <div class="col-md-9">
-                                    <button class="btn btn-info" type="submit" data-bind="click: userContainer.saveGroup">
-                                        <i class="icon-ok bigger-110"></i>
-                                        Create Group
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

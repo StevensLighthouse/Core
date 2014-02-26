@@ -272,6 +272,43 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.addGroup = function (name, description) {
+            var d = $q.defer(),
+                param = {
+                    name: name,
+                    description: description
+                };
+
+            if (name && description) {
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/groups",
+                    data: param
+                }).done(function (response) {
+                    if (response.status === "created") {
+                        if (self.groupList.length) {
+                            self.groupList.push(response.group);
+                            d.resolve(response.group);
+                        } else {
+                            self.getAllGroups().then(function () {
+                                d.resolve(response.group);
+                            });
+                        }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+            }
+
+
+            return d.promise;
+        };
+
         this.getAllUsers = function () {
             var d = $q.defer();
 
@@ -398,6 +435,10 @@ coreApp.config(['$routeProvider',
         when('/groups', {
             templateUrl: 'partials/groups.html',
             controller: 'GroupCtrl'
+        }).
+        when('/groups/new', {
+            templateUrl: 'partials/edit-group.html',
+            controller: 'NewGroupCtrl'
         }).
         when('/groups/:groupId', {
             templateUrl: 'partials/group-detail.html',

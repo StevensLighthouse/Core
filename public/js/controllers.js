@@ -141,6 +141,21 @@ coreControllers.controller('GroupCtrl',
         });
     });
 
+coreControllers.controller('NewGroupCtrl',
+    function ($scope, $dataService) {
+        $scope.verb = "Create";
+        $scope.name = "";
+        $scope.description = "";
+
+        $scope.saveGroup = function () {
+            $dataService.addGroup($scope.name, $scope.description).then(function () {
+                window.location = "#/groups";
+            }, function (errorList) {
+                $scope.errorList = errorList;
+            });
+        };
+    });
+
 coreControllers.controller('GroupDetailCtrl',
     function ($scope, $routeParams, $dataService) {
         $scope.groupId = $routeParams.groupId;
@@ -173,13 +188,11 @@ coreControllers.controller('NewUserCtrl',
 
         $scope.saveUser = function () {
             $dataService.addUser($scope.email, $scope.pass1, $scope.role, $scope.group).then(function () {
-                window.location = "#users";
+                window.location = "#/users";
             }, function (errorList) {
                 $scope.errorList = errorList;
-                console.log($scope.errorList);
             });
         };
-
     });
 
 coreControllers.controller('UserDetailCtrl',
