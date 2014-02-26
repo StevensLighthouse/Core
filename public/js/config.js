@@ -481,7 +481,7 @@ coreApp.factory("$dataService",
             var user = findUser(id);
 
             if (!user) {
-                this.getAllUsers(function () {
+                this.getAllUsers().then(function () {
                     d.resolve(findUser(id));
                 });
             } else {
@@ -526,6 +526,52 @@ coreApp.factory("$dataService",
                 d.reject(["Please provide all the data!"]);
             }
 
+
+            return d.promise;
+        };
+
+        this.updateUser = function (id, email, pass1, role, group) {
+            var d = $q.defer(),
+                param = {
+                    email: email,
+                    password: pass1,
+                    permission: role,
+                    group_id: group
+                };
+
+            if (id && email && role) {
+                $.ajax({
+                    dataType: "json",
+                    type: "PUT",
+                    url: "/users/" + id,
+                    data: param
+                }).done(function (response) {
+                    var user = response.user,
+                        found = false;
+
+                    // TODO: STANDARDIZE RESPONSES
+                    if (!group) {
+                        d.reject(self.fixErrorList(response.errors));
+                    } else {
+                        for (var i = 0; i < self.userList.length && !found; i++) {
+                            if (self.userList[i].id === group.id) {
+                                self.userList[i] = group;
+                                found = true;
+                                d.resolve(group);
+                            }
+                        }
+                        if (!found) {
+                            self.getAllUsers().then(function () {
+                                d.resolve(group);
+                            })
+                        }
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+            }
 
             return d.promise;
         };
@@ -591,6 +637,10 @@ coreApp.config(['$routeProvider',
         when('/users/:userId', {
             templateUrl: 'partials/user-detail.html',
             controller: 'UserDetailCtrl'
+        }).
+        when('/users/edit/:userId', {
+            templateUrl: 'partials/edit-user.html',
+            controller: 'UserEditCtrl'
         }).
         when('/stops', {
             templateUrl: 'partials/stops.html',

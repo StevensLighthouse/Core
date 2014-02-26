@@ -238,6 +238,30 @@ coreControllers.controller('UserDetailCtrl',
         });
     });
 
+coreControllers.controller('UserEditCtrl', 
+    function ($scope, $routeParams, $dataService) {
+        $scope.userId = $routeParams.userId;
+        $scope.verb = "Update";
+
+        $dataService.getAllGroups().then(function (groups) {
+            $scope.possibleGroups = groups;
+        });
+
+        $dataService.getUser($scope.userId).then(function (user) {
+            $scope.email = user.email;
+            $scope.role = user.permission;
+            $scope.group = user.group;
+        });
+
+        $scope.saveUser = function () {
+            $dataService.updateUser($scope.userId, $scope.email, $scope.pass1, $scope.role, $scope.group).then(function () {
+                window.location = "#/users";
+            }, function (errorList) {
+                $scope.errorList = errorList;
+            });
+        };
+    });
+
 coreControllers.controller('StopCtrl',
     function ($scope, $dataService) {
         $dataService.getAllStops().then(function (stops) {
