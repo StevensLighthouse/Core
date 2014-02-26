@@ -1,0 +1,28 @@
+<div class="page-header">
+    <h1>Preview a Tour</h1>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="col-sm-6">
+            <h3>{{ name }}</h3>
+            <p>{{ description }}</p>
+            <ol>
+                <li ng-repeat="stop in stops">
+                    <a href="javascript:void(0)" ng-click="centerOn(stop)">{{ stop.name }}</a>
+                </li>
+            </ol>
+        </div>
+        <google-map class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true">
+            <div ng-repeat="stop in stops">
+                <marker coords='{ latitude: stop.lat, longitude: stop.lon }'>
+                    <window>
+                        <div class="infowindow">
+                            <h5>{{ stop.name }}</h5>
+                            <p>{{ stop.description }}</p>
+                        </div>
+                    </window>
+                </marker>
+            </div>
+        </google-map>
+    </div>
+</div>

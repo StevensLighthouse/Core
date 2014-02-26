@@ -1,0 +1,69 @@
+<div class="page-header">
+    <h1>{{verb}} a Stop</h1>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <form role="form" class="form-horizontal" action="" method="get" ng-submit="saveStop()">
+                    <div class="form-group">
+                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="col-xs-12 col-sm-12" placeholder="My Stop" ng-model="name">
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Description</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" placeholder="Tell us about your stop" ng-model="description"></textarea>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Address</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" class="form-control search-query" placeholder="Stop Address" ng-model="address">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-sm" ng-click="geolocate()">
+                                        Locate
+                                        <i class="icon-search icon-on-right bigger-110"></i>
+                                    </button>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" class="ace" ng-model="visibility" />
+                                <span class="lbl">This stop is visible to the public.</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="clearfix form-actions">
+                        <div class="col-md-9">
+                            <button class="btn btn-info" type="submit">
+                                <i class="icon-ok bigger-110"></i>{{ verb }} Stop
+                            </button>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" ng-repeat="error in errorList">
+                        <strong>
+                            We couldn't submit that!
+                        </strong>
+                        {{ error }}
+                        <br>
+                    </div>
+                </form>
+            </div>
+            <google-map class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true">
+                <marker coords='stop.center'></marker>
+            </google-map>
+        </div>
+    </div>
+</div>
