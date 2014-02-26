@@ -21,297 +21,356 @@ var PermissionDict = {
     4: "Site Admin"
 };
 
-coreApp.factory("$dataService", function ($http) {
-    var self = this;
+coreApp.factory("$dataService",
+    function ($http, $q) {
+        var self = this;
 
-    this.tourList = [];
-    this.stopList = [];
-    this.userList = [];
-    this.groupList = [];
+        this.tourList = [];
+        this.stopList = [];
+        this.userList = [];
+        this.groupList = [];
 
-    this.eventDict = {};
-    this.addListener = function (event, onEvent) {
-        if (!typeof onEvent === "function") return;
+        this.eventDict = {};
+        this.addListener = function (event, onEvent) {
+            if (!typeof onEvent === "function") return;
 
-        if (!this.eventDict[event]) {
-            this.eventDict[event] = [];
-        }
-
-        this.eventDict[event].push(onEvent);
-    };
-
-    this.removeListener = function (event, onEvent) {
-        if (!typeof onEvent === "function") return;
-        if (!this.eventDict[event]) return;
-        this.eventDict[event].remove(onEvent);
-    };
-
-    this.runEvent = function (event, data) {
-        if (!this.eventDict[event]) return;
-
-        for (var i = 0; i < this.eventDict[event].length; i++) {
-            this.eventDict[event][i](data);
-        }
-    };
-
-    // gets all the tours, naively caches them
-    this.getAllTours = function (callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
-        // naive caching
-        if (self.tourList.length > 0) {
-            callback(self.tourList);
-            return;
-        }
-
-        // if we've got no entries, we will download
-        $http.get('/tours.json').success(function (data) {
-            self.tourList = data.tours;
-            callback(self.tourList);
-        });
-    };
-
-    this.getTour = function (id, callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
-
-        function findTour(id) {
-            if (typeof id === "string") {
-                id = parseInt(id);
+            if (!this.eventDict[event]) {
+                this.eventDict[event] = [];
             }
 
-            return _.findWhere(self.tourList, {
-                id: id
-            });
+            this.eventDict[event].push(onEvent);
         };
 
-        var tour = findTour(id);
+        this.removeListener = function (event, onEvent) {
+            if (!typeof onEvent === "function") return;
+            if (!this.eventDict[event]) return;
+            this.eventDict[event].remove(onEvent);
+        };
 
-        if (!tour) {
-            this.getAllTours(function () {
-                callback(findTour(id));
-            });
-        } else {
-            callback(tour);
-        }
-    };
+        this.runEvent = function (event, data) {
+            if (!this.eventDict[event]) return;
 
-    this.addTour = function (name, description, visibility, lat, lon, stops) {
-        var stopIds = _.map(stops, function (stop) {
-            return stop.id;
-        }),
-            request = {
-                name: name,
-                description: description,
-                visibility: visibility,
-                lat: lat,
-                lon: lon,
-                stops: stopIds
+            for (var i = 0; i < this.eventDict[event].length; i++) {
+                this.eventDict[event][i](data);
+            }
+        };
+
+        this.fixUserList = function (users) {
+            var defaultGroup = {
+                name: "No Group"
             };
 
-        $.ajax({
-            dataType: "json",
-            type: "POST",
-            url: "/tours",
-            data: request
-        }).done(function (response) {
-            self.tourList.push(response.tour);
-            self.runEvent("tourAdded", response.tour);
-        }).fail(function (r) {
-            console.log(r);
-        });
-    };
+            return _.map(users, function (user) {
+                var group = user.group_id ? _.findWhere(self.groupList, {
+                    id: user.group_id
+                }) : null;
 
-    this.updateTour = function (id, name, description, visibility, lat, lon, stops) {
-        var stopIds = _.map(stops, function (stop) {
-            return stop.id;
-        }),
-            request = {
-                name: name,
-                description: description,
-                visibility: visibility,
-                lat: lat,
-                lon: lon,
-                stops: stopIds
-            };
+                group = group || defaultGroup;
 
-        $.ajax({
-            dataType: "json",
-            type: "PUT",
-            url: "/tours/" + id,
-            data: request
-        }).done(function (response) {
-            var tour = response.tour;
-            for (var i = 0; i < self.tourList.length; i++) {                
-                if (self.tourList[i].id === tour.id) {
-                    self.tourList[i] = tour;
-                    self.runEvent("tourUpdated", response.tour);
-                    return;
-                }
-            }
+                user.role = PermissionDict[user.permission];
+                user.group = group.name;
 
-            self.tourList.push(tour);
-            self.runEvent("tourAdded", tour);
-        }).fail(function (r) {
-            console.log(r);
-        });
-    };
-
-
-    this.getAllStops = function (callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
-
-        // naive caching
-        if (self.stopList.length > 0) {
-            callback(self.stopList);
-            return;
-        }
-
-        // if we've got no entries, we will download
-        $http.get('/stops.json').success(function (data) {
-            self.stopList = data.stops;
-            callback(self.stopList);
-        });
-    };
-
-    this.getStop = function (id, callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
-
-        function findStop(id) {
-            if (typeof id === "string") {
-                id = parseInt(id);
-            }
-
-            return _.findWhere(self.stopList, {
-                id: id
+                return user;
             });
         };
 
-        var stop = findStop(id);
-
-        if (!stop) {
-            this.getAllStops(function () {
-                callback(findStop(id));
-            });
-        } else {
-            callback(stop);
-        }
-    };
-
-    this.getAllGroups = function (callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
-
-        // naive caching
-        if (self.groupList.length > 0) {
-            callback(self.groupList);
-            return;
-        }
-
-        // if we've got no entries, we will download
-        $http.get('/groups.json').success(function (data) {
-            self.groupList = data.groups;
-            callback(self.groupList);
-        });
-    };
-
-    this.getGroup = function (id, callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
-
-        function findGroup(id) {
-            if (typeof id === "string") {
-                id = parseInt(id);
-            }
-
-            return _.findWhere(self.groupList, {
-                id: id
+        this.fixErrorList = function (errors) {
+            return _.map(errors, function (error, key) {
+                return "[" + key + "] " + error;
             });
         };
 
-        var group = findGroup(id);
+        // gets all the tours, naively caches them
+        this.getAllTours = function () {
+            var d = $q.defer();
 
-        if (!group) {
-            this.getAllGroups(function () {
-                callback(findGroup(id));
-            });
-        } else {
-            callback(group);
-        }
-    };
-
-    this.getAllUsers = function (callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
-
-        /**        
-         * We store this in its own function, so that we can download groups if we don't have them already
-         */
-        function manageUsers() {
             // naive caching
-            if (self.userList.length > 0) {
-                callback(self.userList);
-                return;
+            if (self.tourList.length > 0) {
+                d.resolve(self.tourList);
+            } else {
+                // if we've got no entries, we will download
+                $http.get('/tours.json').success(function (data) {
+                    self.tourList = data.tours;
+                    d.resolve(self.tourList);
+                });
+            }
+
+            return d.promise;
+        };
+
+        this.getTour = function (id) {
+            var d = $q.defer();
+
+            function findTour(id) {
+                if (typeof id === "string") {
+                    id = parseInt(id);
+                }
+
+                return _.findWhere(self.tourList, {
+                    id: id
+                });
+            };
+
+            var tour = findTour(id);
+
+            if (!tour) {
+                this.getAllTours().then(function () {
+                    d.resolve(findTour(id));
+                });
+            } else {
+                d.resolve(findTour(id));
+            }
+
+            return d.promise;
+        };
+
+        this.addTour = function (name, description, visibility, lat, lon, stops) {
+            var stopIds = _.map(stops, function (stop) {
+                return stop.id;
+            }),
+                request = {
+                    name: name,
+                    description: description,
+                    visibility: visibility,
+                    lat: lat,
+                    lon: lon,
+                    stops: stopIds
+                };
+
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: "/tours",
+                data: request
+            }).done(function (response) {
+                self.tourList.push(response.tour);
+                self.runEvent("tourAdded", response.tour);
+            }).fail(function (r) {
+                console.log(r);
+            });
+        };
+
+        this.updateTour = function (id, name, description, visibility, lat, lon, stops) {
+            var stopIds = _.map(stops, function (stop) {
+                return stop.id;
+            }),
+                request = {
+                    name: name,
+                    description: description,
+                    visibility: visibility,
+                    lat: lat,
+                    lon: lon,
+                    stops: stopIds
+                };
+
+            $.ajax({
+                dataType: "json",
+                type: "PUT",
+                url: "/tours/" + id,
+                data: request
+            }).done(function (response) {
+                var tour = response.tour;
+                for (var i = 0; i < self.tourList.length; i++) {
+                    if (self.tourList[i].id === tour.id) {
+                        self.tourList[i] = tour;
+                        self.runEvent("tourUpdated", response.tour);
+                        return;
+                    }
+                }
+
+                self.tourList.push(tour);
+                self.runEvent("tourAdded", tour);
+            }).fail(function (r) {
+                console.log(r);
+            });
+        };
+
+
+        this.getAllStops = function () {
+            var d = $q.defer();
+
+            // naive caching
+            if (self.stopList.length > 0) {
+                d.resolve(self.stopList);
             }
 
             // if we've got no entries, we will download
-            $http.get('/users.json').success(function (data) {
-                var defaultGroup = {
-                    name: "No Group"
-                };
-
-                var fixedList = _.map(data.users, function (user) {
-                    var group = user.group_id ? _.findWhere(self.groupList, {
-                        id: user.group_id
-                    }) : null;
-
-                    group = group || defaultGroup;
-
-                    user.role = PermissionDict[user.permission];
-                    user.group = group.name;
-
-                    return user;
-                });
-                self.userList = fixedList;
-
-                callback(self.userList);
+            $http.get('/stops.json').success(function (data) {
+                self.stopList = data.stops;
+                d.resolve(self.stopList);
             });
-        }
 
-        self.getAllGroups(manageUsers);
-    };
-
-    this.getUser = function (id, callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
-
-        function findUser(id) {
-            if (typeof id === "string") {
-                id = parseInt(id);
-            }
-
-            return _.findWhere(self.userList, {
-                id: id
-            });
+            return d.promise;
         };
 
-        var user = findUser(id);
+        this.getStop = function (id) {
+            var d = $q.defer();
 
-        if (!user) {
-            this.getAllUsers(function () {
-                callback(findUser(id));
-            });
-        } else {
-            callback(user);
-        }
-    };
+            function findStop(id) {
+                if (typeof id === "string") {
+                    id = parseInt(id);
+                }
 
-    this.getAllData = function (callback) {
-        callback = (callback && typeof callback === "function") ? callback : function () {};
+                return _.findWhere(self.stopList, {
+                    id: id
+                });
+            };
 
-        this.getAllTours();
-        this.getAllStops();
-        this.getAllGroups(this.getAllUsers);
+            var stop = findStop(id);
 
-        callback();
-    };
+            if (!stop) {
+                this.getAllStops().then(function () {
+                    d.resolve(findStop(id));
+                });
+            } else {
+                d.resolve(stop);
+            }
 
-    return this;
-});
+            return d.promise;
+        };
+
+        this.getAllGroups = function () {
+            var d = $q.defer();
+
+            // naive caching
+            if (self.groupList.length > 0) {
+                d.resolve(self.groupList);
+            } else {
+                // if we've got no entries, we will download
+                $http.get('/groups.json').success(function (data) {
+                    self.groupList = data.groups;
+                    d.resolve(self.groupList);
+                });
+            }
+
+            return d.promise;
+        };
+
+        this.getGroup = function (id) {
+            var d = $q.defer();
+
+            function findGroup(id) {
+                if (typeof id === "string") {
+                    id = parseInt(id);
+                }
+
+                return _.findWhere(self.groupList, {
+                    id: id
+                });
+            };
+
+            var group = findGroup(id);
+
+            if (!group) {
+                this.getAllGroups().then(function () {
+                    d.resolve(findGroup(id));
+                });
+            } else {
+                d.resolve(group);
+            }
+
+            return d.promise;
+        };
+
+        this.getAllUsers = function () {
+            var d = $q.defer();
+
+            /**        
+             * We store this in its own function, so that we can download groups if we don't have them already
+             */
+            function manageUsers() {
+                // if we've got no entries, we will download
+                $http.get('/users.json').success(function (data) {
+                    self.userList = self.fixUserList(data.users);
+                    d.resolve(self.userList);
+                });
+            }
+
+            // naive caching
+            if (self.userList.length > 0) {
+                d.resolve(self.userList);
+            } else {
+                self.getAllGroups().then(manageUsers);
+            }
+
+            return d.promise;
+        };
+
+        this.getUser = function (id) {
+            var d = $q.defer();
+
+            function findUser(id) {
+                if (typeof id === "string") {
+                    id = parseInt(id);
+                }
+
+                return _.findWhere(self.userList, {
+                    id: id
+                });
+            };
+
+            var user = findUser(id);
+
+            if (!user) {
+                this.getAllUsers(function () {
+                    d.resolve(findUser(id));
+                });
+            } else {
+                d.resolve(user);
+            }
+
+            return d.promise;
+        };
+
+        this.addUser = function (email, pass1, role, group) {
+            var d = $q.defer(),
+                param = {
+                    email: email,
+                    password: pass1,
+                    permission: role,
+                    group_id: group
+                };
+
+            if (email && pass1 && role) {
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/users",
+                    data: param
+                }).done(function (response) {
+                    if (response.status === "created") {
+                        if (self.userList.length) {
+                            self.userList.push(self.fixUserList([response.user])[0]);
+                            d.resolve(response.user);
+                        } else {
+                            self.getAllUsers().then(function () {
+                                d.resolve(response.user);
+                            });
+                        }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+            }
+
+
+            return d.promise;
+        };
+
+        this.getAllData = function () {
+            var d = $q.defer();
+
+            this.getAllStops().then(this.getAllTours).then(this.getAllGroups).then(this.getAllUsers);
+
+            return d.promise;
+        };
+
+        return this;
+    });
 
 coreApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -348,6 +407,10 @@ coreApp.config(['$routeProvider',
             templateUrl: 'partials/users.html',
             controller: 'UserCtrl'
         }).
+        when('/users/new', {
+            templateUrl: 'partials/edit-user.html',
+            controller: 'NewUserCtrl'
+        }).
         when('/users/:userId', {
             templateUrl: 'partials/user-detail.html',
             controller: 'UserDetailCtrl'
@@ -363,6 +426,10 @@ coreApp.config(['$routeProvider',
         when('/stops/:stopId', {
             templateUrl: 'partials/stop-detail.html',
             controller: 'StopDetailCtrl'
+        }).
+        when('/stops/edit/:stopId', {
+            templateUrl: 'partials/edit-stop.html',
+            controller: 'StopEditCtrl'
         }).
         otherwise({
             redirectTo: '/home'

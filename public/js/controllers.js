@@ -22,20 +22,8 @@ coreControllers.controller('TourCtrl',
     function ($scope, $dataService) {
         $scope.tours = [];
 
-        $scope.sync = function () {
-            $scope.$apply();
-        };
-        
-        $dataService.getAllTours(function (tours) {
+        $dataService.getAllTours().then(function (tours) {
             $scope.tours = tours;
-        });
-
-        $dataService.addListener("tourAdded", $scope.sync);
-        $dataService.addListener("tourUpdated", $scope.sync);
-
-        $scope.$on("$destroy", function () {
-            $dataService.removeListener("tourAdded", $scope.sync);
-            $dataService.removeListener("tourUpdated", $scope.sync);
         });
     });
 
@@ -49,7 +37,7 @@ coreControllers.controller('NewTourCtrl',
 
         $scope.map = new mapShim();
 
-        $dataService.getAllStops(function (stops) {
+        $dataService.getAllStops().then(function (stops) {
             $scope.allStops = stops;
         })
 
@@ -108,12 +96,12 @@ coreControllers.controller('TourEditCtrl',
             $dataService.updateTour($scope.tourId, $scope.name, $scope.description, $scope.visibility, $scope.map.center.latitude, $scope.map.center.longitude, $scope.stops);
         };
 
-        $dataService.getTour($scope.tourId, function (tour) {
+        $dataService.getTour($scope.tourId).then(function (tour) {
             $scope.name = tour.name;
             $scope.stops = tour.stops;
             $scope.description = tour.description;
             $scope.map.setCenter(parseFloat(tour.lat), parseFloat(tour.lon));
-            $dataService.getAllStops(function (stops) {
+            $dataService.getAllStops().then(function (stops) {
                 var usedDict = {};
 
                 for (var i = 0; i < $scope.stops.length; i++) {
@@ -138,7 +126,7 @@ coreControllers.controller('TourDetailCtrl',
             $scope.map.setCenter(stop.lat, stop.lon);
         }
 
-        $dataService.getTour($scope.tourId, function (tour) {
+        $dataService.getTour($scope.tourId).then(function (tour) {
             $scope.name = tour.name;
             $scope.stops = tour.stops;
             $scope.description = tour.description;
@@ -148,7 +136,7 @@ coreControllers.controller('TourDetailCtrl',
 
 coreControllers.controller('GroupCtrl',
     function ($scope, $dataService) {
-        $dataService.getAllGroups(function (groups) {
+        $dataService.getAllGroups().then(function (groups) {
             $scope.groups = groups;
         });
     });
@@ -157,7 +145,7 @@ coreControllers.controller('GroupDetailCtrl',
     function ($scope, $routeParams, $dataService) {
         $scope.groupId = $routeParams.groupId;
 
-        $dataService.getGroup($scope.groupId, function (group) {
+        $dataService.getGroup($scope.groupId).then(function (group) {
             $scope.name = group.name;
             $scope.description = group.description;
         });
@@ -165,16 +153,40 @@ coreControllers.controller('GroupDetailCtrl',
 
 coreControllers.controller('UserCtrl',
     function ($scope, $dataService) {
-        $dataService.getAllUsers(function (users) {
+        $dataService.getAllUsers().then(function (users) {
             $scope.users = users;
         });
+    });
+
+coreControllers.controller('NewUserCtrl',
+    function ($scope, $dataService) {
+        $dataService.getAllGroups().then(function (groups) {
+            $scope.possibleGroups = groups;
+        });
+
+        $scope.verb = "Create";
+        $scope.email = "";
+        $scope.pass1 = "";
+        $scope.pass2 = "";
+        $scope.role = "0";
+        $scope.group = "";
+
+        $scope.saveUser = function () {
+            $dataService.addUser($scope.email, $scope.pass1, $scope.role, $scope.group).then(function () {
+                window.location = "#users";
+            }, function (errorList) {
+                $scope.errorList = errorList;
+                console.log($scope.errorList);
+            });
+        };
+
     });
 
 coreControllers.controller('UserDetailCtrl',
     function ($scope, $routeParams, $dataService) {
         $scope.userId = $routeParams.userId;
 
-        $dataService.getUser($scope.userId, function (user) {
+        $dataService.getUser($scope.userId).then(function (user) {
             $scope.email = user.email;
             $scope.role = user.role;
             $scope.group = user.group;
@@ -183,7 +195,7 @@ coreControllers.controller('UserDetailCtrl',
 
 coreControllers.controller('StopCtrl',
     function ($scope, $dataService) {
-        $dataService.getAllStops(function (stops) {
+        $dataService.getAllStops().then(function (stops) {
             $scope.stops = stops;
         });
     });
@@ -194,7 +206,7 @@ coreControllers.controller('StopDetailCtrl',
         $scope.map = new mapShim();
         $scope.stop = new mapShim();
 
-        $dataService.getStop($scope.stopId, function (stop) {
+        $dataService.getStop($scope.stopId).then(function (stop) {
             $scope.name = stop.name;
             $scope.description = stop.description;
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
@@ -205,5 +217,10 @@ coreControllers.controller('StopDetailCtrl',
 coreControllers.controller('NewStopCtrl',
     function ($scope, $dataService) {
         console.log("Foo");
+    });
+
+coreControllers.controller('StopEditCtrl',
+    function ($scope, $dataService) {
+        console.log("bar");
 
     });
