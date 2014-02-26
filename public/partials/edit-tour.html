@@ -5,7 +5,7 @@
     <div class="col-xs-12">
         <div class="row">
             <div class="col-sm-6">
-                <form role="form" class="form-horizontal" action="#tours" method="get">
+                <form role="form" class="form-horizontal" action="" method="get" ng-submit="saveTour()">
                     <div class="form-group">
                         <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Name</label>
                         <div class="col-sm-9">
@@ -56,10 +56,23 @@
                     <div class="space-4"></div>
                     <div class="clearfix form-actions">
                         <div class="col-md-9">
-                            <button class="btn btn-info" type="submit" ng-click="saveTour()">
-                                <i class="icon-ok bigger-110"></i> {{ verb }} Tour
+                            <button class="btn btn-info" type="submit">
+                                <i class="icon-ok bigger-110"></i>{{ verb }} Tour
                             </button>
                         </div>
+                    </div>
+                    <div class="alert alert-danger" ng-repeat="error in errorList">
+                        <button data-dismiss="alert" class="close" type="button">
+                            <i class="icon-remove"></i>
+                        </button>
+
+                        <strong>
+                            <i class="icon-remove"></i>
+                            We couldn't submit that!
+                        </strong>
+
+                        {{ error }}
+                        <br>
                     </div>
                 </form>
             </div>

@@ -30,31 +30,6 @@ coreApp.factory("$dataService",
         this.userList = [];
         this.groupList = [];
 
-        this.eventDict = {};
-        this.addListener = function (event, onEvent) {
-            if (!typeof onEvent === "function") return;
-
-            if (!this.eventDict[event]) {
-                this.eventDict[event] = [];
-            }
-
-            this.eventDict[event].push(onEvent);
-        };
-
-        this.removeListener = function (event, onEvent) {
-            if (!typeof onEvent === "function") return;
-            if (!this.eventDict[event]) return;
-            this.eventDict[event].remove(onEvent);
-        };
-
-        this.runEvent = function (event, data) {
-            if (!this.eventDict[event]) return;
-
-            for (var i = 0; i < this.eventDict[event].length; i++) {
-                this.eventDict[event][i](data);
-            }
-        };
-
         this.fixUserList = function (users) {
             var defaultGroup = {
                 name: "No Group"
@@ -125,10 +100,11 @@ coreApp.factory("$dataService",
         };
 
         this.addTour = function (name, description, visibility, lat, lon, stops) {
-            var stopIds = _.map(stops, function (stop) {
-                return stop.id;
-            }),
-                request = {
+            var d = $q.defer(),
+                stopIds = _.map(stops, function (stop) {
+                    return stop.id;
+                }),
+                param = {
                     name: name,
                     description: description,
                     visibility: visibility,
@@ -137,17 +113,33 @@ coreApp.factory("$dataService",
                     stops: stopIds
                 };
 
-            $.ajax({
-                dataType: "json",
-                type: "POST",
-                url: "/tours",
-                data: request
-            }).done(function (response) {
-                self.tourList.push(response.tour);
-                self.runEvent("tourAdded", response.tour);
-            }).fail(function (r) {
-                console.log(r);
-            });
+            if (name && description && lat && lon && stops.length) {
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/tours",
+                    data: param
+                }).done(function (response) {
+                    if (response.status === "created") {
+                        if (self.tourList.length) {
+                            self.tourList.push(response.tour);
+                            d.resolve(response.tour);
+                        } else {
+                            self.getAllTours().then(function () {
+                                d.resolve(response.tour);
+                            });
+                        }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+            }
+
+            return d.promise;
         };
 
         this.updateTour = function (id, name, description, visibility, lat, lon, stops) {
@@ -173,13 +165,11 @@ coreApp.factory("$dataService",
                 for (var i = 0; i < self.tourList.length; i++) {
                     if (self.tourList[i].id === tour.id) {
                         self.tourList[i] = tour;
-                        self.runEvent("tourUpdated", response.tour);
                         return;
                     }
                 }
 
                 self.tourList.push(tour);
-                self.runEvent("tourAdded", tour);
             }).fail(function (r) {
                 console.log(r);
             });

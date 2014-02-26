@@ -57,7 +57,12 @@ coreControllers.controller('NewTourCtrl',
         }
 
         $scope.saveTour = function () {
-            $dataService.addTour($scope.name, $scope.description, $scope.visibility, $scope.map.center.latitude, $scope.map.center.longitude, $scope.stops);
+            $dataService.addTour($scope.name, $scope.description, $scope.visibility, $scope.map.center.latitude, $scope.map.center.longitude, $scope.stops)
+                .then(function () {
+                    window.location = "#/tours";
+                }, function (errorList) {
+                    $scope.errorList = errorList;
+                });
         };
     });
 
