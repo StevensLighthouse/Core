@@ -233,6 +233,46 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.addStop = function (name, description, visibility, lat, lon) {
+            var d = $q.defer(),
+                param = {
+                    name: name,
+                    description: description,
+                    visibility: visibility,
+                    lat: lat,
+                    lon: lon
+                };
+
+            if (name && description && lat && lon) {
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/stops",
+                    data: param
+                }).done(function (response) {
+                    if (response.status === "created") {
+                        if (self.stopList.length) {
+                            self.stopList.push(response.stop);
+                            d.resolve(response.stop);
+                        } else {
+                            self.getAllStops().then(function () {
+                                d.resolve(response.stop);
+                            });
+                        }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+            }
+
+            return d.promise;
+        };
+
+
         this.getAllGroups = function () {
             var d = $q.defer();
 

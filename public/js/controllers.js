@@ -1,3 +1,4 @@
+var baseGeocoderUrl = "http://maps.googleapis.com/maps/api/geocode/json";
 var coreControllers = angular.module('coreControllers', []);
 
 function mapShim() {
@@ -239,7 +240,47 @@ coreControllers.controller('StopDetailCtrl',
 
 coreControllers.controller('NewStopCtrl',
     function ($scope, $dataService) {
-        console.log("Foo");
+        $scope.verb = "Create";
+        $scope.name = "";
+        $scope.address = "";
+        $scope.description = "";
+        $scope.visibility = true;
+        $scope.map = new mapShim();
+        $scope.stop = new mapShim();
+
+        $scope.geolocate = function () {
+            if ($scope.address) {
+                $.ajax({
+                    dataType: "json",
+                    url: baseGeocoderUrl,
+                    data: {
+                        sensor: true,
+                        address: $scope.address
+                    },
+                    success: function (data) {
+                        if (data.status === "OK" && data.results.length > 0) {
+                            var location = data.results[0].geometry.location;
+                            $scope.map.setCenter(location.lat, location.lng);
+                            $scope.stop.setCenter(location.lat, location.lng);
+                        } else {
+                            $scope.errorList = ["There has been an error location that address."];
+                        }
+                        $scope.$apply();
+                    }
+                });
+            } else {
+                $scope.errorList = ["You must include a location in order to geolocate."];
+            }
+        }
+
+        $scope.saveStop = function () {
+            $dataService.addStop($scope.name, $scope.description, $scope.visibility, $scope.stop.center.latitude, $scope.stop.center.longitude)
+                .then(function () {
+                    window.location = "#/stops";
+                }, function (errorList) {
+                    $scope.errorList = errorList;
+                });
+        };
     });
 
 coreControllers.controller('StopEditCtrl',
