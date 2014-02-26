@@ -409,7 +409,7 @@ coreApp.factory("$dataService",
                     url: "/groups/" + id,
                     data: param
                 }).done(function (response) {
-                    var group = response.tour,
+                    var group = response.group,
                         found = false;
 
                     if (response.status === "updated") {

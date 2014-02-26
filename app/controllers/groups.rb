@@ -39,6 +39,20 @@ post '/groups' do
   end
 end
 
+# PUT /groups/:id
+# Update a group, specify it by the ID and list the params you are updating
+put '/groups/:id' do |id|
+  @group = Group.find(id)
+
+  # Attempt to update the group
+  if @group.update(listing_params)
+    { :status => :updated, :group => @group}.to_json
+  # The group was not correctly updated, show errors
+  else
+    { :errors => @group.errors, :status => :unprocessable_entity }.to_json
+  end
+end
+
 def group_params
   params.allow(:name, :description)
 end

@@ -35,6 +35,20 @@ post '/users' do
   end
 end
 
+# PUT /users/:id
+# Update a user, specify it by the ID and list the params you are updating
+put '/users/:id' do |id|
+  @user = User.find(id)
+
+  # Attempt to update the user
+  if @user.update(listing_params)
+    { :status => :updated, :user => @user}.to_json
+  # The stop was not correctly updated, show errors
+  else
+    { :errors => @user.errors, :status => :unprocessable_entity }.to_json
+  end
+end
+
 private
 def user_params
   params.allow(:email, :permission, :password, :group_id)
