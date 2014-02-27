@@ -6,6 +6,8 @@ require 'sinatra/content_for'
 require 'yaml'
 require 'bcrypt'
 require 'protected_attributes' # needed for attr_accessible
+require 'carrierwave'
+require 'carrierwave/orm/activerecord'
 
 require './config/environments'
 
@@ -26,7 +28,7 @@ class LighthouseCore < Sinatra::Application
 
 end
 
-%w(models controllers helpers).each do |path|
+%w(uploaders models controllers helpers).each do |path|
   Dir[File.join(File.dirname(__FILE__), "app", path, "*.rb")].each do |f|
     require f
   end
