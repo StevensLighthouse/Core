@@ -4,8 +4,15 @@
 get '/tours' do
   redirect to('/login') unless current_user()
   @current_user = current_user()
-  if @current_user.is_editor?
+  
+  if @current_user.is_site_admin? 
     @tours = Tour.all
+
+    respond_to do |format|
+      format.json { { :tours => @tours }.to_json }
+    end
+  elsif @current_user.is_editor?
+    @tours = Tour.where "editor_id = :id or creator_id = :id", { id: @current_user.id } 
 
     respond_to do |format|
       format.html { erb :'tours/index' }
@@ -21,6 +28,7 @@ post '/tours' do
   @current_user = current_user()
   if @current_user.is_builder?
     @tour = Tour.create(tour_params)
+    @tour.creator_id = @current_user.id
 
     stop_ids = params[:stops].map { |sid| Stop.find(sid) }
     puts stop_ids
