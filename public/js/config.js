@@ -417,11 +417,13 @@ coreApp.factory("$dataService",
                             if (self.groupList[i].id === group.id) {
                                 self.groupList[i] = group;
                                 found = true;
+                                self.userList = self.fixUserList(self.userList);
                                 d.resolve(group);
                             }
                         }
                         if (!found) {
                             self.getAllGroups().then(function () {
+                                self.userList = self.fixUserList(self.userList);
                                 d.resolve(group);
                             })
                         }
