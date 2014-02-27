@@ -2,14 +2,14 @@
     <h1>Manage Stops</h1>
 </div>
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-6">
         <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Images</th>
-                    <th>Manage</th>
+                    <th class="center">Manage</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,16 +19,29 @@
                     </td>
                     <td>{{ stop.description }}</td>
                     <td>{{ 0 }}</td>
-                    <td>
-                        <a class="btn btn-xs btn-info" href="#/stops/edit/{{ stop.id }}">
+                    <td class="center">
+                        <a class="blue" href="#/stops/edit/{{ stop.id }}">
                             <i class="icon-edit bigger-120"></i>
                         </a>
-                        <button class="btn btn-xs btn-danger">
+                        <a href="javascript:void(0)" class="red">
                             <i class="icon-trash bigger-120"></i>
-                        </button>
+                        </a>
+                        <a href="javascript:void(0)" class="blue" ng-click="centerOnStop(stop)">
+                            <i class="icon-globe bigger-130"></i>
+                        </a>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
+        <marker ng-repeat="stop in stops" coords='{ latitude: stop.lat, longitude: stop.lon }'>
+            <window class="infowindow">
+                <div class="infowindow">
+                    <h5>{{ stop.name }}</h5>
+                    <p>{{ stop.description }}</p>
+                </div>
+            </window>
+        </marker>
+    </google-map>
 </div>

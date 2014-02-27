@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h1>My Tours</h1>
+    <h1>Global Stops</h1>
 </div>
 <div class="row">
     <div class="col-xs-6">
@@ -8,25 +8,20 @@
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
-                    <th>Stops</th>
                     <th class="center">Manage</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="tour in tours">
+                <tr ng-repeat="stop in stops">
                     <td>
-                        <a href="#/tours/{{ tour.id }}">{{ tour.name }}</a>
+                        <a href="#/stops/{{ stop.id }}">{{ stop.name }}</a>
                     </td>
-                    <td>{{ tour.description }}</td>
-                    <td>{{ tour.stops.length }}</td>
+                    <td>{{ stop.description }}</td>
                     <td class="center">
-                        <a class="blue" href="#/tours/edit/{{ tour.id }}">
-                            <i class="icon-edit bigger-120"></i>
+                        <a href="javascript:void(0)" class="blue" ng-click="cloneStop(stop)">
+                            <i class="icon-copy bigger-130"></i>
                         </a>
-                        <a href="javascript:void(0)" class="red">
-                            <i class="icon-trash bigger-120"></i>
-                        </a>
-                        <a href="javascript:void(0)" class="blue" ng-click="centerOnTour(tour)">
+                        <a href="javascript:void(0)" class="blue" ng-click="centerOnStop(stop)">
                             <i class="icon-globe bigger-130"></i>
                         </a>
                     </td>
@@ -35,11 +30,11 @@
         </table>
     </div>
     <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
-        <marker ng-repeat="tour in tours" coords='{ latitude: tour.lat, longitude: tour.lon }'>
+        <marker ng-repeat="stop in stops" coords='{ latitude: stop.lat, longitude: stop.lon }'>
             <window>
                 <div class="infowindow">
-                    <h5>{{ tour.name }}</h5>
-                    <p>{{ tour.description }}</p>
+                    <h5>{{ stop.name }}</h5>
+                    <p>{{ stop.description }}</p>
                 </div>
             </window>
         </marker>
