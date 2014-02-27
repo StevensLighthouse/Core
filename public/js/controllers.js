@@ -22,9 +22,15 @@ coreControllers.controller('Home',
 coreControllers.controller('Tours',
     function ($scope, $dataService) {
         $scope.tours = [];
+        $scope.map = new mapShim();
+
+        $scope.centerOnTour = function (tour) {
+            $scope.map.setCenter(tour.lat, tour.lon);
+        };
 
         $dataService.getAllTours().then(function (tours) {
             $scope.tours = tours;
+            $scope.loaded = true;
         });
     });
 
@@ -255,7 +261,7 @@ coreControllers.controller('UserEditor',
 
                 if (user.group_id) {
                     for (var i = 0; i < $scope.possibleGroups.length; i++) {
-                        if($scope.possibleGroups[i].id === user.group_id){
+                        if ($scope.possibleGroups[i].id === user.group_id) {
                             $scope.selectedGroup = $scope.possibleGroups[i];
                         }
                     }
@@ -276,8 +282,15 @@ coreControllers.controller('UserEditor',
 
 coreControllers.controller('Stops',
     function ($scope, $dataService) {
+        $scope.map = new mapShim();
+
+        $scope.centerOnStop = function (stop) {
+            $scope.map.setCenter(stop.lat, stop.lon);
+        };
+
         $dataService.getAllStops().then(function (stops) {
             $scope.stops = stops;
+            $scope.loaded = true;
         });
     });
 
@@ -369,4 +382,16 @@ coreControllers.controller('StopEditor',
                     $scope.errorList = errorList;
                 });
         };
+    });
+
+coreControllers.controller('StopImporter',
+    function ($scope, $routeParams, $dataService) {
+        console.log("sup");
+        $scope.map = new mapShim();
+
+        $dataService.getAllStops().then(function (stops) {
+            $scope.allStops = stops;
+            $scope.loaded = true;
+        })
+
     });

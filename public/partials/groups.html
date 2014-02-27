@@ -13,11 +13,17 @@
             </thead>
             <tbody>
                 <tr ng-repeat="group in groups">
-                    <td><a href="#/groups/{{ group.id }}">{{ group.name }}</a></td>
+                    <td>
+                        <a href="#/groups/{{ group.id }}">{{ group.name }}</a>
+                    </td>
                     <td>{{ group.description }}</td>
                     <td>
-                        <a class="btn btn-xs btn-info" href="#/groups/edit/{{ group.id }}"><i class="icon-edit bigger-120"></i></a>
-                        <button class="btn btn-xs btn-danger"><i class="icon-trash bigger-120"></i></button>
+                        <a class="blue" href="#/groups/edit/{{ group.id }}">
+                            <i class="icon-edit bigger-120"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="red">
+                            <i class="icon-trash bigger-120"></i>
+                        </a>
                     </td>
                 </tr>
             </tbody>

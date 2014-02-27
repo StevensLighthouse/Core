@@ -645,6 +645,10 @@ coreApp.config(['$routeProvider',
             templateUrl: 'partials/stops.html',
             controller: 'Stops'
         }).
+        when('/stops/global', {
+            templateUrl: 'partials/stop-importer.html',
+            controller: 'StopImporter'
+        }).
         when('/stops/new', {
             templateUrl: 'partials/stop-editor.html',
             controller: 'StopCreator'
