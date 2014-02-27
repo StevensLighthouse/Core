@@ -206,6 +206,18 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.getGlobalStops = function () {
+            var d = $q.defer();
+
+            this.getAllStops().then(function (stops) {
+                d.resolve(_.filter(stops, function (stop) {
+                    return stop.visibility;
+                }));
+            });
+
+            return d.promise;
+        };
+
         this.getStop = function (id) {
             var d = $q.defer();
 

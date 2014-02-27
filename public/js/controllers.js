@@ -386,12 +386,16 @@ coreControllers.controller('StopEditor',
 
 coreControllers.controller('StopImporter',
     function ($scope, $routeParams, $dataService) {
-        console.log("sup");
         $scope.map = new mapShim();
 
-        $dataService.getAllStops().then(function (stops) {
-            $scope.allStops = stops;
+        $scope.centerOnStop = function (stop) {
+            $scope.map.setCenter(stop.lat, stop.lon);
+        };
+
+        $dataService.getGlobalStops().then(function (stops) {
+            console.log(stops);
             $scope.loaded = true;
+            $scope.stops = stops;
         })
 
     });

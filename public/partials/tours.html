@@ -9,7 +9,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Stops</th>
-                    <th>Manage</th>
+                    <th class="center">Manage</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,7 +19,7 @@
                     </td>
                     <td>{{ tour.description }}</td>
                     <td>{{ tour.stops.length }}</td>
-                    <td>
+                    <td class="center">
                         <a class="blue" href="#/tours/edit/{{ tour.id }}">
                             <i class="icon-edit bigger-120"></i>
                         </a>
@@ -35,5 +35,13 @@
         </table>
     </div>
     <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
+        <marker ng-repeat="tour in tours" coords='{ latitude: tour.lat, longitude: tour.lon }'>
+            <window>
+                <div class="infowindow">
+                    <h5>{{ tour.name }}</h5>
+                    <p>{{ tour.description }}</p>
+                </div>
+            </window>
+        </marker>
     </google-map>
 </div>
