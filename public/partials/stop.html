@@ -7,7 +7,7 @@
             <h3>{{ name }}</h3>
             <p>{{ description }}</p>
         </div>
-        <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true">
+        <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
             <marker coords='stop.center'>
                 <window>
                     <div class="infowindow">
