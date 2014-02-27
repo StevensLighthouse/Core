@@ -385,15 +385,20 @@ coreControllers.controller('StopEditor',
     });
 
 coreControllers.controller('StopImporter',
-    function ($scope, $routeParams, $dataService) {
+    function ($scope, $dataService) {
         $scope.map = new mapShim();
 
         $scope.centerOnStop = function (stop) {
             $scope.map.setCenter(stop.lat, stop.lon);
         };
 
+        $scope.cloneStop = function (stop) {
+            $dataService.cloneStop(stop.id).then(function(newStop) { 
+                window.location = "#/stops/" + newStop.id;
+            });
+        };
+
         $dataService.getGlobalStops().then(function (stops) {
-            console.log(stops);
             $scope.loaded = true;
             $scope.stops = stops;
         })

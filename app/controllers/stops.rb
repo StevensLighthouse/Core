@@ -75,7 +75,7 @@ post '/stops/clone/:id' do |id|
     @new_stop = Stop.new(:name => @stop.name, :description => @stop.description, :editor_id => @current_user.id, :creator_id => @stop.creator_id, :visibility => false, :lat => @stop.lat, :lon => @stop.lon, :parent_id => @stop.id)
 
     if @new_stop.save
-      { :stop => @new_stop }.to_json
+      { :status => :created, :stop => @new_stop }.to_json
     else
       { :errors => @stop.errors, :status => :unprocessable_entity }.to_json
     end

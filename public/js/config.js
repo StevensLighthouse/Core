@@ -218,6 +218,39 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.cloneStop = function (id) {
+            ///stops/clone/:id
+            var d = $q.defer();
+
+            if (id) {
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/stops/clone/" + id,
+                }).done(function (response) {
+                    if (response.status === "created") {
+                        if (self.stopList.length) {
+                            self.stopList.push(response.stop);
+                            d.resolve(response.stop);
+                        } else {
+                            self.getAllStops().then(function () {
+                                d.resolve(response.stop);
+                            });
+                        }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please select a stop to clone!"]);
+            }
+
+            return d.promise;
+
+        };
+
         this.getStop = function (id) {
             var d = $q.defer();
 
