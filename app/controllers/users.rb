@@ -9,8 +9,20 @@ end
 # GET /users
 # Get all users that the requester has permission to access
 get '/users' do 
-  @users = User.all
-  { :users => @users }.to_json
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  if @current_user.is_site_admin?
+    @users = User.all
+
+    respond_to do |format|
+      format.json { { :users => @users }.to_json }
+    end
+  elsif @current_user.is_group_admin? and @current_user.group_id
+      @users = User.where group_id: @current_user.group_id
+      respond_to do |format|
+        format.json { { :users => @users }.to_json }
+    end
+  end
 end
 
 # POST /users
@@ -22,6 +34,11 @@ post '/users' do
   if @current_user.is_group_admin?
     @user = User.create(user_params)
     @user.creator_id = @current_user.id
+      
+    # If we are only a group admin and not a site admin, auto-toss user in this group
+    if not @current_user.is_site_admin? and @current_user.group_id
+      @user.group_id = @current_user.group_id
+    end
       
     if @user.permission > @current_user.permission
       @user.permission = @current_user.permission;
@@ -38,14 +55,25 @@ end
 # PUT /users/:id
 # Update a user, specify it by the ID and list the params you are updating
 put '/users/:id' do |id|
-  @user = User.find(id)
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
 
-  # Attempt to update the user
-  if @user.update(user_params)
-    { :status => :updated, :user => @user}.to_json
-  # The stop was not correctly updated, show errors
-  else
-    { :errors => @user.errors, :status => :unprocessable_entity }.to_json
+  if @current_user.is_group_admin?
+    @user = User.find(id)
+    
+    if not @current_user.is_site_admin? and @user.group_id and @user.group_id != @current_user.group_id
+      respond_to do |format|
+        format.json { { :status => :permission_denied, :errors => ["You do not have permission to update this user"] }.to_json }
+      end
+    end    
+    
+    # Attempt to update the user
+    if @user.update(user_params)
+      { :status => :updated, :user => @user}.to_json
+    # The user was not correctly updated, show errors
+    else
+      { :errors => @user.errors, :status => :unprocessable_entity }.to_json
+    end
   end
 end
 

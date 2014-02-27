@@ -78,12 +78,14 @@
                                     Manage Groups
                                 </a>
                             </li>
-                            <li>
-                                <a href="#/groups/new">
-                                    <i class="icon-double-angle-right"></i>
-                                    Add a group
-                                </a>
-                            </li>
+                            <% if @current_user.is_site_admin? %>
+                                <li>
+                                    <a href="#/groups/new">
+                                        <i class="icon-double-angle-right"></i>
+                                        Add a group
+                                    </a>
+                                </li>
+                                <% end %>
                         </ul>
                     </li>
                     <li class="targetable">
