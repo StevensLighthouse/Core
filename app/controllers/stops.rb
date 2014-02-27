@@ -15,7 +15,7 @@ end
 # POST /stops
 # Create a new stop
 post '/stops' do
-  @stop = Stop.create(listing_params)
+  @stop = Stop.create(stop_params)
 
   # Attempt to save the newly created stop
   if @stop.save
@@ -40,7 +40,7 @@ put '/stops/:id' do |id|
   @stop = Stop.find(id)
 
   # Attempt to update the stop
-  if @stop.update(listing_params)
+  if @stop.update(stop_params)
     { :status => :updated, :stop => @stop }.to_json
   # The stop was not correctly updated, show errors
   else
@@ -97,6 +97,6 @@ delete '/stops/:id' do |id|
 end
 
 private
-def listing_params
+def stop_params
   params.allow(:name, :category, :description, :visibility, :lat, :lon, :parent_id)
 end

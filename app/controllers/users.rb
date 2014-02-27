@@ -41,7 +41,7 @@ put '/users/:id' do |id|
   @user = User.find(id)
 
   # Attempt to update the user
-  if @user.update(listing_params)
+  if @user.update(user_params)
     { :status => :updated, :user => @user}.to_json
   # The stop was not correctly updated, show errors
   else

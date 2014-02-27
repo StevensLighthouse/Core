@@ -45,7 +45,7 @@ put '/groups/:id' do |id|
   @group = Group.find(id)
 
   # Attempt to update the group
-  if @group.update(listing_params)
+  if @group.update(group_params)
     { :status => :updated, :group => @group}.to_json
   # The group was not correctly updated, show errors
   else
