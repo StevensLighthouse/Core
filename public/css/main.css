@@ -28,3 +28,6 @@
 .infowindow {
     min-height: 150px;
 }
+.stop-label {
+    margin-right: 10px;
+}
