@@ -14,12 +14,12 @@ mapShim.prototype.setCenter = function (lat, lng) {
     this.center.longitude = lng;
 };
 
-coreControllers.controller('HomeCtrl',
+coreControllers.controller('Home',
     function ($scope, $dataService) {
         $dataService.getAllData();
     });
 
-coreControllers.controller('TourCtrl',
+coreControllers.controller('Tours',
     function ($scope, $dataService) {
         $scope.tours = [];
 
@@ -28,7 +28,7 @@ coreControllers.controller('TourCtrl',
         });
     });
 
-coreControllers.controller('NewTourCtrl',
+coreControllers.controller('TourCreator',
     function ($scope, $dataService) {
         $scope.verb = "Create";
         $scope.name = "";
@@ -67,7 +67,7 @@ coreControllers.controller('NewTourCtrl',
         };
     });
 
-coreControllers.controller('TourEditCtrl',
+coreControllers.controller('TourEditor',
     function ($scope, $routeParams, $dataService) {
         $scope.verb = "Update";
         $scope.name = "";
@@ -127,7 +127,7 @@ coreControllers.controller('TourEditCtrl',
         });
     });
 
-coreControllers.controller('TourDetailCtrl',
+coreControllers.controller('TourDetails',
     function ($scope, $routeParams, $dataService) {
         $scope.tourId = $routeParams.tourId;
 
@@ -145,14 +145,14 @@ coreControllers.controller('TourDetailCtrl',
         });
     });
 
-coreControllers.controller('GroupCtrl',
+coreControllers.controller('Groups',
     function ($scope, $dataService) {
         $dataService.getAllGroups().then(function (groups) {
             $scope.groups = groups;
         });
     });
 
-coreControllers.controller('NewGroupCtrl',
+coreControllers.controller('GroupCreator',
     function ($scope, $dataService) {
         $scope.verb = "Create";
         $scope.name = "";
@@ -167,7 +167,7 @@ coreControllers.controller('NewGroupCtrl',
         };
     });
 
-coreControllers.controller('GroupEditCtrl',
+coreControllers.controller('GroupEditor',
     function ($scope, $routeParams, $dataService) {
         $scope.groupId = $routeParams.groupId;
         $scope.verb = "Update";
@@ -188,7 +188,7 @@ coreControllers.controller('GroupEditCtrl',
         };
     });
 
-coreControllers.controller('GroupDetailCtrl',
+coreControllers.controller('GroupDetails',
     function ($scope, $routeParams, $dataService) {
         $scope.groupId = $routeParams.groupId;
 
@@ -198,14 +198,14 @@ coreControllers.controller('GroupDetailCtrl',
         });
     });
 
-coreControllers.controller('UserCtrl',
+coreControllers.controller('Users',
     function ($scope, $dataService) {
         $dataService.getAllUsers().then(function (users) {
             $scope.users = users;
         });
     });
 
-coreControllers.controller('NewUserCtrl',
+coreControllers.controller('UserCreator',
     function ($scope, $dataService) {
         $dataService.getAllGroups().then(function (groups) {
             $scope.possibleGroups = groups;
@@ -227,7 +227,7 @@ coreControllers.controller('NewUserCtrl',
         };
     });
 
-coreControllers.controller('UserDetailCtrl',
+coreControllers.controller('UserDetails',
     function ($scope, $routeParams, $dataService) {
         $scope.userId = $routeParams.userId;
 
@@ -238,7 +238,7 @@ coreControllers.controller('UserDetailCtrl',
         });
     });
 
-coreControllers.controller('UserEditCtrl', 
+coreControllers.controller('UserEditor', 
     function ($scope, $routeParams, $dataService) {
         $scope.userId = $routeParams.userId;
         $scope.verb = "Update";
@@ -265,14 +265,14 @@ coreControllers.controller('UserEditCtrl',
         };
     });
 
-coreControllers.controller('StopCtrl',
+coreControllers.controller('Stops',
     function ($scope, $dataService) {
         $dataService.getAllStops().then(function (stops) {
             $scope.stops = stops;
         });
     });
 
-coreControllers.controller('StopDetailCtrl',
+coreControllers.controller('StopDetails',
     function ($scope, $routeParams, $dataService) {
         $scope.stopId = $routeParams.stopId;
         $scope.map = new mapShim();
@@ -286,7 +286,7 @@ coreControllers.controller('StopDetailCtrl',
         });
     });
 
-coreControllers.controller('NewStopCtrl',
+coreControllers.controller('StopCreator',
     function ($scope, $dataService) {
         $scope.verb = "Create";
         $scope.name = "";
@@ -331,7 +331,7 @@ coreControllers.controller('NewStopCtrl',
         };
     });
 
-coreControllers.controller('StopEditCtrl',
+coreControllers.controller('StopEditor',
     function ($scope, $routeParams, $dataService) {
         $scope.stopId = $routeParams.stopId;
         $scope.verb = "Update";

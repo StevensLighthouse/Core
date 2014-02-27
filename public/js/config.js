@@ -589,71 +589,71 @@ coreApp.config(['$routeProvider',
         $routeProvider.
         when('/home', {
             templateUrl: 'partials/home.html',
-            controller: 'HomeCtrl'
+            controller: 'Home'
         }).
         when('/tours', {
             templateUrl: 'partials/tours.html',
-            controller: 'TourCtrl'
+            controller: 'Tours'
         }).
         when('/tours/new', {
-            templateUrl: 'partials/edit-tour.html',
-            controller: 'NewTourCtrl'
+            templateUrl: 'partials/tour-editor.html',
+            controller: 'TourCreator'
         }).
         when('/tours/:tourId', {
-            templateUrl: 'partials/tour-detail.html',
-            controller: 'TourDetailCtrl'
+            templateUrl: 'partials/tour.html',
+            controller: 'TourDetails'
         }).
         when('/tours/edit/:tourId', {
-            templateUrl: 'partials/edit-tour.html',
-            controller: 'TourEditCtrl'
+            templateUrl: 'partials/tour-editor.html',
+            controller: 'TourEditor'
         }).
         when('/groups', {
             templateUrl: 'partials/groups.html',
-            controller: 'GroupCtrl'
+            controller: 'Groups'
         }).
         when('/groups/new', {
-            templateUrl: 'partials/edit-group.html',
-            controller: 'NewGroupCtrl'
+            templateUrl: 'partials/group-editor.html',
+            controller: 'GroupCreator'
         }).
         when('/groups/:groupId', {
-            templateUrl: 'partials/group-detail.html',
-            controller: 'GroupDetailCtrl'
+            templateUrl: 'partials/group.html',
+            controller: 'GroupDetails'
         }).
         when('/groups/edit/:groupId', {
-            templateUrl: 'partials/edit-group.html',
-            controller: 'GroupEditCtrl'
+            templateUrl: 'partials/group-editor.html',
+            controller: 'GroupEditor'
         }).
         when('/users', {
             templateUrl: 'partials/users.html',
-            controller: 'UserCtrl'
+            controller: 'Users'
         }).
         when('/users/new', {
-            templateUrl: 'partials/edit-user.html',
-            controller: 'NewUserCtrl'
+            templateUrl: 'partials/user-editor.html',
+            controller: 'UserCreator'
         }).
         when('/users/:userId', {
-            templateUrl: 'partials/user-detail.html',
-            controller: 'UserDetailCtrl'
+            templateUrl: 'partials/user.html',
+            controller: 'UserDetails'
         }).
         when('/users/edit/:userId', {
-            templateUrl: 'partials/edit-user.html',
-            controller: 'UserEditCtrl'
+            templateUrl: 'partials/user-editor.html',
+            controller: 'UserEditor'
         }).
         when('/stops', {
             templateUrl: 'partials/stops.html',
-            controller: 'StopCtrl'
+            controller: 'Stops'
         }).
         when('/stops/new', {
-            templateUrl: 'partials/edit-stop.html',
-            controller: 'NewStopCtrl'
+            templateUrl: 'partials/stop-editor.html',
+            controller: 'StopCreator'
         }).
         when('/stops/:stopId', {
             templateUrl: 'partials/stop-detail.html',
-            controller: 'StopDetailCtrl'
+            controller: 'StopDetails'
         }).
         when('/stops/edit/:stopId', {
-            templateUrl: 'partials/edit-stop.html',
-            controller: 'StopEditCtrl'
+            templateUrl: 'partials/stop-editor.html',
+            controller: 'StopEditor'
         }).
         otherwise({
             redirectTo: '/home'
