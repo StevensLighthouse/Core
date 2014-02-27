@@ -1,10 +1,33 @@
 # GET /stops
-# Index of all global stops
+# Index of all stops the user owns
 get '/stops' do
   redirect to('/login') unless current_user()
   @current_user = current_user()
-  if @current_user.is_editor?
+
+  if @current_user.is_site_admin? 
     @stops = Stop.all
+
+    respond_to do |format|
+      format.json { { :stops => @stops }.to_json }
+    end
+  elsif @current_user.is_editor?
+      @stops = Stop.where "editor_id = :id or creator_id = :id", { id: @current_user.id } 
+      # User.where(["name = :name and email = :email", { name: "Joe", email: "joe@example.com" }])
+      # @stops = Stop.where editor_id: @current_user.id
+
+    respond_to do |format|
+      format.json { { :stops => @stops }.to_json }
+    end
+  end
+end
+
+# GET /stops/global
+# Index of all global stops
+get '/stops/global' do
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  if @current_user.is_editor?
+    @stops = Stop.where visibility: true
 
     respond_to do |format|
       format.json { { :stops => @stops }.to_json }
@@ -15,14 +38,20 @@ end
 # POST /stops
 # Create a new stop
 post '/stops' do
-  @stop = Stop.create(stop_params)
+  redirect to('/login') unless current_user()
+  @current_user = current_user()
+  
+  if @current_user.is_builder?
+    @stop = Stop.create(stop_params)
+    @stop.creator_id = @current_user.id
 
-  # Attempt to save the newly created stop
-  if @stop.save
-    { :status => :created, :stop => @stop }.to_json
-  # Stop was not saved, show an error
-  else
-    { :status => :unprocessable_entity, :errors => @stop.errors }.to_json
+    # Attempt to save the newly created stop
+    if @stop.save
+      { :status => :created, :stop => @stop }.to_json
+    # Stop was not saved, show an error
+    else
+      { :status => :unprocessable_entity, :errors => @stop.errors }.to_json
+    end
   end
 end
 

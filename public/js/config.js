@@ -27,6 +27,7 @@ coreApp.factory("$dataService",
 
         this.tourList = [];
         this.stopList = [];
+        this.globalStopList = [];
         this.userList = [];
         this.groupList = [];
 
@@ -195,13 +196,13 @@ coreApp.factory("$dataService",
             // naive caching
             if (self.stopList.length > 0) {
                 d.resolve(self.stopList);
+            } else {
+                // if we've got no entries, we will download
+                $http.get('/stops.json').success(function (data) {
+                    self.stopList = data.stops;
+                    d.resolve(self.stopList);
+                });
             }
-
-            // if we've got no entries, we will download
-            $http.get('/stops.json').success(function (data) {
-                self.stopList = data.stops;
-                d.resolve(self.stopList);
-            });
 
             return d.promise;
         };
@@ -209,12 +210,15 @@ coreApp.factory("$dataService",
         this.getGlobalStops = function () {
             var d = $q.defer();
 
-            this.getAllStops().then(function (stops) {
-                d.resolve(_.filter(stops, function (stop) {
-                    return stop.visibility;
-                }));
-            });
-
+            if (self.globalStopList.length > 0) {
+                d.resolve(self.globalStopList);
+            } else {
+                // if we've got no entries, we will download
+                $http.get('/stops/global.json').success(function (data) {
+                    self.globalStopList = data.stops;
+                    d.resolve(self.globalStopList);
+                });
+            }
             return d.promise;
         };
 
@@ -370,8 +374,12 @@ coreApp.factory("$dataService",
             } else {
                 // if we've got no entries, we will download
                 $http.get('/groups.json').success(function (data) {
-                    self.groupList = data.groups;
-                    d.resolve(self.groupList);
+                    if (data.groups) {
+                        self.groupList = data.groups;
+                        d.resolve(self.groupList);
+                    } else {
+                        d.reject("Do not have group permission");
+                    }
                 });
             }
 
