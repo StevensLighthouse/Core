@@ -648,7 +648,7 @@ coreApp.config(['$routeProvider',
             controller: 'StopCreator'
         }).
         when('/stops/:stopId', {
-            templateUrl: 'partials/stop-detail.html',
+            templateUrl: 'partials/stop.html',
             controller: 'StopDetails'
         }).
         when('/stops/edit/:stopId', {
