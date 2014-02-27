@@ -24,12 +24,14 @@
                                 Manage Tours
                             </a>
                         </li>
-                        <li>
-                            <a href="#/tours/new">
-                                <i class="icon-double-angle-right"></i>
-                                Create Tour
-                            </a>
-                        </li>
+                        <% if @current_user.is_builder? %>
+                            <li>
+                                <a href="#/tours/new">
+                                    <i class="icon-double-angle-right"></i>
+                                    Create Tour
+                                </a>
+                            </li>
+                            <% end %>
                     </ul>
                 </li>
                 <li class="targetable">
@@ -45,66 +47,70 @@
                                 Manage Stops
                             </a>
                         </li>
-                        <li>
-                            <a href="#/stops/new">
-                                <i class="icon-double-angle-right"></i>
-                                Create Stop
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#/stops/global">
-                                <i class="icon-double-angle-right"></i>
-                                Global Stops
-                            </a>
-                        </li>
+                        <% if @current_user.is_builder? %>
+                            <li>
+                                <a href="#/stops/new">
+                                    <i class="icon-double-angle-right"></i>
+                                    Create Stop
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#/stops/global">
+                                    <i class="icon-double-angle-right"></i>
+                                    Global Stops
+                                </a>
+                            </li>
+                            <% end %>
                     </ul>
                 </li>
-                <li class="targetable">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="icon-edit"></i>
-                        <span class="menu-text">Groups</span>
+                <% if @current_user.is_group_admin? %>
+                    <li class="targetable">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-edit"></i>
+                            <span class="menu-text">Groups</span>
 
-                        <b class="arrow icon-angle-down"></b>
-                    </a>
-                    <ul class="submenu">
-                        <li>
-                            <a href="#/groups">
-                                <i class="icon-double-angle-right"></i>
-                                Manage Groups
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#/groups/new">
-                                <i class="icon-double-angle-right"></i>
-                                Add a group
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="targetable">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="icon-edit"></i>
-                        <span class="menu-text">Users</span>
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="#/groups">
+                                    <i class="icon-double-angle-right"></i>
+                                    Manage Groups
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#/groups/new">
+                                    <i class="icon-double-angle-right"></i>
+                                    Add a group
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="targetable">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-edit"></i>
+                            <span class="menu-text">Users</span>
 
-                        <b class="arrow icon-angle-down"></b>
-                    </a>
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
 
-                    <ul class="submenu">
-                        <li>
-                            <a href="#/users">
-                                <i class="icon-double-angle-right"></i>
-                                Manage Users
-                            </a>
-                        </li>
+                        <ul class="submenu">
+                            <li>
+                                <a href="#/users">
+                                    <i class="icon-double-angle-right"></i>
+                                    Manage Users
+                                </a>
+                            </li>
 
-                        <li>
-                            <a href="#/users/new">
-                                <i class="icon-double-angle-right"></i>
-                                Add a user
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                            <li>
+                                <a href="#/users/new">
+                                    <i class="icon-double-angle-right"></i>
+                                    Add a user
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <% end %>
             </ul>
             <!-- /.nav-list -->
 
