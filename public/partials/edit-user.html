@@ -41,9 +41,8 @@
             <div class="form-group">
                 <label for="form-field-select-3" class="col-sm-3 control-label no-padding-right">Group</label>
                 <div class="col-sm-5">
-                    <select class="form-control col-xs-10 col-sm-5 width-80" id="form-field-select-1">
+                    <select class="form-control col-xs-10 col-sm-5 width-80" id="form-field-select-1" ng-model="selectedGroup" ng-options="group as group.name for group in possibleGroups">
                         <option value="">No Group</option>
-                        <option ng-repeat="group in possibleGroups" value="{{ group.id }}">{{ group.name }}</option>
                     </select>
                 </div>
             </div>

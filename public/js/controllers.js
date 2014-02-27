@@ -242,7 +242,8 @@ coreControllers.controller('UserEditCtrl',
     function ($scope, $routeParams, $dataService) {
         $scope.userId = $routeParams.userId;
         $scope.verb = "Update";
-
+        $scope.selectedGroup = "";
+        
         $dataService.getAllGroups().then(function (groups) {
             $scope.possibleGroups = groups;
         });
@@ -250,11 +251,13 @@ coreControllers.controller('UserEditCtrl',
         $dataService.getUser($scope.userId).then(function (user) {
             $scope.email = user.email;
             $scope.role = user.permission;
-            $scope.group = user.group;
+            $scope.selectedGroup = user.group_id;
         });
 
         $scope.saveUser = function () {
-            $dataService.updateUser($scope.userId, $scope.email, $scope.pass1, $scope.role, $scope.group).then(function () {
+            var groupId = $scope.selectedGroup ? $scope.selectedGroup.id : null;
+
+            $dataService.updateUser($scope.userId, $scope.email, $scope.pass1, $scope.role, groupId).then(function () {
                 window.location = "#/users";
             }, function (errorList) {
                 $scope.errorList = errorList;

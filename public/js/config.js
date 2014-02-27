@@ -548,15 +548,16 @@ coreApp.factory("$dataService",
 
                     if (response.status === "updated") {
                         for (var i = 0; i < self.userList.length && !found; i++) {
-                            if (self.userList[i].id === group.id) {
-                                self.userList[i] = group;
+                            if (self.userList[i].id === user.id) {
+                                var fixedUser = self.fixUserList([user])[0];
+                                self.userList[i] = fixedUser;
                                 found = true;
-                                d.resolve(group);
+                                d.resolve(user);
                             }
                         }
                         if (!found) {
                             self.getAllUsers().then(function () {
-                                d.resolve(group);
+                                d.resolve(user);
                             })
                         }
                     } else {
