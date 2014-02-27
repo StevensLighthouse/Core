@@ -40,6 +40,7 @@ coreControllers.controller('TourCreator',
 
         $dataService.getAllStops().then(function (stops) {
             $scope.allStops = stops;
+            $scope.loaded = true;
         })
 
         $scope.centerOnStop = function (stop) {
@@ -122,8 +123,9 @@ coreControllers.controller('TourEditor',
                 $scope.allStops = _.reject(stops, function (stop) {
                     return usedDict[stop.id];
                 });
-            });
 
+                $scope.loaded = true;
+            });
         });
     });
 
@@ -142,6 +144,7 @@ coreControllers.controller('TourDetails',
             $scope.stops = tour.stops;
             $scope.description = tour.description;
             $scope.map.setCenter(parseFloat(tour.lat), parseFloat(tour.lon));
+            $scope.loaded = true;
         });
     });
 
@@ -289,6 +292,7 @@ coreControllers.controller('StopDetails',
             $scope.description = stop.description;
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+            $scope.loaded = true;
         });
     });
 
@@ -301,6 +305,7 @@ coreControllers.controller('StopCreator',
         $scope.visibility = true;
         $scope.map = new mapShim();
         $scope.stop = new mapShim();
+        $scope.loaded = true;
 
         $scope.geolocate = function () {
             if ($scope.address) {
@@ -353,6 +358,7 @@ coreControllers.controller('StopEditor',
             $scope.description = stop.description;
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+            $scope.loaded = true;
         });
 
         $scope.saveStop = function () {
