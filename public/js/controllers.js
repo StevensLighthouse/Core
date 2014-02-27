@@ -14,12 +14,12 @@ mapShim.prototype.setCenter = function (lat, lng) {
     this.center.longitude = lng;
 };
 
-coreControllers.controller('HomeCtrl',
+coreControllers.controller('Home',
     function ($scope, $dataService) {
         $dataService.getAllData();
     });
 
-coreControllers.controller('TourCtrl',
+coreControllers.controller('Tours',
     function ($scope, $dataService) {
         $scope.tours = [];
 
@@ -28,7 +28,7 @@ coreControllers.controller('TourCtrl',
         });
     });
 
-coreControllers.controller('NewTourCtrl',
+coreControllers.controller('TourCreator',
     function ($scope, $dataService) {
         $scope.verb = "Create";
         $scope.name = "";
@@ -40,6 +40,7 @@ coreControllers.controller('NewTourCtrl',
 
         $dataService.getAllStops().then(function (stops) {
             $scope.allStops = stops;
+            $scope.loaded = true;
         })
 
         $scope.centerOnStop = function (stop) {
@@ -67,7 +68,7 @@ coreControllers.controller('NewTourCtrl',
         };
     });
 
-coreControllers.controller('TourEditCtrl',
+coreControllers.controller('TourEditor',
     function ($scope, $routeParams, $dataService) {
         $scope.verb = "Update";
         $scope.name = "";
@@ -122,12 +123,13 @@ coreControllers.controller('TourEditCtrl',
                 $scope.allStops = _.reject(stops, function (stop) {
                     return usedDict[stop.id];
                 });
-            });
 
+                $scope.loaded = true;
+            });
         });
     });
 
-coreControllers.controller('TourDetailCtrl',
+coreControllers.controller('TourDetails',
     function ($scope, $routeParams, $dataService) {
         $scope.tourId = $routeParams.tourId;
 
@@ -142,17 +144,18 @@ coreControllers.controller('TourDetailCtrl',
             $scope.stops = tour.stops;
             $scope.description = tour.description;
             $scope.map.setCenter(parseFloat(tour.lat), parseFloat(tour.lon));
+            $scope.loaded = true;
         });
     });
 
-coreControllers.controller('GroupCtrl',
+coreControllers.controller('Groups',
     function ($scope, $dataService) {
         $dataService.getAllGroups().then(function (groups) {
             $scope.groups = groups;
         });
     });
 
-coreControllers.controller('NewGroupCtrl',
+coreControllers.controller('GroupCreator',
     function ($scope, $dataService) {
         $scope.verb = "Create";
         $scope.name = "";
@@ -167,7 +170,7 @@ coreControllers.controller('NewGroupCtrl',
         };
     });
 
-coreControllers.controller('GroupEditCtrl',
+coreControllers.controller('GroupEditor',
     function ($scope, $routeParams, $dataService) {
         $scope.groupId = $routeParams.groupId;
         $scope.verb = "Update";
@@ -188,7 +191,7 @@ coreControllers.controller('GroupEditCtrl',
         };
     });
 
-coreControllers.controller('GroupDetailCtrl',
+coreControllers.controller('GroupDetails',
     function ($scope, $routeParams, $dataService) {
         $scope.groupId = $routeParams.groupId;
 
@@ -198,14 +201,14 @@ coreControllers.controller('GroupDetailCtrl',
         });
     });
 
-coreControllers.controller('UserCtrl',
+coreControllers.controller('Users',
     function ($scope, $dataService) {
         $dataService.getAllUsers().then(function (users) {
             $scope.users = users;
         });
     });
 
-coreControllers.controller('NewUserCtrl',
+coreControllers.controller('UserCreator',
     function ($scope, $dataService) {
         $dataService.getAllGroups().then(function (groups) {
             $scope.possibleGroups = groups;
@@ -227,7 +230,7 @@ coreControllers.controller('NewUserCtrl',
         };
     });
 
-coreControllers.controller('UserDetailCtrl',
+coreControllers.controller('UserDetails',
     function ($scope, $routeParams, $dataService) {
         $scope.userId = $routeParams.userId;
 
@@ -238,23 +241,32 @@ coreControllers.controller('UserDetailCtrl',
         });
     });
 
-coreControllers.controller('UserEditCtrl', 
+coreControllers.controller('UserEditor',
     function ($scope, $routeParams, $dataService) {
         $scope.userId = $routeParams.userId;
         $scope.verb = "Update";
 
         $dataService.getAllGroups().then(function (groups) {
             $scope.possibleGroups = groups;
-        });
 
-        $dataService.getUser($scope.userId).then(function (user) {
-            $scope.email = user.email;
-            $scope.role = user.permission;
-            $scope.group = user.group;
+            $dataService.getUser($scope.userId).then(function (user) {
+                $scope.email = user.email;
+                $scope.role = user.permission;
+
+                if (user.group_id) {
+                    for (var i = 0; i < $scope.possibleGroups.length; i++) {
+                        if($scope.possibleGroups[i].id === user.group_id){
+                            $scope.selectedGroup = $scope.possibleGroups[i];
+                        }
+                    }
+                }
+            });
         });
 
         $scope.saveUser = function () {
-            $dataService.updateUser($scope.userId, $scope.email, $scope.pass1, $scope.role, $scope.group).then(function () {
+            var groupId = $scope.selectedGroup ? $scope.selectedGroup.id : null;
+
+            $dataService.updateUser($scope.userId, $scope.email, $scope.pass1, $scope.role, groupId).then(function () {
                 window.location = "#/users";
             }, function (errorList) {
                 $scope.errorList = errorList;
@@ -262,14 +274,14 @@ coreControllers.controller('UserEditCtrl',
         };
     });
 
-coreControllers.controller('StopCtrl',
+coreControllers.controller('Stops',
     function ($scope, $dataService) {
         $dataService.getAllStops().then(function (stops) {
             $scope.stops = stops;
         });
     });
 
-coreControllers.controller('StopDetailCtrl',
+coreControllers.controller('StopDetails',
     function ($scope, $routeParams, $dataService) {
         $scope.stopId = $routeParams.stopId;
         $scope.map = new mapShim();
@@ -280,10 +292,11 @@ coreControllers.controller('StopDetailCtrl',
             $scope.description = stop.description;
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+            $scope.loaded = true;
         });
     });
 
-coreControllers.controller('NewStopCtrl',
+coreControllers.controller('StopCreator',
     function ($scope, $dataService) {
         $scope.verb = "Create";
         $scope.name = "";
@@ -292,6 +305,7 @@ coreControllers.controller('NewStopCtrl',
         $scope.visibility = true;
         $scope.map = new mapShim();
         $scope.stop = new mapShim();
+        $scope.loaded = true;
 
         $scope.geolocate = function () {
             if ($scope.address) {
@@ -328,7 +342,7 @@ coreControllers.controller('NewStopCtrl',
         };
     });
 
-coreControllers.controller('StopEditCtrl',
+coreControllers.controller('StopEditor',
     function ($scope, $routeParams, $dataService) {
         $scope.stopId = $routeParams.stopId;
         $scope.verb = "Update";
@@ -344,6 +358,7 @@ coreControllers.controller('StopEditCtrl',
             $scope.description = stop.description;
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+            $scope.loaded = true;
         });
 
         $scope.saveStop = function () {

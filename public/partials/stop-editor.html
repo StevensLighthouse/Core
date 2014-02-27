@@ -61,8 +61,15 @@
                     </div>
                 </form>
             </div>
-            <google-map class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true">
-                <marker coords='stop.center'></marker>
+            <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
+                <marker coords='stop.center'>
+                    <window>
+                        <div class="infowindow">
+                            <h5>{{ name }}</h5>
+                            <p>{{ description }}</p>
+                        </div>
+                    </window>
+                </marker>
             </google-map>
         </div>
     </div>

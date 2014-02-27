@@ -165,10 +165,7 @@ coreApp.factory("$dataService",
                 var tour = response.tour,
                     found = false;
 
-                // TODO: STANDARDIZE RESPONSES
-                if (!tour) {
-                    d.reject(self.fixErrorList(response.errors));
-                } else {
+                if (response.status === "updated") {
                     for (var i = 0; i < self.tourList.length && !found; i++) {
                         if (self.tourList[i].id === tour.id) {
                             self.tourList[i] = tour;
@@ -181,6 +178,8 @@ coreApp.factory("$dataService",
                             d.resolve(tour);
                         })
                     }
+                } else {
+                    d.reject(self.fixErrorList(response.errors));
                 }
             }).fail(function (r) {
                 d.reject(r);
@@ -292,10 +291,7 @@ coreApp.factory("$dataService",
                     var stop = response.stop,
                         found = false;
 
-                    // TODO: STANDARDIZE RESPONSES
-                    if (!stop) {
-                        d.reject(self.fixErrorList(response.errors));
-                    } else {
+                    if (response.status === "updated") {
                         for (var i = 0; i < self.stopList.length && !found; i++) {
                             if (self.stopList[i].id === stop.id) {
                                 self.stopList[i] = stop;
@@ -308,6 +304,8 @@ coreApp.factory("$dataService",
                                 d.resolve(stop);
                             })
                         }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
                     }
                 });
             } else {
@@ -411,25 +409,26 @@ coreApp.factory("$dataService",
                     url: "/groups/" + id,
                     data: param
                 }).done(function (response) {
-                    var group = response.tour,
+                    var group = response.group,
                         found = false;
 
-                    // TODO: STANDARDIZE RESPONSES
-                    if (!group) {
-                        d.reject(self.fixErrorList(response.errors));
-                    } else {
+                    if (response.status === "updated") {
                         for (var i = 0; i < self.groupList.length && !found; i++) {
                             if (self.groupList[i].id === group.id) {
                                 self.groupList[i] = group;
                                 found = true;
+                                self.userList = self.fixUserList(self.userList);
                                 d.resolve(group);
                             }
                         }
                         if (!found) {
                             self.getAllGroups().then(function () {
+                                self.userList = self.fixUserList(self.userList);
                                 d.resolve(group);
                             })
                         }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
                     }
                 }).fail(function (r) {
                     d.reject(r);
@@ -549,22 +548,22 @@ coreApp.factory("$dataService",
                     var user = response.user,
                         found = false;
 
-                    // TODO: STANDARDIZE RESPONSES
-                    if (!group) {
-                        d.reject(self.fixErrorList(response.errors));
-                    } else {
+                    if (response.status === "updated") {
                         for (var i = 0; i < self.userList.length && !found; i++) {
-                            if (self.userList[i].id === group.id) {
-                                self.userList[i] = group;
+                            if (self.userList[i].id === user.id) {
+                                var fixedUser = self.fixUserList([user])[0];
+                                self.userList[i] = fixedUser;
                                 found = true;
-                                d.resolve(group);
+                                d.resolve(user);
                             }
                         }
                         if (!found) {
                             self.getAllUsers().then(function () {
-                                d.resolve(group);
+                                d.resolve(user);
                             })
                         }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
                     }
                 }).fail(function (r) {
                     d.reject(r);
@@ -592,71 +591,71 @@ coreApp.config(['$routeProvider',
         $routeProvider.
         when('/home', {
             templateUrl: 'partials/home.html',
-            controller: 'HomeCtrl'
+            controller: 'Home'
         }).
         when('/tours', {
             templateUrl: 'partials/tours.html',
-            controller: 'TourCtrl'
+            controller: 'Tours'
         }).
         when('/tours/new', {
-            templateUrl: 'partials/edit-tour.html',
-            controller: 'NewTourCtrl'
+            templateUrl: 'partials/tour-editor.html',
+            controller: 'TourCreator'
         }).
         when('/tours/:tourId', {
-            templateUrl: 'partials/tour-detail.html',
-            controller: 'TourDetailCtrl'
+            templateUrl: 'partials/tour.html',
+            controller: 'TourDetails'
         }).
         when('/tours/edit/:tourId', {
-            templateUrl: 'partials/edit-tour.html',
-            controller: 'TourEditCtrl'
+            templateUrl: 'partials/tour-editor.html',
+            controller: 'TourEditor'
         }).
         when('/groups', {
             templateUrl: 'partials/groups.html',
-            controller: 'GroupCtrl'
+            controller: 'Groups'
         }).
         when('/groups/new', {
-            templateUrl: 'partials/edit-group.html',
-            controller: 'NewGroupCtrl'
+            templateUrl: 'partials/group-editor.html',
+            controller: 'GroupCreator'
         }).
         when('/groups/:groupId', {
-            templateUrl: 'partials/group-detail.html',
-            controller: 'GroupDetailCtrl'
+            templateUrl: 'partials/group.html',
+            controller: 'GroupDetails'
         }).
         when('/groups/edit/:groupId', {
-            templateUrl: 'partials/edit-group.html',
-            controller: 'GroupEditCtrl'
+            templateUrl: 'partials/group-editor.html',
+            controller: 'GroupEditor'
         }).
         when('/users', {
             templateUrl: 'partials/users.html',
-            controller: 'UserCtrl'
+            controller: 'Users'
         }).
         when('/users/new', {
-            templateUrl: 'partials/edit-user.html',
-            controller: 'NewUserCtrl'
+            templateUrl: 'partials/user-editor.html',
+            controller: 'UserCreator'
         }).
         when('/users/:userId', {
-            templateUrl: 'partials/user-detail.html',
-            controller: 'UserDetailCtrl'
+            templateUrl: 'partials/user.html',
+            controller: 'UserDetails'
         }).
         when('/users/edit/:userId', {
-            templateUrl: 'partials/edit-user.html',
-            controller: 'UserEditCtrl'
+            templateUrl: 'partials/user-editor.html',
+            controller: 'UserEditor'
         }).
         when('/stops', {
             templateUrl: 'partials/stops.html',
-            controller: 'StopCtrl'
+            controller: 'Stops'
         }).
         when('/stops/new', {
-            templateUrl: 'partials/edit-stop.html',
-            controller: 'NewStopCtrl'
+            templateUrl: 'partials/stop-editor.html',
+            controller: 'StopCreator'
         }).
         when('/stops/:stopId', {
-            templateUrl: 'partials/stop-detail.html',
-            controller: 'StopDetailCtrl'
+            templateUrl: 'partials/stop.html',
+            controller: 'StopDetails'
         }).
         when('/stops/edit/:stopId', {
-            templateUrl: 'partials/edit-stop.html',
-            controller: 'StopEditCtrl'
+            templateUrl: 'partials/stop-editor.html',
+            controller: 'StopEditor'
         }).
         otherwise({
             redirectTo: '/home'
