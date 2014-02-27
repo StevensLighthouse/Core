@@ -118,6 +118,7 @@ coreControllers.controller('TourEditor',
             $scope.name = tour.name;
             $scope.stops = tour.stops;
             $scope.description = tour.description;
+            $scope.visibility = tour.visibility;
             $scope.map.setCenter(parseFloat(tour.lat), parseFloat(tour.lon));
             $dataService.getAllStops().then(function (stops) {
                 var usedDict = {};
@@ -372,6 +373,7 @@ coreControllers.controller('StopEditor',
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.loaded = true;
+            $scope.visibility = stop.visibility;
         });
 
         $scope.saveStop = function () {
