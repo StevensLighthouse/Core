@@ -10,7 +10,7 @@ get '/groups' do
       format.json { { :groups => @groups }.to_json }
     end
   elsif @current_user.is_group_admin? and @current_user.group_id
-      @groups = Group.where id: @current_user.group_id
+      @groups = Group.where(:id => @current_user.group_id)
       respond_to do |format|
         format.json { { :groups => @groups }.to_json }
     end

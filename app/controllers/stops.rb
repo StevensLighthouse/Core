@@ -11,9 +11,7 @@ get '/stops' do
       format.json { { :stops => @stops }.to_json }
     end
   elsif @current_user.is_editor?
-      @stops = Stop.where "editor_id = :id or creator_id = :id", { id: @current_user.id } 
-      # User.where(["name = :name and email = :email", { name: "Joe", email: "joe@example.com" }])
-      # @stops = Stop.where editor_id: @current_user.id
+      @stops = Stop.where "editor_id = :id or creator_id = :id", { :id => @current_user.id } 
 
     respond_to do |format|
       format.json { { :stops => @stops }.to_json }
@@ -27,7 +25,7 @@ get '/stops/global' do
   redirect to('/login') unless current_user()
   @current_user = current_user()
   if @current_user.is_editor?
-    @stops = Stop.where visibility: true
+    @stops = Stop.where(:visibility => true)
 
     respond_to do |format|
       format.json { { :stops => @stops }.to_json }

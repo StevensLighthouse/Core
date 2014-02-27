@@ -12,7 +12,7 @@ get '/tours' do
       format.json { { :tours => @tours }.to_json }
     end
   elsif @current_user.is_editor?
-    @tours = Tour.where "editor_id = :id or creator_id = :id", { id: @current_user.id } 
+    @tours = Tour.where "editor_id = :id or creator_id = :id", { :id => @current_user.id } 
 
     respond_to do |format|
       format.html { erb :'tours/index' }
