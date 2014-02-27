@@ -238,20 +238,26 @@ coreControllers.controller('UserDetails',
         });
     });
 
-coreControllers.controller('UserEditor', 
+coreControllers.controller('UserEditor',
     function ($scope, $routeParams, $dataService) {
         $scope.userId = $routeParams.userId;
         $scope.verb = "Update";
-        $scope.selectedGroup = "";
-        
+
         $dataService.getAllGroups().then(function (groups) {
             $scope.possibleGroups = groups;
-        });
 
-        $dataService.getUser($scope.userId).then(function (user) {
-            $scope.email = user.email;
-            $scope.role = user.permission;
-            $scope.selectedGroup = user.group_id;
+            $dataService.getUser($scope.userId).then(function (user) {
+                $scope.email = user.email;
+                $scope.role = user.permission;
+
+                if (user.group_id) {
+                    for (var i = 0; i < $scope.possibleGroups.length; i++) {
+                        if($scope.possibleGroups[i].id === user.group_id){
+                            $scope.selectedGroup = $scope.possibleGroups[i];
+                        }
+                    }
+                }
+            });
         });
 
         $scope.saveUser = function () {
