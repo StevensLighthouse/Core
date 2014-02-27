@@ -25,4 +25,12 @@ class Stop < ActiveRecord::Base
 
   default_scope { where :deleted => false }
 
+  def as_json(options = {})
+    hash = super(options)
+
+    #merg in the categories 
+    categories = self.categories.map
+    hash.merge!(:categories => categories)
+    end
+
 end

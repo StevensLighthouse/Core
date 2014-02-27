@@ -123,6 +123,26 @@ delete '/stops/:id' do |id|
   end
 end
 
+# POST '/stop/:stop_id/category/:category_id
+# Add a category to a stop
+post '/stop/:stop_id/category/:category_id' do
+  redirect to('/login') unless current_user()
+  stop = Stop.find(params[:stop_id])
+  category = Category.find(params[:category_id])
+
+  # Add the category to the stop
+  stop.categories << category unless stop.categories.include? category
+
+  # Save the updated stop
+  if stop.save
+    { :stop => stop }.to_json
+    # Stop was not sucessfully saved, show errors
+  else
+    { :errors => stop.errors, :status => :unprocessable_entity }.to_json
+  end
+end
+
+
 private
 def stop_params
   params.allow(:name, :category, :description, :visibility, :lat, :lon, :parent_id)

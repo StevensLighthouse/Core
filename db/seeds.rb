@@ -28,3 +28,9 @@ t.save
 
 # Create a group
 g1 = Group.find_or_create_by(:name => 'Steven\'s', :description => 'School in Hoboken NJ')
+
+# Create categories
+c1 = Category.find_or_create_by(:name => 'Food', :description => 'Something you consume')
+c2 = Category.find_or_create_by(:name => 'Art', :description => 'A place where artwork such as sculptures, paintings, or pictures can be found')
+c3 = Category.find_or_create_by(:name => 'Bar', :description => 'A place to consume alcohol')
+c4 = Category.find_or_create_by(:name => 'Landmark', :description => 'An object or feature of the landscape that is easily seen or recognized from a distance')
