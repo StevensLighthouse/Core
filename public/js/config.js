@@ -319,14 +319,18 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
-        this.addStop = function (name, description, visibility, lat, lon) {
+        this.addStop = function (name, description, visibility, lat, lon, categories) {
             var d = $q.defer(),
+                category_ids = _.map(categories, function (category) {
+                    return category.id;
+                }),
                 param = {
                     name: name,
                     description: description,
                     visibility: visibility,
                     lat: lat,
-                    lon: lon
+                    lon: lon,
+                    categories: category_ids
                 };
 
             if (name && description && lat && lon) {
@@ -358,14 +362,18 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
-        this.updateStop = function (id, name, description, visibility, lat, lon) {
+        this.updateStop = function (id, name, description, visibility, lat, lon, categories) {
             var d = $q.defer(),
+                category_ids = _.map(categories, function (category) {
+                    return category.id;
+                }),
                 param = {
                     name: name,
                     description: description,
                     visibility: visibility,
                     lat: lat,
-                    lon: lon
+                    lon: lon,
+                    categories: category_ids
                 };
 
             if (name && description && lat && lon) {

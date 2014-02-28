@@ -319,7 +319,13 @@ coreControllers.controller('StopCreator',
         $scope.visibility = true;
         $scope.map = new mapShim();
         $scope.stop = new mapShim();
-        $scope.loaded = true;
+        $scope.categories = [];
+        $scope.allCategories = [];
+
+        $dataService.getAllCategories().then(function (categories) {
+            $scope.allCategories = categories;
+            $scope.loaded = true;
+        });
 
         $scope.geolocate = function () {
             if ($scope.address) {
@@ -344,10 +350,20 @@ coreControllers.controller('StopCreator',
             } else {
                 $scope.errorList = ["You must include a location in order to geolocate."];
             }
-        }
+        };
+
+        $scope.poolToList = function (category) {
+            $scope.allCategories.remove(category);
+            $scope.categories.push(category);
+        };
+
+        $scope.listToPool = function (category) {
+            $scope.categories.remove(category);
+            $scope.allCategories.push(category);
+        };
 
         $scope.saveStop = function () {
-            $dataService.addStop($scope.name, $scope.description, $scope.visibility, $scope.stop.center.latitude, $scope.stop.center.longitude)
+            $dataService.addStop($scope.name, $scope.description, $scope.visibility, $scope.stop.center.latitude, $scope.stop.center.longitude, $scope.categories)
                 .then(function () {
                     window.location = "#/stops";
                 }, function (errorList) {
@@ -364,6 +380,8 @@ coreControllers.controller('StopEditor',
         $scope.address = "";
         $scope.description = "";
         $scope.visibility = true;
+        $scope.categories = [];
+        $scope.allCategories = [];
         $scope.map = new mapShim();
         $scope.stop = new mapShim();
 
@@ -372,17 +390,41 @@ coreControllers.controller('StopEditor',
             $scope.description = stop.description;
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
-            $scope.loaded = true;
             $scope.visibility = stop.visibility;
+            $scope.categories = stop.categories;
+
+            $dataService.getAllCategories().then(function (categories) {
+                var usedDict = {};
+
+                for (var i = 0; i < $scope.categories.length; i++) {
+                    usedDict[$scope.categories[i].id] = true
+                }
+
+                $scope.allCategories = _.reject(categories, function (category) {
+                    return usedDict[category.id];
+                });
+
+                $scope.loaded = true;
+            });
         });
 
         $scope.saveStop = function () {
-            $dataService.updateStop($scope.stopId, $scope.name, $scope.description, $scope.visibility, $scope.stop.center.latitude, $scope.stop.center.longitude)
+            $dataService.updateStop($scope.stopId, $scope.name, $scope.description, $scope.visibility, $scope.stop.center.latitude, $scope.stop.center.longitude, $scope.categories)
                 .then(function () {
                     window.location = "#/stops";
                 }, function (errorList) {
                     $scope.errorList = errorList;
                 });
+        };
+
+        $scope.poolToList = function (category) {
+            $scope.allCategories.remove(category);
+            $scope.categories.push(category);
+        };
+
+        $scope.listToPool = function (category) {
+            $scope.categories.remove(category);
+            $scope.allCategories.push(category);
         };
     });
 

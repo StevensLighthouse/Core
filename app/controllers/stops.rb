@@ -42,6 +42,13 @@ post '/stops' do
   if @current_user.is_builder?
     @stop = Stop.create(stop_params)
     @stop.creator_id = @current_user.id
+    
+    if params[:categories]
+      categories = params[:categories].map { |cid| Category.find(cid) }
+      @stop.categories = categories.each_with_index.map do |category| 
+      category
+      end
+    end
 
     # Attempt to save the newly created stop
     if @stop.save
@@ -66,7 +73,13 @@ end
 put '/stops/:id' do |id|
   @stop = Stop.find(id)
 
-  # Attempt to update the stop
+  if params[:categories]
+    categories = params[:categories].map { |cid| Category.find(cid) }
+    @stop.categories = categories.each_with_index.map do |category| 
+      category
+    end
+  end
+    # Attempt to update the stop
   if @stop.update(stop_params)
     { :status => :updated, :stop => @stop }.to_json
   # The stop was not correctly updated, show errors
@@ -145,5 +158,5 @@ end
 
 private
 def stop_params
-  params.allow(:name, :category, :description, :visibility, :lat, :lon, :parent_id)
+  params.allow(:name, :description, :visibility, :lat, :lon, :parent_id)
 end

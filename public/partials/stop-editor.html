@@ -21,6 +21,31 @@
                     </div>
                     <div class="space-4"></div>
                     <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right">Categories</label>
+                        <div class="col-sm-9 col-sm-offset-1">
+                            <ul class="item-list" ui-sortable ng-model="categories">
+                                <li class="item-blue clearfix" ng-repeat="category in categories">
+                                    <div class="pull-left">
+                                        <img ng-src="{{ category.icon_base64 }}" class="mini-stop-icon">
+                                        <label class="inline">{{ category.name }}</label>
+                                    </div>
+                                    <div class="pull-right action-buttons">
+                                        <a href="javascript:void(0)" class="red" ng-click="listToPool(category)">
+                                            <i class="icon-trash bigger-130"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <div class="col-sm-9 col-sm-offset-3">
+                            <span class="label clickable data-label" ng-repeat="category in allCategories" ng-click="poolToList(category)">{{ category.name }}</span>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
                         <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Address</label>
                         <div class="col-sm-9">
                             <div class="input-group">
@@ -32,7 +57,6 @@
                                     </button>
                                 </span>
                             </div>
-
                         </div>
                     </div>
                     <div class="space-4"></div>
