@@ -395,7 +395,7 @@ coreControllers.controller('StopImporter',
         };
 
         $scope.cloneStop = function (stop) {
-            $dataService.cloneStop(stop.id).then(function(newStop) { 
+            $dataService.cloneStop(stop.id).then(function (newStop) {
                 window.location = "#/stops/" + newStop.id;
             });
         };
@@ -405,4 +405,97 @@ coreControllers.controller('StopImporter',
             $scope.stops = stops;
         })
 
+    });
+
+coreControllers.controller('Categories',
+    function ($scope, $dataService) {
+        $dataService.getAllCategories().then(function (categories) {
+            $scope.categories = categories;
+        });
+    });
+
+coreControllers.controller('CategoryCreator',
+    function ($scope, $dataService) {
+        $scope.verb = "Create";
+
+        $scope.name = "";
+        $scope.description = "";
+        $scope.fileData = {};
+
+        $scope.getIconSrc = function () {
+            if ($scope.fileData && $scope.fileData.type && $scope.fileData.type.indexOf("image/") >= 0 && $scope.fileData.encoded)
+                return "data:" + $scope.fileData.type + ";base64," + $scope.fileData.encoded;
+            return "";
+        };
+
+        $scope.saveCategory = function () {
+            $dataService.addCategory($scope.name, $scope.description, $scope.getIconSrc())
+                .then(function () {
+                    window.location = "#/categories";
+                }, function (errorList) {
+                    $scope.errorList = errorList;
+                });
+        };
+
+    });
+
+coreControllers.controller('CategoryDetails',
+    function ($scope, $routeParams, $dataService) {
+        $scope.categoryId = $routeParams.categoryId;
+        $scope.name = "";
+        $scope.description = "";
+        $scope.fileData = {};
+
+        $scope.getIconSrc = function () {
+            if ($scope.fileData && $scope.fileData.type && $scope.fileData.type.indexOf("image/") >= 0 && $scope.fileData.encoded)
+                return "data:" + $scope.fileData.type + ";base64," + $scope.fileData.encoded;
+            return "";
+        };
+
+        $dataService.getCategory($scope.categoryId).then(function (category) {
+            $scope.name = category.name;
+            $scope.description = category.description;
+
+            var split = category.icon_base64 ? category.icon_base64.split(";base64,") : [];
+            if (split.length) {
+                $scope.fileData.type = split[0].split("data:")[1];
+                $scope.fileData.encoded = split[1];
+            }
+        });
+    });
+
+
+coreControllers.controller('CategoryEditor',
+    function ($scope, $routeParams, $dataService) {
+        $scope.categoryId = $routeParams.categoryId;
+        $scope.verb = "Update";
+        $scope.name = "";
+        $scope.description = "";
+        $scope.fileData = {};
+
+        $scope.getIconSrc = function () {
+            if ($scope.fileData && $scope.fileData.type && $scope.fileData.type.indexOf("image/") >= 0 && $scope.fileData.encoded)
+                return "data:" + $scope.fileData.type + ";base64," + $scope.fileData.encoded;
+            return "";
+        };
+
+        $dataService.getCategory($scope.categoryId).then(function (category) {
+            $scope.name = category.name;
+            $scope.description = category.description;
+
+            var split = category.icon_base64 ? category.icon_base64.split(";base64,") : [];
+            if (split.length) {
+                $scope.fileData.type = split[0].split("data:")[1];
+                $scope.fileData.encoded = split[1];
+            }
+        });
+
+        $scope.saveCategory = function () {
+            $dataService.updateCategory($scope.categoryId, $scope.name, $scope.description, $scope.getIconSrc())
+                .then(function () {
+                    window.location = "#/categories";
+                }, function (errorList) {
+                    $scope.errorList = errorList;
+                });
+        };
     });

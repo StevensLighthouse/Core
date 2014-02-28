@@ -21,6 +21,43 @@ var PermissionDict = {
     4: "Site Admin"
 };
 
+coreApp.directive('base64FileUploader', function () {
+    return {
+        restrict: 'ACE',
+        template: '<input type="file" />',
+        replace: true,
+        scope: {
+            output: "="
+        },
+        link: function ($scope, element, attrs) {
+            var ele = element[0];
+
+            element.change(function (event) {
+                var files = ele.files,
+                    file = files[0];
+                
+                window.lolol = file;
+                
+                if (files && file) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (readerEvt) {
+                        var binaryString = readerEvt.target.result;
+                        $scope.$apply(function () {
+                            $scope.output = {
+                                type: file.type,
+                                encoded: btoa(binaryString)
+                            };
+                        });
+                    };
+
+                    reader.readAsBinaryString(file);
+                }
+            })
+        }
+    }
+});
+
 coreApp.factory("$dataService",
     function ($http, $q) {
         var self = this;
@@ -30,6 +67,7 @@ coreApp.factory("$dataService",
         this.globalStopList = [];
         this.userList = [];
         this.groupList = [];
+        this.categoryList = [];
 
         this.fixUserList = function (users) {
             var defaultGroup = {
@@ -628,10 +666,139 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+
+        // gets all the categories, naively caches them
+        this.getAllCategories = function () {
+            var d = $q.defer();
+
+            // naive caching
+            if (self.categoryList.length > 0) {
+                d.resolve(self.categoryList);
+            } else {
+                // if we've got no entries, we will download
+                $http.get('/categories.json').success(function (data) {
+                    self.categoryList = data.categories;
+                    d.resolve(self.categoryList);
+                });
+            }
+
+            return d.promise;
+        };
+
+        this.getCategory = function (id) {
+            var d = $q.defer();
+
+            function findCategory(id) {
+                if (typeof id === "string") {
+                    id = parseInt(id);
+                }
+
+                return _.findWhere(self.categoryList, {
+                    id: id
+                });
+            };
+
+            var category = findCategory(id);
+
+            if (!category) {
+                this.getAllCategories().then(function () {
+                    d.resolve(findCategory(id));
+                });
+            } else {
+                d.resolve(category);
+            }
+
+            return d.promise;
+        };
+
+
+        this.addCategory = function (name, description, icon_base64) {
+            var d = $q.defer(),
+                param = {
+                    name: name,
+                    description: description,
+                    icon_base64: icon_base64
+                };
+
+            if (name && description) {
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/categories",
+                    data: param
+                }).done(function (response) {
+                    if (response.status === "created") {
+                        if (self.categoryList.length) {
+                            self.categoryList.push(response.category);
+                            d.resolve(response.category);
+                        } else {
+                            self.getAllCategories().then(function () {
+                                d.resolve(response.category);
+                            });
+                        }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+            }
+
+            return d.promise;
+        };
+
+        this.updateCategory = function (id, name, description, icon_base64) {
+            var d = $q.defer(),
+                param = {
+                    name: name,
+                    description: description,
+                    icon_base64: icon_base64
+                };
+
+            if (name && description) {
+                $.ajax({
+                    dataType: "json",
+                    type: "PUT",
+                    url: "/categories/" + id,
+                    data: param
+                }).done(function (response) {
+                    var category = response.category,
+                        found = false;
+
+                    if (response.status === "updated") {
+                        for (var i = 0; i < self.categoryList.length && !found; i++) {
+                            if (self.categoryList[i].id === category.id) {
+                                self.categoryList[i] = category;
+                                found = true;
+                                d.resolve(category);
+                            }
+                        }
+                        if (!found) {
+                            self.getAllCategories().then(function () {
+                                d.resolve(category);
+                            })
+                        }
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
+                    }
+                }).fail(function (r) {
+                    d.reject(r);
+                });
+            } else {
+                d.reject(["Please provide all the data!"]);
+            }
+
+            return d.promise;
+
+        };
+
+
         this.getAllData = function () {
             var d = $q.defer();
 
-            this.getAllStops().then(this.getAllTours).then(this.getAllGroups).then(this.getAllUsers);
+            this.getAllCategories().then(this.getAllStops).then(this.getAllTours).then(this.getAllGroups).then(this.getAllUsers);
 
             return d.promise;
         };
@@ -713,6 +880,22 @@ coreApp.config(['$routeProvider',
         when('/stops/edit/:stopId', {
             templateUrl: 'partials/stop-editor.html',
             controller: 'StopEditor'
+        }).
+        when('/categories', {
+            templateUrl: 'partials/categories.html',
+            controller: 'Categories'
+        }).
+        when('/categories/new', {
+            templateUrl: 'partials/category-editor.html',
+            controller: 'CategoryCreator'
+        }).
+        when('/categories/:categoryId', {
+            templateUrl: 'partials/category.html',
+            controller: 'CategoryDetails'
+        }).
+        when('/categories/edit/:categoryId', {
+            templateUrl: 'partials/category-editor.html',
+            controller: 'CategoryEditor'
         }).
         otherwise({
             redirectTo: '/home'
