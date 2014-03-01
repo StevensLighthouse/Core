@@ -9,8 +9,8 @@ end
 # GET /users
 # Get all users that the requester has permission to access
 get '/users' do 
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   if @current_user.is_site_admin?
     @users = User.all
 
@@ -28,8 +28,8 @@ end
 # POST /users
 # Create a new user, if the requester has permission to do so
 post '/users' do
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
 
   if @current_user.is_group_admin?
     @user = User.create(user_params)
@@ -55,8 +55,8 @@ end
 # PUT /users/:id
 # Update a user, specify it by the ID and list the params you are updating
 put '/users/:id' do |id|
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
 
   if @current_user.is_group_admin?
     @user = User.find(id)

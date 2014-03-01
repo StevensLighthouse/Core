@@ -1,7 +1,7 @@
 enable :sessions
 
 get '/logged_in' do
-  user = current_user()
+  user = current_user
 
   respond_to do |wants|
     wants.html { user.to_json } 
@@ -42,8 +42,8 @@ post '/login' do
 end
 
 get '/logout' do
-  # log the current_user() out
-  user = current_user()
+  # log the current_user out
+  user = current_user
 
   # delete all sessions associated with this user
   Session.where(:user_id => user.id).destroy_all

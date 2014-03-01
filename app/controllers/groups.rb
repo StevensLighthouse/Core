@@ -1,8 +1,8 @@
 # GET /groups
 # Index of all all groups
 get '/groups' do
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   if @current_user.is_site_admin?
     @groups = Group.all
 
@@ -20,8 +20,8 @@ end
 # GET /groups/:id
 # Show a group by specifing an ID
 get '/groups/:id' do |id|
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   if @current_user.is_site_admin?
     @group = Group.find(id)
 
@@ -32,8 +32,8 @@ end
 # POST /groups
 # Create a new group
 post '/groups' do
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   if @current_user.is_site_admin?
     @group = Group.create(group_params)
     if @group.save
@@ -47,8 +47,8 @@ end
 # PUT /groups/:id
 # Update a group, specify it by the ID and list the params you are updating
 put '/groups/:id' do |id|
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
 
   if @current_user.is_group_admin?
     @group = Group.find(id)

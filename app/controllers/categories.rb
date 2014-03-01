@@ -9,8 +9,8 @@ end
 # POST /categories
 # Create a new category
 post '/categories' do
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   
   if @current_user.is_site_admin?
     @category = Category.create(category_params)
@@ -29,8 +29,8 @@ end
 # PUT /categories/:id
 # Update a category
 put '/categories/:id' do |id|
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   if @current_user.is_site_admin?
     @category = Category.find(id)
 
