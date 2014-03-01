@@ -8,6 +8,8 @@ class Stop < ActiveRecord::Base
   has_many :stop_tours
   has_and_belongs_to_many :categories
 
+  has_many :photos, :class_name => 'StopPhoto'
+
   # validators
   validates :name, :presence => true
   validates :description, :presence => true

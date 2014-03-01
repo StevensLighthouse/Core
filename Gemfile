@@ -11,6 +11,8 @@ group :default do
   gem 'factory_girl'
   gem 'protected_attributes', '1.0.3'
   gem 'bcrypt-ruby'
+  gem 'sinatra-formhelpers'
+  gem 'carrierwave'
 end
 
 group :development do

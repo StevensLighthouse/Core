@@ -1,3 +1,5 @@
+=begin
+
 require 'spec_helper'
 
 describe "User API" do
@@ -46,3 +48,4 @@ describe "User API" do
   end
 end
 
+=end
