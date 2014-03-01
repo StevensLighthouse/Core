@@ -1,8 +1,8 @@
 # GET /stops
 # Index of all stops the user owns
 get '/stops' do
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
 
   if @current_user.is_site_admin? 
     @stops = Stop.all
@@ -22,8 +22,8 @@ end
 # GET /stops/global
 # Index of all global stops
 get '/stops/global' do
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   if @current_user.is_editor?
     @stops = Stop.where(:visibility => true)
 
@@ -36,12 +36,17 @@ end
 # POST /stops
 # Create a new stop
 post '/stops' do
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   
   if @current_user.is_builder?
     @stop = Stop.create(stop_params)
     @stop.creator_id = @current_user.id
+    
+    if params[:categories]
+      categories = params[:categories].map { |cid| Category.find(cid) }
+      @stop.categories = categories
+    end
 
     # Attempt to save the newly created stop
     if @stop.save
@@ -66,7 +71,11 @@ end
 put '/stops/:id' do |id|
   @stop = Stop.find(id)
 
-  # Attempt to update the stop
+  if params[:categories]
+      categories = params[:categories].map { |cid| Category.find(cid) }
+      @stop.categories = categories
+  end
+    # Attempt to update the stop
   if @stop.update(stop_params)
     { :status => :updated, :stop => @stop }.to_json
   # The stop was not correctly updated, show errors
@@ -78,8 +87,8 @@ end
 # POST /stops/global/:id
 # Makes a stop into a global stop
 post '/stops/global/:id' do |id|
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   if @current_user.is_editor?
     @stop = Stop.find(id)
   
@@ -94,8 +103,8 @@ end
 # POST /stops/clone/:id
 # Clones the stop specified
 post '/stops/clone/:id' do |id|
-  redirect to('/login') unless current_user()
-  @current_user = current_user()
+  redirect to('/login') unless current_user
+  @current_user = current_user
   if @current_user.is_builder?
     @stop = Stop.find(id)
 
@@ -126,7 +135,7 @@ end
 # POST '/stop/:stop_id/category/:category_id
 # Add a category to a stop
 post '/stop/:stop_id/category/:category_id' do
-  redirect to('/login') unless current_user()
+  redirect to('/login') unless current_user
   stop = Stop.find(params[:stop_id])
   category = Category.find(params[:category_id])
 
@@ -145,5 +154,5 @@ end
 
 private
 def stop_params
-  params.allow(:name, :category, :description, :visibility, :lat, :lon, :parent_id)
+  params.allow(:name, :description, :visibility, :lat, :lon, :parent_id)
 end

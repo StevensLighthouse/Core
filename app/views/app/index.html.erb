@@ -113,6 +113,32 @@
                         </ul>
                     </li>
                     <% end %>
+                    <li class="targetable">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-edit"></i>
+                            <span class="menu-text">Categories</span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li>
+                                <a href="#/categories">
+                                    <i class="icon-double-angle-right"></i>
+                                    Manage Categories
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#/categories/new">
+                                    <i class="icon-double-angle-right"></i>
+                                    Add a Category
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                        <% if @current_user.is_group_admin? %>
+                            <% end %>
             </ul>
             <!-- /.nav-list -->
 
