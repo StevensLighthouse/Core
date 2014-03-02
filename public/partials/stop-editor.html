@@ -1,100 +1,145 @@
 <div class="page-header">
     <h1>{{verb}} a Stop</h1>
 </div>
-<div class="row">
-    <div class="col-xs-12">
-        <div class="row">
-            <div class="col-sm-6">
-                <form role="form" class="form-horizontal" action="" method="get" ng-submit="saveStop()">
-                    <div class="form-group">
-                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Name</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="col-xs-12 col-sm-12" placeholder="My Stop" ng-model="name">
-                        </div>
+<form role="form" class="form-horizontal" action="" method="get" ng-submit="saveStop()">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Name</label>
+                <div class="col-sm-9">
+                    <input type="text" class="col-xs-12 col-sm-12" placeholder="My Stop" ng-model="name">
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">Description</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" placeholder="Tell us about your stop" ng-model="description"></textarea>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label no-padding-right">Categories</label>
+                <div class="col-sm-9">
+                    <ul class="item-list" ui-sortable ng-model="categories">
+                        <li class="item-blue clearfix" ng-repeat="category in categories">
+                            <div class="pull-left">
+                                <img ng-src="{{ category.icon_base64 }}" class="mini-stop-icon">
+                                <label class="inline">{{ category.name }}</label>
+                            </div>
+                            <div class="pull-right action-buttons">
+                                <a href="javascript:void(0)" class="red" ng-click="listToPool(category)">
+                                    <i class="icon-trash bigger-130"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <span class="label clickable data-label" ng-repeat="category in allCategories" ng-click="poolToList(category)">{{ category.name }}</span>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Address</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-query" placeholder="Stop Address" ng-model="address">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-sm" ng-click="geolocate()">
+                                Locate
+                                <i class="icon-search icon-on-right bigger-110"></i>
+                            </button>
+                        </span>
                     </div>
-                    <div class="space-4"></div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label no-padding-right">Description</label>
-                        <div class="col-sm-9">
-                            <textarea class="form-control" placeholder="Tell us about your stop" ng-model="description"></textarea>
-                        </div>
+                </div>
+            </div>
+            <div class="space-4"></div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" class="ace" ng-model="visibility" />
+                        <span class="lbl">This stop is visible to the public.</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
+            <marker coords='stop.center'>
+                <window>
+                    <div class="infowindow">
+                        <h5>{{ name }}</h5>
+                        <p>{{ description }}</p>
                     </div>
-                    <div class="space-4"></div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label no-padding-right">Categories</label>
-                        <div class="col-sm-9 col-sm-offset-1">
-                            <ul class="item-list" ui-sortable ng-model="categories">
-                                <li class="item-blue clearfix" ng-repeat="category in categories">
-                                    <div class="pull-left">
-                                        <img ng-src="{{ category.icon_base64 }}" class="mini-stop-icon">
-                                        <label class="inline">{{ category.name }}</label>
-                                    </div>
-                                    <div class="pull-right action-buttons">
-                                        <a href="javascript:void(0)" class="red" ng-click="listToPool(category)">
-                                            <i class="icon-trash bigger-130"></i>
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
+                </window>
+            </marker>
+        </google-map>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Stop Gallery</h2>
+            <div class="row-fluid">
+                <ul class="ace-thumbnails">
+                    <li ng-repeat="image in images">
+                        <a class="cboxElement" href="assets/images/gallery/image-2.jpg" target="_blank">
+                            <img alt="150x150" src="assets/images/gallery/thumb-2.jpg">
+                            <div class="text">
+                                <div class="inner">Sample Caption on Hover</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Add Image</label>
+                                <div class="col-sm-9">
+                                    <file-uploader output="newImageFile"></file-uploader>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Image Description</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="col-xs-12 col-sm-12" placeholder="An image of {{ name || 'my stop' }}" ng-model="newImageDescription">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-info" type="button" ng-click="addImageFile()">
+                                    <i class="icon-ok bigger-110"></i>Add Image
+                                </button>
+                                <button class="btn btn-danger" ng-click="clearImage()" type="button">
+                                    <i class="icon-ok bigger-110"></i>Discard Image
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="space-4"></div>
-                    <div class="form-group">
-                        <div class="col-sm-9 col-sm-offset-3">
-                            <span class="label clickable data-label" ng-repeat="category in allCategories" ng-click="poolToList(category)">{{ category.name }}</span>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-                    <div class="form-group">
-                        <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Address</label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <input type="text" class="form-control search-query" placeholder="Stop Address" ng-model="address">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-sm" ng-click="geolocate()">
-                                        Locate
-                                        <i class="icon-search icon-on-right bigger-110"></i>
-                                    </button>
-                                </span>
+                        <div class="col-xs-6">
+                            <div class="form-group" ng-if="newImageFile">
+                                <img alt="" ng-src="{{ getImageSrc() }}" class="stop-preview-image">
                             </div>
                         </div>
                     </div>
-                    <div class="space-4"></div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" class="ace" ng-model="visibility" />
-                                <span class="lbl">This stop is visible to the public.</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="space-4"></div>
-                    <div class="clearfix form-actions">
-                        <div class="col-md-9">
-                            <button class="btn btn-info" type="submit">
-                                <i class="icon-ok bigger-110"></i>{{ verb }} Stop
-                            </button>
-                        </div>
-                    </div>
-                    <div class="alert alert-danger" ng-repeat="error in errorList">
-                        <strong>
-                            We couldn't submit that!
-                        </strong>
-                        {{ error }}
-                        <br>
-                    </div>
-                </form>
+                </div>
             </div>
-            <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
-                <marker coords='stop.center'>
-                    <window>
-                        <div class="infowindow">
-                            <h5>{{ name }}</h5>
-                            <p>{{ description }}</p>
-                        </div>
-                    </window>
-                </marker>
-            </google-map>
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="alert alert-danger" ng-repeat="error in errorList">
+            <strong>
+                We couldn't submit that!
+            </strong>
+            {{ error }}
+            <br>
+        </div>
+        <div class="clearfix form-actions">
+            <button class="btn btn-info" type="submit">
+                <i class="icon-ok bigger-110"></i>{{ verb }} Stop
+            </button>
+        </div>
+    </div>
+</form>

@@ -21,7 +21,7 @@ var PermissionDict = {
     4: "Site Admin"
 };
 
-coreApp.directive('base64FileUploader', function () {
+coreApp.directive('fileUploader', function () {
     return {
         restrict: 'ACE',
         template: '<input type="file" />',
@@ -32,12 +32,14 @@ coreApp.directive('base64FileUploader', function () {
         link: function ($scope, element, attrs) {
             var ele = element[0];
 
+            $scope.$watch('output', function (newVal) {
+                if (!newVal) element.val("");
+            });
+
             element.change(function (event) {
                 var files = ele.files,
                     file = files[0];
-                
-                window.lolol = file;
-                
+
                 if (files && file) {
                     var reader = new FileReader();
 
@@ -46,6 +48,8 @@ coreApp.directive('base64FileUploader', function () {
                         $scope.$apply(function () {
                             $scope.output = {
                                 type: file.type,
+                                file: file,
+                                name: file.name,
                                 encoded: btoa(binaryString)
                             };
                         });
@@ -53,7 +57,7 @@ coreApp.directive('base64FileUploader', function () {
 
                     reader.readAsBinaryString(file);
                 }
-            })
+            });
         }
     }
 });
@@ -227,6 +231,26 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.saveNewImage = function (stopId, imageFile, description) {
+            var d = $q.defer(),
+                formData = new FormData(),
+                client = new XMLHttpRequest();
+            
+            formData.append("stop_id", stopId);
+            // formData.append("photo", imageFile.file);
+            formData.append("description", description);
+
+            client.onreadystatechange = function () {
+                if (client.readyState == 4 && client.status == 200) {
+                    console.log(client.responseText);
+                }
+            }
+            client.open("POST", "/photos/upload", true);
+            client.setRequestHeader("Content-Type", "multipart/form-data");
+            client.send(formData);
+
+            return d.promise;
+        };
 
         this.getAllStops = function () {
             var d = $q.defer();

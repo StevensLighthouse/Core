@@ -24,15 +24,22 @@
 .angular-google-map-container {
     height: 400px;
 }
-
 .infowindow {
     min-height: 150px;
 }
 .data-label {
     margin-right: 10px;
 }
-.mini-stop-icon{
+.mini-stop-icon {
     max-width: 20px;
     max-height: 20px;
     margin-right: 5px;
+}
+.stop-preview {
+    text-align: center;
+}
+.stop-preview-image {
+    margin: 0 auto 10px auto;
+    max-width: 100%;
+    display: block;
 }

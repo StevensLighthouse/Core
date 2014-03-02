@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Upload Image</label>
                         <div class="col-sm-9">
-                            <base64-file-uploader output="fileData"></base64-file-uploader>
+                            <file-uploader output="fileData"></file-uploader>
                         </div>
                     </div>
                     <div class="space-4"></div>
@@ -39,12 +39,10 @@
                 <br>
             </div>
             <div class="clearfix form-actions">
-                <div class="col-md-9">
-                    <button class="btn btn-info" type="submit">
-                        <i class="icon-ok bigger-110"></i>
-                        {{ verb }} Category
-                    </button>
-                </div>
+                <button class="btn btn-info" type="submit">
+                    <i class="icon-ok bigger-110"></i>
+                    {{ verb }} Category
+                </button>
             </div>
         </form>
     </div>
