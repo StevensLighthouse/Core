@@ -237,7 +237,7 @@ coreApp.factory("$dataService",
                 client = new XMLHttpRequest();
             
             formData.append("stop_id", stopId);
-            // formData.append("photo", imageFile.file);
+            formData.append("photo", imageFile.file);
             formData.append("description", description);
 
             client.onreadystatechange = function () {
