@@ -390,9 +390,11 @@ coreControllers.controller('StopEditor',
         $scope.newImageDescription = "";
 
         $scope.getImageSrc = function () {
-            if ($scope.newImageFile && $scope.newImageFile.type && $scope.newImageFile.type.indexOf("image/") >= 0 && $scope.newImageFile.encoded)
+            if ($scope.newImageFile && $scope.newImageFile.type && $scope.newImageFile.type.indexOf("image/") >= 0 && $scope.newImageFile.encoded){
                 return "data:" + $scope.newImageFile.type + ";base64," + $scope.newImageFile.encoded;
-            return "";
+            }
+
+            return null;
         };
 
         $scope.clearImage = function () {
@@ -414,7 +416,8 @@ coreControllers.controller('StopEditor',
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.visibility = stop.visibility;
             $scope.categories = stop.categories;
-
+            $scope.images = stop.photos;
+            
             $dataService.getAllCategories().then(function (categories) {
                 var usedDict = {};
 

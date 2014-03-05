@@ -39,7 +39,11 @@
     text-align: center;
 }
 .stop-preview-image {
-    margin: 0 auto 10px auto;
     max-width: 100%;
-    display: block;
+    max-height: 70px;
+    display: inline-block;
+}
+.mini-gallery {
+    max-width: 75px;
+    max-height: 75px;
 }

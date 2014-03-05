@@ -79,54 +79,52 @@
         </google-map>
     </div>
     <div class="row">
-        <div class="col-xs-12">
-            <h2>Stop Gallery</h2>
+        <h2>Stop Gallery</h2>
+        <div class="col-xs-6">
             <div class="row-fluid">
                 <ul class="ace-thumbnails">
                     <li ng-repeat="image in images">
-                        <a class="cboxElement" href="{{ image.photo.url }}" target="_blank">
+                        <a class="cboxElement mini-gallery" href="{{ image.photo.url }}" target="_blank">
                             <img alt=" {{ image.description }}" ng-src="{{ image.photo.url }}">
                             <div class="text">
-                                <div class="inner"> {{ image.description }}</div>
+                                <div class="inner">{{ image.description }}</div>
                             </div>
                         </a>
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class="col-xs-6">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Add Image</label>
-                                <div class="col-sm-9">
-                                    <file-uploader output="newImageFile"></file-uploader>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="form-field-1" class="col-sm-3 control-label no-padding-right">Image Description</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="col-xs-12 col-sm-12" placeholder="An image of {{ name || 'my stop' }}" ng-model="newImageDescription">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-info" type="button" ng-click="addImageFile()">
-                                    <i class="icon-ok bigger-110"></i>Add Image
-                                </button>
-                                <button class="btn btn-danger" ng-click="clearImage()" type="button">
-                                    <i class="icon-ok bigger-110"></i>Discard Image
-                                </button>
-                            </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Add Image</label>
+                        <div class="col-sm-9">
+                            <file-uploader output="newImageFile"></file-uploader>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="form-group" ng-if="newImageFile">
-                                <img alt="" ng-src="{{ getImageSrc() }}" class="stop-preview-image">
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-3 no-padding-right text-right">
+                            <img alt="" ng-src="{{ getImageSrc() }}" class="stop-preview-image" ng-show="newImageFile">
+                        </div>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" rows="3" placeholder="An image of {{ name || 'my stop' }}" ng-model="newImageDescription"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-right">
+                            <button class="btn btn-danger" ng-click="clearImage()" type="button">
+                                <i class="icon-ok bigger-110"></i>Discard
+                            </button>
+                            <button class="btn btn-info" type="button" ng-click="addImageFile()">
+                                <i class="icon-ok bigger-110"></i>Upload
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <div class="row">
         <div class="alert alert-danger" ng-repeat="error in errorList">
