@@ -6,3 +6,4 @@ db/lighthouse_development.sqlite
 **.sqlite
 .bundle/
 .DS_Store
+public/uploads
