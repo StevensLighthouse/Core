@@ -13,10 +13,10 @@ post '/photos/upload' do
 
   if @sp
     # success
-    "Success"
+     { :status => :success, :image => @sp }.to_json 
   else
     # failed to create photo
-    "Failure"
+      { :status => :unprocessable_entity, :errors => @sp.errors }.to_json
   end
 end
 
@@ -33,5 +33,5 @@ end
 
 private
 def photo_params
-  params.allow(:description, :photo)
+  params.allow(:description, :photo, :stop_id)
 end

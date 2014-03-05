@@ -384,6 +384,28 @@ coreControllers.controller('StopEditor',
         $scope.allCategories = [];
         $scope.map = new mapShim();
         $scope.stop = new mapShim();
+        $scope.images = [];
+        $scope.newImages = [];
+        $scope.newImageFile = null;
+        $scope.newImageDescription = "";
+
+        $scope.getImageSrc = function () {
+            if ($scope.newImageFile && $scope.newImageFile.type && $scope.newImageFile.type.indexOf("image/") >= 0 && $scope.newImageFile.encoded)
+                return "data:" + $scope.newImageFile.type + ";base64," + $scope.newImageFile.encoded;
+            return "";
+        };
+
+        $scope.clearImage = function () {
+            $scope.newImageFile = null;
+        };
+
+        $scope.addImageFile = function () {
+            $dataService.saveNewImage($scope.stopId, $scope.newImageFile, $scope.newImageDescription).then(function (image) {
+                $scope.images.push(image);
+                $scope.newImageFile = null;
+                $scope.newImageDescription = null;
+            });
+        };
 
         $dataService.getStop($scope.stopId).then(function (stop) {
             $scope.name = stop.name;
