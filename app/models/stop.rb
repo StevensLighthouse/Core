@@ -32,9 +32,9 @@ class Stop < ActiveRecord::Base
 
     # merge in the categories 
     categories = self.categories
-    stopohotos = self.photos
+    stop_photos = self.photos
 
-    hash.merge!(:categories => categories, :photos => stopohotos)
+    hash.merge!(:categories => categories, :photos => stop_photos)
     end
 
 end
