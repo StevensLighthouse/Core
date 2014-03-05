@@ -30,9 +30,11 @@ class Stop < ActiveRecord::Base
   def as_json(options = {})
     hash = super(options)
 
-    #merg in the categories 
-    categories = self.categories.map
-    hash.merge!(:categories => categories)
+    # merge in the categories 
+    categories = self.categories
+    stopohotos = self.photos
+
+    hash.merge!(:categories => categories, :photos => stopohotos)
     end
 
 end
