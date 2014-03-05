@@ -237,7 +237,7 @@ coreApp.factory("$dataService",
                 client = new XMLHttpRequest();
 
             formData.append("stop_id", stopId);
-            formData.append("photo", imageFile.file, imageFile.file.name);
+            formData.append("photo", imageFile.file);
             formData.append("description", description);
 
             client.onreadystatechange = function () {
@@ -245,11 +245,11 @@ coreApp.factory("$dataService",
                     console.log(client.responseText);
                 }
             }
+
             client.open("POST", "/photos/upload", true);
             client.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            client.setRequestHeader("Content-Type", "multipart/form-data");
             client.send(formData);
-
+            
             return d.promise;
         };
 
