@@ -84,10 +84,10 @@
             <div class="row-fluid">
                 <ul class="ace-thumbnails">
                     <li ng-repeat="image in images">
-                        <a class="cboxElement" href="assets/images/gallery/image-2.jpg" target="_blank">
-                            <img alt="150x150" src="assets/images/gallery/thumb-2.jpg">
+                        <a class="cboxElement" href="{{ image.photo.url }}" target="_blank">
+                            <img alt=" {{ image.description }}" ng-src="{{ image.photo.url }}">
                             <div class="text">
-                                <div class="inner">Sample Caption on Hover</div>
+                                <div class="inner"> {{ image.description }}</div>
                             </div>
                         </a>
                     </li>

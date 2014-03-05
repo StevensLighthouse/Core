@@ -402,6 +402,8 @@ coreControllers.controller('StopEditor',
         $scope.addImageFile = function () {
             $dataService.saveNewImage($scope.stopId, $scope.newImageFile, $scope.newImageDescription).then(function (image) {
                 $scope.images.push(image);
+                $scope.newImageFile = null;
+                $scope.newImageDescription = null;
             });
         };
 

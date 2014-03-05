@@ -242,14 +242,19 @@ coreApp.factory("$dataService",
 
             client.onreadystatechange = function () {
                 if (client.readyState == 4 && client.status == 200) {
-                    console.log(client.responseText);
+                    var response = JSON.parse(client.responseText);
+                    if (response.status === "success") {
+                        d.resolve(response.image);
+                    } else {
+                        d.reject(self.fixErrorList(response.errors));
+                    }
                 }
             }
 
             client.open("POST", "/photos/upload", true);
             client.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             client.send(formData);
-            
+
             return d.promise;
         };
 
