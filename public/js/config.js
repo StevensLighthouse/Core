@@ -11,7 +11,7 @@ Array.prototype.remove = function () {
     return this;
 };
 
-var coreApp = angular.module('core', ['google-maps', 'ngRoute', 'ui.sortable', 'coreControllers']);
+var coreApp = angular.module('core', ['google-maps', 'ngRoute', 'ui.sortable', 'ui.bootstrap', 'coreControllers']);
 
 var PermissionDict = {
     0: "Deactivated",
