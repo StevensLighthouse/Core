@@ -401,7 +401,7 @@ coreControllers.controller('PhotoModal',
         };
 
         $scope.delete = function () {
-            $dataService.deleteStopPhoto($scope.image.stop_id, $scope.image.id).then(function () {
+            $dataService.deleteStopPhoto($scope.image.id, $scope.image.stop_id).then(function () {
                 $modalInstance.close(new ModalResult(stopPhoto, ModalState.deleted));
             }, function (errorList) {
                 $scope.errorList = errorList;
