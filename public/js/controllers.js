@@ -14,6 +14,17 @@ mapShim.prototype.setCenter = function (lat, lng) {
     this.center.longitude = lng;
 };
 
+var ModalState = {
+    "deleted": -1,
+    "canceled": 0,
+    "saved": 1
+};
+
+function ModalResult(data, state) {
+    this.data = data;
+    this.state = state || ModalState.cancel;
+};
+
 coreControllers.controller('Home',
     function ($scope, $dataService) {
         $dataService.getAllData();
@@ -372,8 +383,34 @@ coreControllers.controller('StopCreator',
         };
     });
 
+coreControllers.controller('PhotoModal',
+    function ($scope, $modalInstance, stopPhoto, $dataService) {
+        $scope.image = stopPhoto;
+        $scope.errorList = [];
+
+        $scope.update = function () {
+            $dataService.updateStopPhoto($scope.image.id, $scope.image.stop_id, $scope.image.description).then(function () {
+                $modalInstance.close(new ModalResult(stopPhoto, ModalState.saved));
+            }, function (errorList) {
+                $scope.errorList = errorList;
+            });
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.close(new ModalResult(stopPhoto, ModalState.canceled));
+        };
+
+        $scope.delete = function () {
+            $dataService.deleteStopPhoto($scope.image.stop_id, $scope.image.id).then(function () {
+                $modalInstance.close(new ModalResult(stopPhoto, ModalState.deleted));
+            }, function (errorList) {
+                $scope.errorList = errorList;
+            });
+        };
+    });
+
 coreControllers.controller('StopEditor',
-    function ($scope, $routeParams, $dataService) {
+    function ($scope, $routeParams, $modal, $dataService) {
         $scope.stopId = $routeParams.stopId;
         $scope.verb = "Update";
         $scope.name = "";
@@ -387,10 +424,32 @@ coreControllers.controller('StopEditor',
         $scope.images = [];
         $scope.newImages = [];
         $scope.newImageFile = null;
+        $scope.showGallery = true;
         $scope.newImageDescription = "";
 
+        $scope.openImage = function (image) {
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/stop-photo-modal.html',
+                controller: 'PhotoModal',
+                resolve: {
+                    stopPhoto: function () {
+                        return image;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.images.remove(result.data);
+                }
+            }, function (data) {
+                console.log("failed");
+                console.log(data);
+            });
+        };
+
         $scope.getImageSrc = function () {
-            if ($scope.newImageFile && $scope.newImageFile.type && $scope.newImageFile.type.indexOf("image/") >= 0 && $scope.newImageFile.encoded){
+            if ($scope.newImageFile && $scope.newImageFile.type && $scope.newImageFile.type.indexOf("image/") >= 0 && $scope.newImageFile.encoded) {
                 return "data:" + $scope.newImageFile.type + ";base64," + $scope.newImageFile.encoded;
             }
 
@@ -417,7 +476,7 @@ coreControllers.controller('StopEditor',
             $scope.visibility = stop.visibility;
             $scope.categories = stop.categories;
             $scope.images = stop.photos;
-            
+
             $dataService.getAllCategories().then(function (categories) {
                 var usedDict = {};
 

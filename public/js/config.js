@@ -185,6 +185,60 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.updateStopPhoto = function (photo_id, stop_id, description) {
+            var d = $q.defer(),
+                param = {
+                    stop_id: stop_id,
+                    description: description
+                };
+
+            $.ajax({
+                dataType: "json",
+                type: "PUT",
+                url: "/photos/" + photo_id,
+                data: param
+            }).done(function (response) {
+                console.log(response);
+
+                if (response.status === "updated") {
+                    d.resolve(response);
+                } else {
+                    d.reject(self.fixErrorList(response.errors));
+                }
+            }).fail(function (r) {
+                d.reject(r);
+            });
+
+            return d.promise;
+        };
+
+        this.deleteStopPhoto = function (photo_id, stop_id) {
+            var d = $q.defer(),
+                param = {
+                    stop_id: stop_id
+                };
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/photos/" + photo_id,
+                data: param
+            }).done(function (response) {
+                console.log(response);
+
+                if (response.status === "deleted") {
+                    d.resolve(response);
+                } else {
+                    d.reject(self.fixErrorList(response.errors));
+                }
+            }).fail(function (r) {
+                console.log(r);
+                d.reject(r);
+            });
+
+            return d.promise;
+        };
+
         this.updateTour = function (id, name, description, visibility, lat, lon, stops) {
             var d = $q.defer(),
                 stopIds = _.map(stops, function (stop) {

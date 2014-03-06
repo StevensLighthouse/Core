@@ -22,13 +22,13 @@ end
 
 # PUT: Update data for a photo
 put '/photos/:id' do
-
+  { :status => :updated }.to_json
 end
 
 # DELETE: Destroy this photo, delete
 # associated data
 delete '/photos/:id' do
-
+  { :status => :deleted }.to_json
 end
 
 private
