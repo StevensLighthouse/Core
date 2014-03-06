@@ -4,12 +4,12 @@
 <div class="modal-body">
     <div class="row">
         <div class="col-xs-2 no-padding-right text-right">
-            <a href="{{image.photo.url}}" target=_ "blank">
-                <img class="mini-gallery" alt=" {{ image.description }}" ng-src="{{ image.photo.url }}">
+            <a href="{{ imageData.currentPhoto.photo.url }}" target=_ "blank">
+                <img class="mini-gallery" alt=" {{ imageData.newDescription }}" ng-src="{{ imageData.currentPhoto.photo.url }}">
             </a>
         </div>
         <div class="col-sm-10">
-            <textarea class="form-control" rows="3" placeholder="Add an image description!" ng-model="image.description"></textarea>
+            <textarea class="form-control" rows="3" placeholder="Add an image description!" ng-model="imageData.newDescription"></textarea>
         </div>
         <div class="alert alert-danger" ng-repeat="error in errorList">
             <strong>

@@ -385,24 +385,30 @@ coreControllers.controller('StopCreator',
 
 coreControllers.controller('PhotoModal',
     function ($scope, $modalInstance, stopPhoto, $dataService) {
-        $scope.image = stopPhoto;
+        $scope.imageData = { 
+            currentPhoto: stopPhoto, 
+            newDescription: stopPhoto.description
+        };
         $scope.errorList = [];
 
         $scope.update = function () {
-            $dataService.updateStopPhoto($scope.image.id, $scope.image.stop_id, $scope.image.description).then(function () {
-                $modalInstance.close(new ModalResult(stopPhoto, ModalState.saved));
+            var curr = $scope.imageData.currentPhoto;
+            $dataService.updateStopPhoto(curr.id, curr.stop_id, $scope.imageData.newDescription).then(function () {
+                curr.description = $scope.imageData.newDescription;
+                $modalInstance.close(new ModalResult(curr, ModalState.saved));
             }, function (errorList) {
                 $scope.errorList = errorList;
             });
         };
 
         $scope.cancel = function () {
-            $modalInstance.close(new ModalResult(stopPhoto, ModalState.canceled));
+            $modalInstance.close(new ModalResult(curr, ModalState.canceled));
         };
 
         $scope.delete = function () {
-            $dataService.deleteStopPhoto($scope.image.id, $scope.image.stop_id).then(function () {
-                $modalInstance.close(new ModalResult(stopPhoto, ModalState.deleted));
+            var curr = $scope.imageData.currentPhoto;
+            $dataService.deleteStopPhoto(curr.id, curr.stop_id).then(function () {
+                $modalInstance.close(new ModalResult(curr, ModalState.deleted));
             }, function (errorList) {
                 $scope.errorList = errorList;
             });

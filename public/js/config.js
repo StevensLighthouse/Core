@@ -198,10 +198,8 @@ coreApp.factory("$dataService",
                 url: "/photos/" + photo_id,
                 data: param
             }).done(function (response) {
-                console.log(response);
-
                 if (response.status === "updated") {
-                    d.resolve(response);
+                    d.resolve(response.image);
                 } else {
                     d.reject(self.fixErrorList(response.errors));
                 }
@@ -224,8 +222,6 @@ coreApp.factory("$dataService",
                 url: "/photos/" + photo_id,
                 data: param
             }).done(function (response) {
-                console.log(response);
-
                 if (response.status === "deleted") {
                     d.resolve(response);
                 } else {
