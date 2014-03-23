@@ -32,10 +32,8 @@ namespace :deploy do
 
   after :restart, :migrate_database do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
-      namespace :production do 
-        within release_path do
-          execute :rake, 'db:migrate'
-        end
+      within release_path do
+        execute :rake, 'db:migrate RACK_ENV=production'
       end
     end
   end
