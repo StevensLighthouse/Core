@@ -1,9 +1,6 @@
 development:
-  adapter: mysql2
-  host: localhost
-  username: root
-  password: 
-  database: lighthouse_development 
+  adapter: sqlite3
+  database: db/lighthouse_development.sqlite
 
 production:
   adapter: mysql2
@@ -13,9 +10,5 @@ production:
   database: lighthouse_production 
 
 test:
-  adapter: mysql2
-  adapter: mysql2
-  host: localhost
-  username: root
-  password: 
-  database: lighthouse_test
+  adapter: sqlite3
+  database: db/lighthouse_test.sqlite
