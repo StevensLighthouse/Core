@@ -1,6 +1,9 @@
 development:
-  adapter: sqlite3
-  database: db/lighthouse_development.sqlite
+  adapter: mysql2
+  host: localhost
+  username: root
+  password: 
+  database: lighthouse_development 
 
 production:
   adapter: mysql2
