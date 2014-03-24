@@ -31,13 +31,36 @@ coreControllers.controller('Home',
     });
 
 coreControllers.controller('Tours',
-    function ($scope, $dataService) {
+    function ($scope, $dataService, $modal) {
         $scope.tours = [];
         $scope.map = new mapShim();
 
         $scope.centerOnTour = function (tour) {
             $scope.map.setCenter(tour.lat, tour.lon);
         };
+
+        $scope.deleteTour = function (tour) {
+            console.log(tour);
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/deletion-modal.html',
+                controller: 'DeletionModal',
+                resolve: {
+                    dataName: function () {
+                        return "tour";
+                    },
+                    name: function () {
+                        return tour.name;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.tours.remove(tour);
+                    $dataService.deleteTour(tour.id);
+                }
+            });
+        }
 
         $dataService.getAllTours().then(function (tours) {
             $scope.tours = tours;
@@ -385,8 +408,8 @@ coreControllers.controller('StopCreator',
 
 coreControllers.controller('PhotoModal',
     function ($scope, $modalInstance, stopPhoto, $dataService) {
-        $scope.imageData = { 
-            currentPhoto: stopPhoto, 
+        $scope.imageData = {
+            currentPhoto: stopPhoto,
             newDescription: stopPhoto.description
         };
         $scope.errorList = [];
@@ -412,6 +435,20 @@ coreControllers.controller('PhotoModal',
             }, function (errorList) {
                 $scope.errorList = errorList;
             });
+        };
+    });
+
+coreControllers.controller('DeletionModal',
+    function ($scope, $modalInstance, dataName, name, $dataService) {
+        $scope.dataName = dataName;
+        $scope.name = name;
+
+        $scope.cancel = function () {
+            $modalInstance.close(new ModalResult(null, ModalState.canceled));
+        };
+
+        $scope.delete = function () {
+            $modalInstance.close(new ModalResult(null, ModalState.deleted));
         };
     });
 

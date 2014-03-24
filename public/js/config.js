@@ -142,6 +142,36 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.deleteTour = function (id) {
+            var d = $q.defer();
+
+            function findTour(id) {
+                if (typeof id === "string") {
+                    id = parseInt(id);
+                }
+
+                return _.findWhere(self.tourList, {
+                    id: id
+                });
+            };
+
+            var tour = findTour(id);
+
+            this.tourList.remove(tour);
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/tours/" + id
+            }).done(function (response) {
+                d.resolve();
+            }).fail(function (r) {
+                d.reject(r);
+            });
+
+            return d.promise;
+        };
+
         this.addTour = function (name, description, visibility, lat, lon, stops) {
             var d = $q.defer(),
                 stopIds = _.map(stops, function (stop) {
