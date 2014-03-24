@@ -426,7 +426,7 @@ coreApp.factory("$dataService",
 
             if (!stop) {
                 this.getAllStops().then(function () {
-                    d.resolve(findStop(id));
+                    d.resolve(self.findStop(id));
                 });
             } else {
                 d.resolve(stop);
