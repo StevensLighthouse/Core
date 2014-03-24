@@ -85,7 +85,7 @@
                 <ul class="ace-thumbnails">
                     <li ng-repeat="image in images">
                         <a class="cboxElement mini-gallery" href="" ng-click="openImage(image)">
-                            <img alt=" {{ image.description }}" ng-src="{{ image.photo.url }}">
+                            <img alt=" {{ image.description }}" ng-src="{{ image.photo.url }}" class="contained">
                             <div class="text">
                                 <div class="inner">{{ image.description }}</div>
                             </div>
