@@ -189,10 +189,32 @@ coreControllers.controller('TourDetails',
     });
 
 coreControllers.controller('Groups',
-    function ($scope, $dataService) {
+    function ($scope, $dataService, $modal) {
         $dataService.getAllGroups().then(function (groups) {
             $scope.groups = groups;
         });
+
+        $scope.deleteGroup = function (group) {
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/deletion-modal.html',
+                controller: 'DeletionModal',
+                resolve: {
+                    dataName: function () {
+                        return "group";
+                    },
+                    name: function () {
+                        return group.name;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.groups.remove(group);
+                    $dataService.deleteGroup(group.id);
+                }
+            });
+        };
     });
 
 coreControllers.controller('GroupCreator',
@@ -321,7 +343,7 @@ coreControllers.controller('Stops',
         $scope.centerOnStop = function (stop) {
             $scope.map.setCenter(stop.lat, stop.lon);
         };
-        
+
         $scope.deleteStop = function (stop) {
             var modalInstance = $modal.open({
                 templateUrl: '/partials/deletion-modal.html',

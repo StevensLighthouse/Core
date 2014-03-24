@@ -548,24 +548,42 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.findGroup = function (id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.groupList, {
+                id: id
+            });
+        };
+
+        this.deleteGroup = function (id) {
+            var d = $q.defer(),
+                group = this.findGroup(id);
+
+            this.groupList.remove(group);
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/groups/" + id
+            }).done(function (response) {
+                d.resolve();
+            }).fail(function (r) {
+                d.reject(r);
+            });
+
+            return d.promise;
+        };
+        
         this.getGroup = function (id) {
-            var d = $q.defer();
-
-            function findGroup(id) {
-                if (typeof id === "string") {
-                    id = parseInt(id);
-                }
-
-                return _.findWhere(self.groupList, {
-                    id: id
-                });
-            };
-
-            var group = findGroup(id);
+            var d = $q.defer(),
+                group = this.findGroup(id);
 
             if (!group) {
                 this.getAllGroups().then(function () {
-                    d.resolve(findGroup(id));
+                    d.resolve(self.findGroup(id));
                 });
             } else {
                 d.resolve(group);
