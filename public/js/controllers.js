@@ -40,7 +40,6 @@ coreControllers.controller('Tours',
         };
 
         $scope.deleteTour = function (tour) {
-            console.log(tour);
             var modalInstance = $modal.open({
                 templateUrl: '/partials/deletion-modal.html',
                 controller: 'DeletionModal',
@@ -60,7 +59,7 @@ coreControllers.controller('Tours',
                     $dataService.deleteTour(tour.id);
                 }
             });
-        }
+        };
 
         $dataService.getAllTours().then(function (tours) {
             $scope.tours = tours;
@@ -316,11 +315,33 @@ coreControllers.controller('UserEditor',
     });
 
 coreControllers.controller('Stops',
-    function ($scope, $dataService) {
+    function ($scope, $dataService, $modal) {
         $scope.map = new mapShim();
 
         $scope.centerOnStop = function (stop) {
             $scope.map.setCenter(stop.lat, stop.lon);
+        };
+        
+        $scope.deleteStop = function (stop) {
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/deletion-modal.html',
+                controller: 'DeletionModal',
+                resolve: {
+                    dataName: function () {
+                        return "stop";
+                    },
+                    name: function () {
+                        return stop.name;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.stops.remove(stop);
+                    $dataService.deleteStop(stop.id);
+                }
+            });
         };
 
         $dataService.getAllStops().then(function (stops) {
