@@ -13,6 +13,9 @@ class Tour < ActiveRecord::Base
   validates :lat, :numericality => { :greater_than => -90.0, :less_than => 90.0 }
   validates :lon, :numericality => { :greater_than => -180.0, :less_than => 180.0 }
 
+
+  default_scope where(:deleted => false)
+
   scope :public_within, -> (lat, lon, boundary) do
     boundary ||= 0.005
     where(:visibility => true,
