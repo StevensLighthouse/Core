@@ -1,0 +1,14 @@
+development:
+  adapter: sqlite3
+  database: db/lighthouse_development.sqlite
+
+production:
+  adapter: mysql2
+  host: localhost
+  username: root
+  password: 
+  database: lighthouse_production 
+
+test:
+  adapter: sqlite3
+  database: db/lighthouse_test.sqlite

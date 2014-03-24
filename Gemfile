@@ -18,6 +18,7 @@ end
 group :development do
   gem 'capistrano'
   gem 'capistrano-rvm'
+  gem 'capistrano-rails'
 	gem 'shotgun'
   gem 'sqlite3'
   gem 'guard'

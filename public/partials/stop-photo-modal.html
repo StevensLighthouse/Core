@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h3>Photo Editor</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-xs-2 no-padding-right text-right">
+            <a href="{{ imageData.currentPhoto.photo.url }}" target=_ "blank">
+                <img class="mini-gallery" alt=" {{ imageData.newDescription }}" ng-src="{{ imageData.currentPhoto.photo.url }}">
+            </a>
+        </div>
+        <div class="col-sm-10">
+            <textarea class="form-control" rows="3" placeholder="Add an image description!" ng-model="imageData.newDescription"></textarea>
+        </div>
+        <div class="alert alert-danger" ng-repeat="error in errorList">
+            <strong>
+                We couldn't submit that!
+            </strong>
+            {{ error }}
+            <br>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-danger" ng-click="delete()">Delete</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="update()">Save</button>
+</div>

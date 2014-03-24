@@ -15,6 +15,10 @@ set :linked_files, %w{config/database.yml}
 
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 # set :keep_releases, 5
+#
+
+
+set :rack_env, :production
 
 namespace :deploy do
 
@@ -26,12 +30,11 @@ namespace :deploy do
     end
   end
 
-  after :restart, :clear_cache do
+  after :restart, :migrate_database do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+      within release_path do
+        execute :rake, 'db:migrate RACK_ENV=production'
+      end
     end
   end
 

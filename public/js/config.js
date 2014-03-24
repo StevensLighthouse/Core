@@ -11,7 +11,7 @@ Array.prototype.remove = function () {
     return this;
 };
 
-var coreApp = angular.module('core', ['google-maps', 'ngRoute', 'ui.sortable', 'coreControllers']);
+var coreApp = angular.module('core', ['google-maps', 'ngRoute', 'ui.sortable', 'ui.bootstrap', 'coreControllers']);
 
 var PermissionDict = {
     0: "Deactivated",
@@ -181,6 +181,56 @@ coreApp.factory("$dataService",
             } else {
                 d.reject(["Please provide all the data!"]);
             }
+
+            return d.promise;
+        };
+
+        this.updateStopPhoto = function (photo_id, stop_id, description) {
+            var d = $q.defer(),
+                param = {
+                    stop_id: stop_id,
+                    description: description
+                };
+
+            $.ajax({
+                dataType: "json",
+                type: "PUT",
+                url: "/photos/" + photo_id,
+                data: param
+            }).done(function (response) {
+                if (response.status === "updated") {
+                    d.resolve(response.image);
+                } else {
+                    d.reject(self.fixErrorList(response.errors));
+                }
+            }).fail(function (r) {
+                d.reject(r);
+            });
+
+            return d.promise;
+        };
+
+        this.deleteStopPhoto = function (photo_id, stop_id) {
+            var d = $q.defer(),
+                param = {
+                    stop_id: stop_id
+                };
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/photos/" + photo_id,
+                data: param
+            }).done(function (response) {
+                if (response.status === "deleted") {
+                    d.resolve(response);
+                } else {
+                    d.reject(self.fixErrorList(response.errors));
+                }
+            }).fail(function (r) {
+                console.log(r);
+                d.reject(r);
+            });
 
             return d.promise;
         };

@@ -22,13 +22,26 @@ end
 
 # PUT: Update data for a photo
 put '/photos/:id' do
+  @sp = StopPhoto.find(params[:id])
+
+  if @sp.update_attributes(:description => params[:description])
+    { :status => :updated, :image => @sp }.to_json
+  else
+    { :status => :unprocessable_entity }.to_json
+  end
 
 end
 
 # DELETE: Destroy this photo, delete
 # associated data
 delete '/photos/:id' do
+  @sp = StopPhoto.find(params[:id])
 
+  if @sp.destroy
+    { :status => :deleted }.to_json
+  else
+    { :status => :unprocessable_entity }.to_json
+  end
 end
 
 private
