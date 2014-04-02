@@ -468,7 +468,7 @@ coreControllers.controller('PhotoModal',
         };
 
         $scope.cancel = function () {
-            $modalInstance.close(new ModalResult(curr, ModalState.canceled));
+            $modalInstance.close(new ModalResult(null, ModalState.canceled));
         };
 
         $scope.delete = function () {
