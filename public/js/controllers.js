@@ -400,7 +400,7 @@ coreControllers.controller('StopCreator',
         $scope.allCategories = [];
 
         $dataService.getAllCategories().then(function (categories) {
-            $scope.allCategories = categories;
+            $scope.allCategories.push.apply($scope.allCategories, categories);
             $scope.loaded = true;
         });
 
@@ -562,17 +562,21 @@ coreControllers.controller('StopEditor',
             $scope.visibility = stop.visibility;
             $scope.categories = stop.categories;
             $scope.images = stop.photos;
-
+            $scope.allCategories = [];
+            
             $dataService.getAllCategories().then(function (categories) {
-                var usedDict = {};
+                var usedDict = {}, 
+                    tmpCategories;
 
                 for (var i = 0; i < $scope.categories.length; i++) {
                     usedDict[$scope.categories[i].id] = true
                 }
-
-                $scope.allCategories = _.reject(categories, function (category) {
+                
+                tmpCategories =  _.reject(categories, function (category) {
                     return usedDict[category.id];
                 });
+                
+                $scope.allCategories.push.apply($scope.allCategories, tmpCategories);
 
                 $scope.loaded = true;
             });
