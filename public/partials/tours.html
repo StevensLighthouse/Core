@@ -35,7 +35,7 @@
         </table>
     </div>
     <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
-        <marker ng-repeat="tour in tours" coords='{ latitude: tour.lat, longitude: tour.lon }'>
+        <marker ng-repeat="tour in tours" coords='{ latitude: tour.lat, longitude: tour.lon }' icon="tour.stops[0].categories[0].icon_base64">
             <window>
                 <div class="infowindow">
                     <h5>{{ tour.name }}</h5>
