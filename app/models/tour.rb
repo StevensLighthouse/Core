@@ -29,7 +29,7 @@ class Tour < ActiveRecord::Base
     hash = super(options)
     
     # merge in the stops in the proper order
-    stops = self.stop_tours.order(:position).map { |st| st.stop.attributes.merge(:position => st.position, :categories => st.stop.categories, :photos => st.stop.photos) }
+    stops = self.stop_tours.order(:position).select{ |st| st.stop != nil }.map { |st| st.stop.attributes.merge(:position => st.position, :categories => st.stop.categories, :photos => st.stop.photos) }
     hash.merge!(:stops => stops)
   end
 
