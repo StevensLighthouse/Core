@@ -68,7 +68,7 @@
             </div>
         </div>
         <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
-            <marker coords='stop.center'>
+            <marker coords='stop.center' icon='categories[0].icon_base64'>
                 <window>
                     <div class="infowindow">
                         <h5>{{ name }}</h5>

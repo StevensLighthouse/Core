@@ -383,6 +383,7 @@ coreControllers.controller('StopDetails',
             $scope.description = stop.description;
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+            $scope.categories = stop.categories;
             $scope.loaded = true;
         });
     });
