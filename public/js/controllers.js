@@ -31,12 +31,34 @@ coreControllers.controller('Home',
     });
 
 coreControllers.controller('Tours',
-    function ($scope, $dataService) {
+    function ($scope, $dataService, $modal) {
         $scope.tours = [];
         $scope.map = new mapShim();
 
         $scope.centerOnTour = function (tour) {
             $scope.map.setCenter(tour.lat, tour.lon);
+        };
+
+        $scope.deleteTour = function (tour) {
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/deletion-modal.html',
+                controller: 'DeletionModal',
+                resolve: {
+                    dataName: function () {
+                        return "tour";
+                    },
+                    name: function () {
+                        return tour.name;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.tours.remove(tour);
+                    $dataService.deleteTour(tour.id);
+                }
+            });
         };
 
         $dataService.getAllTours().then(function (tours) {
@@ -167,10 +189,32 @@ coreControllers.controller('TourDetails',
     });
 
 coreControllers.controller('Groups',
-    function ($scope, $dataService) {
+    function ($scope, $dataService, $modal) {
         $dataService.getAllGroups().then(function (groups) {
             $scope.groups = groups;
         });
+
+        $scope.deleteGroup = function (group) {
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/deletion-modal.html',
+                controller: 'DeletionModal',
+                resolve: {
+                    dataName: function () {
+                        return "group";
+                    },
+                    name: function () {
+                        return group.name;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.groups.remove(group);
+                    $dataService.deleteGroup(group.id);
+                }
+            });
+        };
     });
 
 coreControllers.controller('GroupCreator',
@@ -293,11 +337,33 @@ coreControllers.controller('UserEditor',
     });
 
 coreControllers.controller('Stops',
-    function ($scope, $dataService) {
+    function ($scope, $dataService, $modal) {
         $scope.map = new mapShim();
 
         $scope.centerOnStop = function (stop) {
             $scope.map.setCenter(stop.lat, stop.lon);
+        };
+
+        $scope.deleteStop = function (stop) {
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/deletion-modal.html',
+                controller: 'DeletionModal',
+                resolve: {
+                    dataName: function () {
+                        return "stop";
+                    },
+                    name: function () {
+                        return stop.name;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.stops.remove(stop);
+                    $dataService.deleteStop(stop.id);
+                }
+            });
         };
 
         $dataService.getAllStops().then(function (stops) {
@@ -317,6 +383,7 @@ coreControllers.controller('StopDetails',
             $scope.description = stop.description;
             $scope.map.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
             $scope.stop.setCenter(parseFloat(stop.lat), parseFloat(stop.lon));
+            $scope.categories = stop.categories;
             $scope.loaded = true;
         });
     });
@@ -334,7 +401,7 @@ coreControllers.controller('StopCreator',
         $scope.allCategories = [];
 
         $dataService.getAllCategories().then(function (categories) {
-            $scope.allCategories = categories;
+            $scope.allCategories.push.apply($scope.allCategories, categories);
             $scope.loaded = true;
         });
 
@@ -385,8 +452,8 @@ coreControllers.controller('StopCreator',
 
 coreControllers.controller('PhotoModal',
     function ($scope, $modalInstance, stopPhoto, $dataService) {
-        $scope.imageData = { 
-            currentPhoto: stopPhoto, 
+        $scope.imageData = {
+            currentPhoto: stopPhoto,
             newDescription: stopPhoto.description
         };
         $scope.errorList = [];
@@ -402,7 +469,7 @@ coreControllers.controller('PhotoModal',
         };
 
         $scope.cancel = function () {
-            $modalInstance.close(new ModalResult(curr, ModalState.canceled));
+            $modalInstance.close(new ModalResult(null, ModalState.canceled));
         };
 
         $scope.delete = function () {
@@ -412,6 +479,20 @@ coreControllers.controller('PhotoModal',
             }, function (errorList) {
                 $scope.errorList = errorList;
             });
+        };
+    });
+
+coreControllers.controller('DeletionModal',
+    function ($scope, $modalInstance, dataName, name, $dataService) {
+        $scope.dataName = dataName;
+        $scope.name = name;
+
+        $scope.cancel = function () {
+            $modalInstance.close(new ModalResult(null, ModalState.canceled));
+        };
+
+        $scope.delete = function () {
+            $modalInstance.close(new ModalResult(null, ModalState.deleted));
         };
     });
 
@@ -482,17 +563,21 @@ coreControllers.controller('StopEditor',
             $scope.visibility = stop.visibility;
             $scope.categories = stop.categories;
             $scope.images = stop.photos;
-
+            $scope.allCategories = [];
+            
             $dataService.getAllCategories().then(function (categories) {
-                var usedDict = {};
+                var usedDict = {}, 
+                    tmpCategories;
 
                 for (var i = 0; i < $scope.categories.length; i++) {
                     usedDict[$scope.categories[i].id] = true
                 }
-
-                $scope.allCategories = _.reject(categories, function (category) {
+                
+                tmpCategories =  _.reject(categories, function (category) {
                     return usedDict[category.id];
                 });
+                
+                $scope.allCategories.push.apply($scope.allCategories, tmpCategories);
 
                 $scope.loaded = true;
             });

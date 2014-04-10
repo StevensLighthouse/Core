@@ -116,28 +116,46 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.findTour = function (id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.tourList, {
+                id: id
+            });
+        };
+
         this.getTour = function (id) {
-            var d = $q.defer();
-
-            function findTour(id) {
-                if (typeof id === "string") {
-                    id = parseInt(id);
-                }
-
-                return _.findWhere(self.tourList, {
-                    id: id
-                });
-            };
-
-            var tour = findTour(id);
+            var d = $q.defer(),
+                tour = this.findTour(id);
 
             if (!tour) {
                 this.getAllTours().then(function () {
-                    d.resolve(findTour(id));
+                    d.resolve(self.findTour(id));
                 });
             } else {
-                d.resolve(findTour(id));
+                d.resolve(tour);
             }
+
+            return d.promise;
+        };
+
+        this.deleteTour = function (id) {
+            var d = $q.defer(),
+                tour = this.findTour(id);
+
+            this.tourList.remove(tour);
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/tours/" + id
+            }).done(function (response) {
+                d.resolve();
+            }).fail(function (r) {
+                d.reject(r);
+            });
 
             return d.promise;
         };
@@ -340,6 +358,25 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.deleteStop = function (id) {
+            var d = $q.defer(),
+                stop = this.findStop(id);
+
+            this.stopList.remove(stop);
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/stops/" + id
+            }).done(function (response) {
+                d.resolve();
+            }).fail(function (r) {
+                d.reject(r);
+            });
+
+            return d.promise;
+        };
+
         this.cloneStop = function (id) {
             ///stops/clone/:id
             var d = $q.defer();
@@ -373,24 +410,23 @@ coreApp.factory("$dataService",
 
         };
 
+        this.findStop = function (id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.stopList, {
+                id: id
+            });
+        };
+
         this.getStop = function (id) {
-            var d = $q.defer();
-
-            function findStop(id) {
-                if (typeof id === "string") {
-                    id = parseInt(id);
-                }
-
-                return _.findWhere(self.stopList, {
-                    id: id
-                });
-            };
-
-            var stop = findStop(id);
+            var d = $q.defer(),
+                stop = this.findStop(id);
 
             if (!stop) {
                 this.getAllStops().then(function () {
-                    d.resolve(findStop(id));
+                    d.resolve(self.findStop(id));
                 });
             } else {
                 d.resolve(stop);
@@ -512,24 +548,42 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.findGroup = function (id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.groupList, {
+                id: id
+            });
+        };
+
+        this.deleteGroup = function (id) {
+            var d = $q.defer(),
+                group = this.findGroup(id);
+
+            this.groupList.remove(group);
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/groups/" + id
+            }).done(function (response) {
+                d.resolve();
+            }).fail(function (r) {
+                d.reject(r);
+            });
+
+            return d.promise;
+        };
+        
         this.getGroup = function (id) {
-            var d = $q.defer();
-
-            function findGroup(id) {
-                if (typeof id === "string") {
-                    id = parseInt(id);
-                }
-
-                return _.findWhere(self.groupList, {
-                    id: id
-                });
-            };
-
-            var group = findGroup(id);
+            var d = $q.defer(),
+                group = this.findGroup(id);
 
             if (!group) {
                 this.getAllGroups().then(function () {
-                    d.resolve(findGroup(id));
+                    d.resolve(self.findGroup(id));
                 });
             } else {
                 d.resolve(group);

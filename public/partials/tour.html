@@ -13,7 +13,7 @@
             </ol>
         </div>
         <google-map ng-if="loaded" class="col-sm-6" center='map.center' zoom='map.zoom' draggable="true" options="{ mapTypeControl: false }">
-            <marker ng-repeat="stop in stops" coords='{ latitude: stop.lat, longitude: stop.lon }'>
+            <marker ng-repeat="stop in stops" coords='{ latitude: stop.lat, longitude: stop.lon }' icon='stop.categories[0].icon_base64'>
                 <window>
                     <div class="infowindow">
                         <h5>{{ stop.name }}</h5>
