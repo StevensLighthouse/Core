@@ -576,7 +576,7 @@ coreApp.factory("$dataService",
 
             return d.promise;
         };
-        
+
         this.getGroup = function (id) {
             var d = $q.defer(),
                 group = this.findGroup(id);
@@ -697,20 +697,19 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.findUser = function (id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.userList, {
+                id: id
+            });
+        };
+
         this.getUser = function (id) {
-            var d = $q.defer();
-
-            function findUser(id) {
-                if (typeof id === "string") {
-                    id = parseInt(id);
-                }
-
-                return _.findWhere(self.userList, {
-                    id: id
-                });
-            };
-
-            var user = findUser(id);
+            var d = $q.defer(),
+                user = this.findUser(id);
 
             if (!user) {
                 this.getAllUsers().then(function () {
@@ -804,6 +803,26 @@ coreApp.factory("$dataService",
             } else {
                 d.reject(["Please provide all the data!"]);
             }
+
+            return d.promise;
+        };
+
+        // Deletes the user
+        this.deleteUser = function (id) {
+            var d = $q.defer(),
+                user = this.findUser(id);
+
+            this.userList.remove(user);
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/users/" + id
+            }).done(function (response) {
+                d.resolve();
+            }).fail(function (r) {
+                d.reject(r);
+            });
 
             return d.promise;
         };

@@ -264,10 +264,32 @@ coreControllers.controller('GroupDetails',
     });
 
 coreControllers.controller('Users',
-    function ($scope, $dataService) {
+    function ($scope, $dataService, $modal) {
         $dataService.getAllUsers().then(function (users) {
             $scope.users = users;
         });
+
+        $scope.deleteUser = function (user) {
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/deletion-modal.html',
+                controller: 'DeletionModal',
+                resolve: {
+                    dataName: function () {
+                        return "user";
+                    },
+                    name: function () {
+                        return user.email;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.users.remove(user);
+                    $dataService.deleteUser(user.id);
+                }
+            });
+        };
     });
 
 coreControllers.controller('UserCreator',
@@ -564,19 +586,19 @@ coreControllers.controller('StopEditor',
             $scope.categories = stop.categories;
             $scope.images = stop.photos;
             $scope.allCategories = [];
-            
+
             $dataService.getAllCategories().then(function (categories) {
-                var usedDict = {}, 
+                var usedDict = {},
                     tmpCategories;
 
                 for (var i = 0; i < $scope.categories.length; i++) {
                     usedDict[$scope.categories[i].id] = true
                 }
-                
-                tmpCategories =  _.reject(categories, function (category) {
+
+                tmpCategories = _.reject(categories, function (category) {
                     return usedDict[category.id];
                 });
-                
+
                 $scope.allCategories.push.apply($scope.allCategories, tmpCategories);
 
                 $scope.loaded = true;

@@ -77,6 +77,31 @@ put '/users/:id' do |id|
   end
 end
 
+# DELETE /stops/:id
+# Delete a specific stop by specifying an ID
+delete '/users/:id' do |id|
+  redirect to('/login') unless current_user
+  @current_user = current_user
+
+  if @current_user.is_group_admin?
+    @user = User.find(id)
+    
+    if not @current_user.is_site_admin? and @user.group_id and @user.group_id != @current_user.group_id
+      respond_to do |format|
+        format.json { { :status => :permission_denied, :errors => ["You do not have permission to delete this user"] }.to_json }
+      end
+    end    
+    
+    # Attempt to delete the user
+    if @user.destroy
+      { :status => :deleted }.to_json
+    # The user was not deleted updated, show errors
+    else
+      { :status => :unprocessable_entity }.to_json
+    end
+  end
+end
+
 private
 def user_params
   params.allow(:email, :permission, :password, :group_id)
