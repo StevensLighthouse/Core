@@ -42,6 +42,25 @@ put '/categories/:id' do |id|
   end
 end
 
+# DELETE /categories/:id
+# Delete a specific category by specifying an ID
+delete '/categories/:id' do |id|
+  redirect to('/login') unless current_user
+  @current_user = current_user
+
+  if @current_user.is_site_admin?
+    @category = Category.find(id)
+
+    # Attempt to delete the user
+    if @category.destroy
+      { :status => :deleted }.to_json
+    # The user was not deleted updated, show errors
+    else
+      { :status => :unprocessable_entity }.to_json
+    end
+  end
+end
+
 # Set the allowed parameters, for security
 private
 def category_params

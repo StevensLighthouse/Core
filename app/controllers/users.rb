@@ -77,8 +77,8 @@ put '/users/:id' do |id|
   end
 end
 
-# DELETE /stops/:id
-# Delete a specific stop by specifying an ID
+# DELETE /users/:id
+# Delete a specific user by specifying an ID
 delete '/users/:id' do |id|
   redirect to('/login') unless current_user
   @current_user = current_user

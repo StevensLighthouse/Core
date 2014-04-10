@@ -846,7 +846,7 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
-        this.findCategory(id) {
+        this.findCategory = function (id) {
             if (typeof id === "string") {
                 id = parseInt(id);
             }
@@ -951,9 +951,26 @@ coreApp.factory("$dataService",
             }
 
             return d.promise;
-
         };
 
+        this.deleteCategory = function (id) {
+            var d = $q.defer(),
+                category = this.findCategory(id);
+
+            this.categoryList.remove(category);
+
+            $.ajax({
+                dataType: "json",
+                type: "DELETE",
+                url: "/categories/" + id
+            }).done(function (response) {
+                d.resolve();
+            }).fail(function (r) {
+                d.reject(r);
+            });
+
+            return d.promise;
+        };
 
         this.getAllData = function () {
             var d = $q.defer();

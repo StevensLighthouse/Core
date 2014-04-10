@@ -647,10 +647,32 @@ coreControllers.controller('StopImporter',
     });
 
 coreControllers.controller('Categories',
-    function ($scope, $dataService) {
+    function ($scope, $dataService, $modal) {
         $dataService.getAllCategories().then(function (categories) {
             $scope.categories = categories;
         });
+
+        $scope.deleteCategory = function (category) {
+            var modalInstance = $modal.open({
+                templateUrl: '/partials/deletion-modal.html',
+                controller: 'DeletionModal',
+                resolve: {
+                    dataName: function () {
+                        return "category";
+                    },
+                    name: function () {
+                        return category.name;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                if (result.state === ModalState.deleted) {
+                    $scope.categories.remove(category);
+                    $dataService.deleteCategory(category.id);
+                }
+            });
+        };
     });
 
 coreControllers.controller('CategoryCreator',
