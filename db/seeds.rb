@@ -96,8 +96,8 @@ t2.save
 t3 = Tour.find_or_create_by(:name => 'Waterfront Sights',
                :description => 'A tour that explores the beautiful sights of Hoboken\'s waterfront.',
                :visibility => true, 
-               :lat => 40.740387,
-               :lon => -74.025789)
+               :lat => 40.736715, 
+                :lon => -74.025897)
 t3.stops << s9
 t3.stops << s10
 t3.stops << s5
