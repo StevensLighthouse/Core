@@ -70,6 +70,24 @@ put '/groups/:id' do |id|
   end
 end
 
+
+# DELETE /groups/:id
+# Deletes a group and all associated data
+delete '/groups/:id' do
+  redirect to('/login') unless current_user
+  @current_user = current_user
+
+  if @current_user.is_group_admin?
+    @group = Group.find(params[:id])
+
+    if @group.destroy
+      { :status => :deleted }.to_json
+    else
+      { :status => :unprocessable_entity }.to_json
+    end
+  end
+end
+
 def group_params
   params.allow(:name, :description)
 end
