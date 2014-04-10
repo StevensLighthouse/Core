@@ -713,7 +713,7 @@ coreApp.factory("$dataService",
 
             if (!user) {
                 this.getAllUsers().then(function () {
-                    d.resolve(findUser(id));
+                    d.resolve(self.findUser(id));
                 });
             } else {
                 d.resolve(user);
@@ -846,24 +846,23 @@ coreApp.factory("$dataService",
             return d.promise;
         };
 
+        this.findCategory(id) {
+            if (typeof id === "string") {
+                id = parseInt(id);
+            }
+
+            return _.findWhere(self.categoryList, {
+                id: id
+            });
+        };
+
         this.getCategory = function (id) {
-            var d = $q.defer();
-
-            function findCategory(id) {
-                if (typeof id === "string") {
-                    id = parseInt(id);
-                }
-
-                return _.findWhere(self.categoryList, {
-                    id: id
-                });
-            };
-
-            var category = findCategory(id);
+            var d = $q.defer()
+            category = this.findCategory(id);
 
             if (!category) {
                 this.getAllCategories().then(function () {
-                    d.resolve(findCategory(id));
+                    d.resolve(self.findCategory(id));
                 });
             } else {
                 d.resolve(category);
